@@ -1,0 +1,89 @@
+
+///////////////////////////////////////////////////////////////
+// Developed by Kyle 'Abszol' Darling
+// Version 3.9.3, Copyright 2016-
+
+Tutorial(s)
+Setting up the stream updater -> https://www.youtube.com/watch?v=kq2FmqMH7e4
+Linking OBS with the files created + Setting it up -> https://www.youtube.com/watch?v=HZd_LETz1yU
+
+Donations are always much appreciated, donations actually help me keep going and pay for college without having to do something
+I dislike and rather do something I love.
+
+Bug? Email me at -> 
+
+Features & Use
+===============
+[Tournament Enlisting Tab]
+The start of the program lies within this tab. The core functionality
+of this tab is to allow tournament hosters to manually register
+their players into the program.
+The tab also has a green arrow that will flush all player names into
+the commentators list which will populate it further.
+The tab also allows users to attach their own sponsorships as well.
+
+To begin using this tab you must first declare all the locations
+within the Files Tab, an error will be thrown if you have not done so.
+
+
+[Stream Updater Tab]
+The heart of the this program lies here. The core functionality simply
+put, allows you to manipulate text files and an easy to read environment.
+Very self explanatory, on the left of players is the sponsor, to the
+right are the players, and so on.
+You do NOT have to click update after clicking the '+' or '-' buttons,
+this does it automatically to save a HUGE amount of time.
+
+To begin using this tab you must first declare all the locations
+within the Files Tab, an error will be thrown if you have not done so.
+
+
+[Render Tab] - The pre-existing Files Tab but BETTER.
+Features are Render Now and Render During Stream
+Render Now allows you to take a previous saved object
+and render it right then and there with ease.
+Render During/After stream (Doesn't matter)
+will take the capture and stop capture durations into account
+and will allow you to save the object or render it then and there.
+By clicking capture/stop capture, the information is stored, no garbage.
+
+Still in beta, feel free to work on it.
+
+
+[Bracket Tab] - Beta, Hidden. Developers this hasn't been built yet
+Soon to be the very own bracket generator, not needing Internet 
+to use it unlike Challonge (I enjoy using this). 
+Temporary/Perm solution is within the Files Tab.
+
+
+[Files Tab]
+The brains, the everything of this program. The tab manages the text
+files, pictures, etc that this program runs through. Basically,
+this is touching the OS without you having to.
+Very self explanatory so no talking about the text fields, every time
+a change is made to the URLS, use Load Files to throw it into the
+program.
+
+Load Data From Excel Sheets (Beta)
+This part of the tab will allow you to gather all your entrants for
+the tournament and throw them into the enlisting.
+The two column searches are for Players and their Information (Twitter),
+etc, like you saw in the first tab.
+
+Load Bracket URL
+New and amazing, using the power of JavaFX, this tiny part of the tab
+will load any URL, well... Just use it for Brackets. 
+
+Save Config & Remove
+This function is quite simply, save your configurations to the system
+or remove them. Developers, this function checks for the OS, check it out.
+
+
+
+Want to develop?
+================
+Before developing I suggest the following
+- Donate, I really enjoy people using this program and money (sadly)
+helps me stay programming things I WANT to program.
+- Know Java and JavaFX (Java but stranger)
+- Have eclipse, netbeans, any IDE.
