@@ -61,6 +61,7 @@ public class RenderTab extends JPanel {
 		renderNow.setToolTipText("Render now, lets forget the stream");
 		renderNow.setFont(new Font("Dialog", Font.BOLD, 14));
 		renderNow.setBounds(86, 65, 361, 40);
+		renderNow.setEnabled(false); 									// temp
 		pan.add(renderNow);
 		
 		renderAfterStream = new JButton("Render Live During Stream");
