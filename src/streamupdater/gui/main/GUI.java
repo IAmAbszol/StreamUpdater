@@ -1,5 +1,7 @@
 package streamupdater.gui.main;
 
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -33,6 +35,16 @@ public class GUI extends JFrame {
 	
 	private int boot = 0;
 	
+	public static ArrayList<String> rounds;
+	
+	/*
+	 * DEVELOPERS CHANGE THE VALUES TO INCREASE LETTERS, ROUNDS, ETC!!!
+	 */
+
+	private static int numberOfPools = 10;
+	private static int numberOfRounds = 20;
+	private static boolean simple = true;
+	
 	private static String[] arguments;
 	
 	public GUI() {
@@ -42,6 +54,8 @@ public class GUI extends JFrame {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			
 		} catch (Exception e) { };
+
+		constructRounds();
 		
 		setTitle("Stream Updater Version 3.9.3 by Kyle Darling");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,6 +110,41 @@ public class GUI extends JFrame {
 		
 		setVisible(true);
 			
+	}
+	
+	// Algorithm I'm working on to programmatically create stoof
+	private static void constructRounds() {
+		rounds = new ArrayList<String>();
+		String[] keyWords = { "Pool", "Winners", "Losers", "Grand Finals" };
+		// lets build the pools ~ any higher than Z, we have a problemo
+		for(int i = 0; i < numberOfPools; i++) {
+			char tmp = (char) (i + 65);
+			rounds.add(keyWords[0] + " " + tmp);
+		}
+		// lets add Winners + Losers
+		String[] roundStuff = { "Quater-Finals", "Semi-Finals", "Finals" };
+		if(simple) {
+			rounds.add("Winners");
+			rounds.add("Losers");
+			for(int i = 0; i < roundStuff.length; i++) {
+				rounds.add(keyWords[1] + " " + roundStuff[i]);
+			}
+			for(int i = 0; i < roundStuff.length; i++) {
+				rounds.add(keyWords[2] + " " + roundStuff[i]);
+			}
+		} else {
+			for(int i = 0; i < numberOfRounds; i++) {
+				rounds.add(keyWords[1] + " Round " + (i+1));
+				rounds.add(keyWords[2] + " Round " + (i+1));
+			}
+			for(int i = 0; i < roundStuff.length; i++) {
+				rounds.add(keyWords[1] + " " + roundStuff[i]);
+			}
+			for(int i = 0; i < roundStuff.length; i++) {
+				rounds.add(keyWords[2] + " " + roundStuff[i]);
+			}
+		}
+		rounds.add(keyWords[3]);
 	}
 	
 	public static void switchTo(int i) {

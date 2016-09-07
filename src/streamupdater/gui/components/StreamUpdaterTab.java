@@ -47,6 +47,21 @@ public class StreamUpdaterTab extends JPanel {
 	private static JComboBox commentatorOneSponsor;
 	private static JComboBox commentatorTwoSponsor;
 	
+	private static JButton overrideP1;
+	private static JButton overrideP2;
+	private static JButton overrideC1;
+	private static JButton overrideC2;
+	private static JButton overrideRound;
+	private static JTextField overP1;
+	private static JTextField overP2;
+	private static JTextField overCom1;
+	private static JTextField overCom2;
+	private static JComboBox overrideR;
+	private static boolean overridePlayerOne = false;
+	private static boolean overridePlayerTwo = false;
+	private static boolean overrideCom = false;
+	private static boolean overrideRounds = true;
+	
 	// auto switch
 	private static JCheckBox playerBox;
 	private static JSpinner playerSpin;
@@ -95,6 +110,10 @@ public class StreamUpdaterTab extends JPanel {
 		lblNewLabel.setBounds(10, 11, 519, 14);
 		panel.add(lblNewLabel);
 		
+		overrideRound = new JButton("*");
+		overrideRound.setBounds(455, 92, 20, 20);
+		panel.add(overrideRound);
+		
 		mainTitleText = new JTextField();
 		mainTitleText.setHorizontalAlignment(SwingConstants.CENTER);
 		mainTitleText.setFont(new Font("Dialog", Font.PLAIN, 12));
@@ -108,6 +127,14 @@ public class StreamUpdaterTab extends JPanel {
 		lblNewLabel_12.setBounds(10, 67, 519, 14);
 		panel.add(lblNewLabel_12);
 		
+		overrideR = new JComboBox();
+		overrideR.setBounds(89, 92, 361, 20);
+		panel.add(overrideR);
+		
+		for(int i = 0; i < GUI.rounds.size(); i++) {
+			overrideR.addItem(GUI.rounds.get(i));
+		}
+		
 		currentRoundText = new JTextField();
 		currentRoundText.setHorizontalAlignment(SwingConstants.CENTER);
 		currentRoundText.setFont(new Font("Dialog", Font.PLAIN, 12));
@@ -120,6 +147,14 @@ public class StreamUpdaterTab extends JPanel {
 		lblNewLabel_13.setFont(new Font("Dialog", Font.BOLD, 16));
 		lblNewLabel_13.setBounds(10, 123, 519, 20);
 		panel.add(lblNewLabel_13);
+		
+		overrideP1 = new JButton("*");
+		overrideP1.setBounds(455, 154, 20, 20);
+		panel.add(overrideP1);
+		
+		overrideP2 = new JButton("*");
+		overrideP2.setBounds(455, 309, 20, 20);
+		panel.add(overrideP2);
 		
 		playerOneCombo = new JComboBox();
 		playerOneCombo.setBounds(239, 154, 211, 20);
@@ -155,6 +190,12 @@ public class StreamUpdaterTab extends JPanel {
 		playerTwoCombo = new JComboBox();
 		playerTwoCombo.setBounds(239, 309, 211, 20);
 		panel.add(playerTwoCombo);
+		
+		overP1 = new JTextField("");
+		overP1.setBounds(239, 154, 211, 20);
+		
+		overP2 = new JTextField("");
+		overP2.setBounds(239, 309, 211, 20);
 		
 		JLabel lblNewLabel_16 = new JLabel("Player Two Score");
 		lblNewLabel_16.setHorizontalAlignment(SwingConstants.CENTER);
@@ -215,6 +256,20 @@ public class StreamUpdaterTab extends JPanel {
 		lblNewLabel_17.setBounds(10, 523, 519, 20);
 		panel.add(lblNewLabel_17);
 		
+		overCom1 = new JTextField("");
+		overCom1.setBounds(239, 554, 211, 20);
+		
+		overCom2 = new JTextField("");
+		overCom2.setBounds(239, 585, 211, 20);
+		
+		overrideC1  = new JButton("*");
+		overrideC1.setBounds(455, 554, 20, 20);
+		panel.add(overrideC1);
+		
+		overrideC2 = new JButton("*");
+		overrideC2.setBounds(455, 585, 20, 20);
+		panel.add(overrideC2);
+		
 		commentatorOne = new JComboBox();
 		commentatorOne.setBounds(239, 554, 211, 20);
 		panel.add(commentatorOne);
@@ -252,6 +307,107 @@ public class StreamUpdaterTab extends JPanel {
 		commentatorTwoSponsor.setBounds(89, 585, 140, 20);
 		panel.add(commentatorTwoSponsor);
 
+		overrideRound.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(overrideRounds) {
+					overrideRounds = false;
+					panel.remove(overrideR);
+					panel.add(currentRoundText);
+					repaint();
+				} else {
+					overrideRounds = true;
+					panel.remove(currentRoundText);
+					panel.add(overrideR);
+					repaint();
+				}
+			}
+			
+		});
+		
+		overrideP1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(overridePlayerOne) {
+					overridePlayerOne = false;
+					panel.remove(overP1);
+					panel.add(playerOneCombo);
+					repaint();
+				} else {
+					overridePlayerOne = true;
+					panel.remove(playerOneCombo);
+					panel.add(overP1);
+					repaint();
+				}
+			}
+			
+		});
+		
+		overrideP2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(overridePlayerTwo) {
+					overridePlayerTwo = false;
+					panel.remove(overP2);
+					panel.add(playerTwoCombo);
+					repaint();
+				} else {
+					overridePlayerTwo = true;
+					panel.remove(playerTwoCombo);
+					panel.add(overP2);
+					repaint();
+				}
+			}
+			
+		});
+		
+		overrideC1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(overrideCom) {
+					overrideCom = false;
+					panel.remove(overCom2);
+					panel.add(commentatorTwo);
+					panel.remove(overCom1);
+					panel.add(commentatorOne);
+					repaint();
+				} else {
+					overrideCom = true;
+					panel.remove(commentatorTwo);
+					panel.add(overCom2);
+					panel.remove(commentatorOne);
+					panel.add(overCom1);
+					repaint();
+				}
+			}
+		});
+		
+		overrideC2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(overrideCom) {
+					overrideCom = false;
+					panel.remove(overCom2);
+					panel.add(commentatorTwo);
+					panel.remove(overCom1);
+					panel.add(commentatorOne);
+					repaint();
+				} else {
+					overrideCom = true;
+					panel.remove(commentatorTwo);
+					panel.add(overCom2);
+					panel.remove(commentatorOne);
+					panel.add(overCom1);
+					repaint();
+				}				
+			}
+			
+		});
+		
 		playersSwitch.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent arg0) {
 				if(playerBox.isSelected()) {
@@ -315,16 +471,16 @@ public class StreamUpdaterTab extends JPanel {
 									while(true) {
 										if(!pause) {
 											if(!swap) {
-												if(playerOneCombo.getItemCount() > 0)
+												if(playerOneCombo.getItemCount() > 0 || !overP1.getText().equals(""))
 													setPlayerOneName(swap);
-												if(playerTwoCombo.getItemCount() > 0)
+												if(playerTwoCombo.getItemCount() > 0 || !overP2.getText().equals(""))
 													setPlayerTwoName(swap);
 												swap = true;
 												
 											} else {
-												if(playerOneCombo.getItemCount() > 0)
+												if(playerOneCombo.getItemCount() > 0 || !overP1.getText().equals(""))
 													setPlayerOneName(swap);
-												if(playerTwoCombo.getItemCount() > 0)
+												if(playerTwoCombo.getItemCount() > 0 || !overP2.getText().equals(""))
 													setPlayerTwoName(swap);
 												swap = false;
 											}
@@ -473,13 +629,14 @@ public class StreamUpdaterTab extends JPanel {
 						}
 						setMainTitle();
 						setCurrentRound();
-						if(playerOneCombo.getItemCount() > 0)
+						if(playerOneCombo.getItemCount() > 0 || !overP1.getText().equals(""))
 							setPlayerOneName(swap);
 						setPlayerOneScore();
-						if(playerTwoCombo.getItemCount() > 0)
+						if(playerTwoCombo.getItemCount() > 0 || !overP2.getText().equals(""))
 							setPlayerTwoName(swap);
 						setPlayerTwoScore();
-						setCommentators();
+						if((commentatorOne.getItemCount() > 0 && commentatorTwo.getItemCount() > 0) || (!overCom1.getText().equals("") && !overCom2.getText().equals("")))
+							setCommentators();
 						setPlayerOneCharacterText(removeColors((String)playerOneCharacter.getSelectedItem()));
 						setPlayerTwoCharacterText(removeColors((String)playerTwoCharacter.getSelectedItem()));
 					} catch (Exception e) {
@@ -639,12 +796,15 @@ public class StreamUpdaterTab extends JPanel {
 	
 	private void setMainTitle()
 	{
-	  StreamUpdaterTab.sfc.setMainTitle(StreamUpdaterTab.mainTitleText.getText());
+		StreamUpdaterTab.sfc.setMainTitle(StreamUpdaterTab.mainTitleText.getText());
 	}
 
 	private void setCurrentRound()
 	{
-	  StreamUpdaterTab.sfc.setCurrentRound(StreamUpdaterTab.currentRoundText.getText());
+		if(overrideRounds) {
+			StreamUpdaterTab.sfc.setCurrentRound((String)StreamUpdaterTab.overrideR.getSelectedItem());
+		} else
+			StreamUpdaterTab.sfc.setCurrentRound(StreamUpdaterTab.currentRoundText.getText());
 	}
 
 	private void setPlayerOneScore()
@@ -658,28 +818,40 @@ public class StreamUpdaterTab extends JPanel {
 	}
 	
 	private void setPlayerOneName(boolean swap) {
-		if(!swap) {
-			sfc.setPlayerOne((String) playerOneCombo.getSelectedItem());
-			sfc.setPlayerOneInfo(playerInfo.get(playerOneCombo.getSelectedIndex()));
+		if(!overridePlayerOne) {
+			if(!swap) {
+				sfc.setPlayerOne((String) playerOneCombo.getSelectedItem());
+				sfc.setPlayerOneInfo(playerInfo.get(playerOneCombo.getSelectedIndex()));
+			} else {
+				sfc.setPlayerOne(playerInfo.get(playerOneCombo.getSelectedIndex()));
+				sfc.setPlayerOneInfo((String) playerOneCombo.getSelectedItem());
+			}
 		} else {
-			sfc.setPlayerOne(playerInfo.get(playerOneCombo.getSelectedIndex()));
-			sfc.setPlayerOneInfo((String) playerOneCombo.getSelectedItem());
+			sfc.setPlayerOne(overP1.getText());
 		}
 	}
 	
 	private void setPlayerTwoName(boolean swap) {
-		if(!swap) {
-			sfc.setPlayerTwo((String) playerTwoCombo.getSelectedItem());
-			sfc.setPlayerTwoInfo(playerInfo.get(playerTwoCombo.getSelectedIndex()));
+		if(!overridePlayerTwo) {
+			if(!swap) {
+				sfc.setPlayerTwo((String) playerTwoCombo.getSelectedItem());
+				sfc.setPlayerTwoInfo(playerInfo.get(playerTwoCombo.getSelectedIndex()));
+			} else {
+				sfc.setPlayerTwo(playerInfo.get(playerTwoCombo.getSelectedIndex()));
+				sfc.setPlayerTwoInfo((String) playerTwoCombo.getSelectedItem());
+			}
 		} else {
-			sfc.setPlayerTwo(playerInfo.get(playerTwoCombo.getSelectedIndex()));
-			sfc.setPlayerTwoInfo((String) playerTwoCombo.getSelectedItem());
+			sfc.setPlayerTwo(overP2.getText());
 		}
 	}
 	
 	private void setCommentators() {
-		sfc.setCommentators((String)commentatorOne.getSelectedItem(), (String)commentatorTwo.getSelectedItem());
-		sfc.setCommentatorsInfo(commentatorInfo.get(commentatorOne.getSelectedIndex()), commentatorInfo.get(commentatorTwo.getSelectedIndex()));
+		if(!overrideCom) {
+			sfc.setCommentators((String)commentatorOne.getSelectedItem(), (String)commentatorTwo.getSelectedItem());
+			sfc.setCommentatorsInfo(commentatorInfo.get(commentatorOne.getSelectedIndex()), commentatorInfo.get(commentatorTwo.getSelectedIndex()));
+		} else {
+			sfc.setCommentators(overCom1.getText(), overCom2.getText());
+		}
 	}
 	
 	private void setPlayerOneCharacter() {
