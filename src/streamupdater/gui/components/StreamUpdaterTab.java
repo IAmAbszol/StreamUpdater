@@ -26,11 +26,15 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import streamupdater.gui.main.GUI;
+import streamupdater.util.AdjustRounds;
 import streamupdater.util.SavingFileConfiguration;
 
 @SuppressWarnings("serial")
 public class StreamUpdaterTab extends JPanel {
 
+	public static String displayPools = "Pools %ad";
+	public static String displayBracket = "Bracket %ad";
+	
 	private static JTextField mainTitleText;
 	private static JTextField currentRoundText;
 	private static JTextField playerOneScoreText;
@@ -110,8 +114,18 @@ public class StreamUpdaterTab extends JPanel {
 		lblNewLabel.setBounds(10, 11, 519, 14);
 		panel.add(lblNewLabel);
 		
+		JLabel gear = new JLabel("");
+		gear.setBounds(89, 92, 20, 20);
+		try {
+			gear.setIcon(new ImageIcon(ImageIO.read(AboutMeTab.class.getResource("/Images/test.png"))));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		panel.add(gear);
+		
 		overrideRound = new JButton("*");
-		overrideRound.setBounds(455, 92, 20, 20);
+		overrideRound.setBounds(430, 92, 20, 20);
 		panel.add(overrideRound);
 		
 		mainTitleText = new JTextField();
@@ -128,7 +142,7 @@ public class StreamUpdaterTab extends JPanel {
 		panel.add(lblNewLabel_12);
 		
 		overrideR = new JComboBox();
-		overrideR.setBounds(89, 92, 361, 20);
+		overrideR.setBounds(114, 92, 311, 20);
 		panel.add(overrideR);
 		
 		for(int i = 0; i < GUI.rounds.size(); i++) {
@@ -138,8 +152,7 @@ public class StreamUpdaterTab extends JPanel {
 		currentRoundText = new JTextField();
 		currentRoundText.setHorizontalAlignment(SwingConstants.CENTER);
 		currentRoundText.setFont(new Font("Dialog", Font.PLAIN, 12));
-		currentRoundText.setBounds(89, 92, 361, 20);
-		panel.add(currentRoundText);
+		currentRoundText.setBounds(114, 92, 311, 20);
 		currentRoundText.setColumns(10);
 		
 		JLabel lblNewLabel_13 = new JLabel("Player One");
@@ -149,15 +162,15 @@ public class StreamUpdaterTab extends JPanel {
 		panel.add(lblNewLabel_13);
 		
 		overrideP1 = new JButton("*");
-		overrideP1.setBounds(455, 154, 20, 20);
+		overrideP1.setBounds(430, 154, 20, 20);
 		panel.add(overrideP1);
 		
 		overrideP2 = new JButton("*");
-		overrideP2.setBounds(455, 309, 20, 20);
+		overrideP2.setBounds(430, 309, 20, 20);
 		panel.add(overrideP2);
 		
 		playerOneCombo = new JComboBox();
-		playerOneCombo.setBounds(239, 154, 211, 20);
+		playerOneCombo.setBounds(239, 154, 186, 20);
 		panel.add(playerOneCombo);
 		
 		JLabel lblNewLabel_14 = new JLabel("Player One Score");
@@ -188,14 +201,14 @@ public class StreamUpdaterTab extends JPanel {
 		panel.add(lblNewLabel_15);
 		
 		playerTwoCombo = new JComboBox();
-		playerTwoCombo.setBounds(239, 309, 211, 20);
+		playerTwoCombo.setBounds(239, 309, 186, 20);
 		panel.add(playerTwoCombo);
 		
 		overP1 = new JTextField("");
-		overP1.setBounds(239, 154, 211, 20);
+		overP1.setBounds(239, 154, 186, 20);
 		
 		overP2 = new JTextField("");
-		overP2.setBounds(239, 309, 211, 20);
+		overP2.setBounds(239, 309, 186, 20);
 		
 		JLabel lblNewLabel_16 = new JLabel("Player Two Score");
 		lblNewLabel_16.setHorizontalAlignment(SwingConstants.CENTER);
@@ -257,25 +270,25 @@ public class StreamUpdaterTab extends JPanel {
 		panel.add(lblNewLabel_17);
 		
 		overCom1 = new JTextField("");
-		overCom1.setBounds(239, 554, 211, 20);
+		overCom1.setBounds(239, 554, 186, 20);
 		
 		overCom2 = new JTextField("");
-		overCom2.setBounds(239, 585, 211, 20);
+		overCom2.setBounds(239, 585, 186, 20);
 		
 		overrideC1  = new JButton("*");
-		overrideC1.setBounds(455, 554, 20, 20);
+		overrideC1.setBounds(430, 554, 20, 20);
 		panel.add(overrideC1);
 		
 		overrideC2 = new JButton("*");
-		overrideC2.setBounds(455, 585, 20, 20);
+		overrideC2.setBounds(430, 585, 20, 20);
 		panel.add(overrideC2);
 		
 		commentatorOne = new JComboBox();
-		commentatorOne.setBounds(239, 554, 211, 20);
+		commentatorOne.setBounds(239, 554, 186, 20);
 		panel.add(commentatorOne);
 		
 		commentatorTwo = new JComboBox();
-		commentatorTwo.setBounds(239, 585, 211, 20);
+		commentatorTwo.setBounds(239, 585, 186, 20);
 		panel.add(commentatorTwo);
 		
 		JButton updateButton = new JButton("Update!");
@@ -307,6 +320,18 @@ public class StreamUpdaterTab extends JPanel {
 		commentatorTwoSponsor.setBounds(89, 585, 140, 20);
 		panel.add(commentatorTwoSponsor);
 
+		gear.addMouseListener(new MouseListener() {
+			public void mouseClicked(MouseEvent arg0) {
+				// only event I care about
+				new AdjustRounds();
+			}
+			public void mouseEntered(MouseEvent arg0) {}
+			public void mouseExited(MouseEvent arg0) {}
+			public void mousePressed(MouseEvent arg0) {}
+			public void mouseReleased(MouseEvent arg0) {}
+			
+		});
+		
 		overrideRound.addActionListener(new ActionListener() {
 
 			@Override
@@ -956,6 +981,13 @@ public class StreamUpdaterTab extends JPanel {
 	
 	public static boolean getRestriction() {
 		return lineBox.isSelected();
+	}
+	
+	public static void setRounds(ArrayList<String> rounds) {
+		overrideR.removeAllItems();
+		for(int i = 0; i < rounds.size(); i++) {
+			overrideR.addItem(rounds.get(i));
+		}
 	}
 	
 }

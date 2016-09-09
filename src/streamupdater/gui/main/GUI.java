@@ -159,4 +159,12 @@ public class GUI extends JFrame {
 		return arguments;
 	}
 	
+	public static int getNumberOfPools() {
+		return numberOfPools;
+	}
+	
+	public static int getNumberOfRounds() {
+		return numberOfRounds;
+	}
+	
 }
