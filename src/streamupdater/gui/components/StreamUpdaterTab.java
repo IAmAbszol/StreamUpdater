@@ -33,7 +33,7 @@ import streamupdater.util.SavingFileConfiguration;
 public class StreamUpdaterTab extends JPanel {
 
 	public static String displayPools = "Pools %ad";
-	public static String displayBracket = "Bracket %ad";
+	public static String displayBracket = "Bracket %round";
 	
 	private static JTextField mainTitleText;
 	private static JTextField currentRoundText;
@@ -649,8 +649,8 @@ public class StreamUpdaterTab extends JPanel {
 					JOptionPane.showMessageDialog(null, "Please Declare All The Paths In The Files Tab!"); GUI.switchTo(3);
 				} else {
 					try {
-						if(FileRenamerTab.isRunningMonitor()) {
-							FileRenamerTab.appendCharacterSystem();
+						if(RenderTab.isStreaming()) {
+							RenderTab.appendCharacterSystem();
 						}
 						setMainTitle();
 						setCurrentRound();

@@ -6,14 +6,14 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
-import streamupdater.gui.components.FileRenamerTab;
+import streamupdater.gui.components.RenderTab;
 import streamupdater.gui.components.FilesTab;
 
 public class Commands {
 	
 	public static String interpretString(String n) {
 		
-		if(!FileRenamerTab.isStreamEmpty() && !FilesTab.getTextFolder().equals("")) {
+		if(!FilesTab.getTextFolder().equals("")) {
 			
 			if(n.contains("PLAYERONENAME")) {
 				n = n.replaceAll("PLAYERONENAME", getPlayerName(true));
@@ -49,26 +49,26 @@ public class Commands {
 	
 	private static String getCharacters(boolean playerOne) {
 
-		LinkedHashSet<String> set1 = new LinkedHashSet<String>(FileRenamerTab.getPlayerOneCharacters());
+		LinkedHashSet<String> set1 = new LinkedHashSet<String>(RenderTab.getPlayerOneCharacters());
         ArrayList<String> tmp1  = new ArrayList<String>(set1);
-        LinkedHashSet<String> set2 = new LinkedHashSet<String>(FileRenamerTab.getPlayerTwoCharacters());
+        LinkedHashSet<String> set2 = new LinkedHashSet<String>(RenderTab.getPlayerTwoCharacters());
         ArrayList<String> tmp2  = new ArrayList<String>(set2);
         
-        FileRenamerTab.setPlayerOneChars(tmp1);
-        FileRenamerTab.setPlayerTwoChars(tmp2);
+        RenderTab.setPlayerOneChars(tmp1);
+        RenderTab.setPlayerTwoChars(tmp2);
  
 		
 		if(playerOne) {
 			
 			String tmp = "BLANK";
-			if(FileRenamerTab.getPlayerOneCharacters().size() > 0) tmp = "";
+			if(RenderTab.getPlayerOneCharacters().size() > 0) tmp = "";
 			
-			for(int i = 0; i < FileRenamerTab.getPlayerOneCharacters().size(); i++) {
+			for(int i = 0; i < RenderTab.getPlayerOneCharacters().size(); i++) {
 				
 				if(i == 0) {
-					tmp = tmp + FileRenamerTab.getPlayerOneCharacters().get(i);
+					tmp = tmp + RenderTab.getPlayerOneCharacters().get(i);
 				} else
-					tmp = tmp + "," + FileRenamerTab.getPlayerOneCharacters().get(i);
+					tmp = tmp + "," + RenderTab.getPlayerOneCharacters().get(i);
 
 			}
 			
@@ -78,14 +78,14 @@ public class Commands {
 			
 			String tmp = "BLANK";
 			
-			if(FileRenamerTab.getPlayerTwoCharacters().size() > 0) tmp = "";
+			if(RenderTab.getPlayerTwoCharacters().size() > 0) tmp = "";
 			
-			for(int i = 0; i < FileRenamerTab.getPlayerTwoCharacters().size(); i++) {
+			for(int i = 0; i < RenderTab.getPlayerTwoCharacters().size(); i++) {
 				
 				if(i == 0) {
-					tmp = tmp + FileRenamerTab.getPlayerTwoCharacters().get(i);
+					tmp = tmp + RenderTab.getPlayerTwoCharacters().get(i);
 				} else
-					tmp = tmp + "," + FileRenamerTab.getPlayerTwoCharacters().get(i);
+					tmp = tmp + "," + RenderTab.getPlayerTwoCharacters().get(i);
 				
 			}
 			

@@ -3,8 +3,15 @@ package streamupdater.gui.components;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,7 +24,8 @@ import javax.swing.border.EmptyBorder;
 import streamupdater.gui.components.render.RenderObject;
 import streamupdater.gui.components.render.RenderingEngine;
 import streamupdater.gui.components.render.VideoHandler;
-import streamupdater.gui.main.GUI;
+import streamupdater.util.Commands;
+import streamupdater.util.SavingFileConfiguration;
 
 @SuppressWarnings("serial")
 public class RenderTab extends JPanel {
@@ -31,10 +39,15 @@ public class RenderTab extends JPanel {
 	private JButton save;
 	private JButton render;
 	private boolean capturing = false;
-	private String streamURL = null;
+	private static String streamURL = null;
 	private long offset = 0;
 	private long duration = 0;
-	private int pos = 0;
+	
+	// title tampering
+	private JTextField videoName;
+	private JCheckBox jcb;
+	private static ArrayList<String> playerOneCharacters = new ArrayList<String>();
+	private static ArrayList<String> playerTwoCharacters = new ArrayList<String>();
 	
 	private VideoHandler video;
 	
@@ -119,6 +132,23 @@ public class RenderTab extends JPanel {
 				capture.setFont(new Font("Dialog", Font.BOLD, 14));
 				capture.setBounds(86, 65, 361, 40);
 				pan.add(capture);
+				
+				// render stoof
+				jcb = new JCheckBox();
+				jcb.setSelected(false);
+				jcb.setToolTipText("Enable to rename your video output to the stream");
+				jcb.setBounds(86, 245, 20, 20);
+				pan.add(jcb);
+				
+				videoName = new JTextField("VIDEOTITLE HERE. REPLACE WITH W/E");
+				videoName.setToolTipText(buildCommandList());
+				videoName.setFont(new Font("Dialog", Font.PLAIN, 14));
+				videoName.setBounds(124, 245, 323, 20);
+				videoName.setHorizontalAlignment(SwingConstants.CENTER);
+				videoName.setColumns(10);
+				videoName.setEnabled(false);
+				pan.add(videoName);
+				
 				repaint();
 				
 				JFrame frame = new JFrame("Stream URL");
@@ -155,6 +185,18 @@ public class RenderTab extends JPanel {
 				launch.setFont(new Font("Dialog", Font.PLAIN, 12));
 				launch.setBounds(315, 85, 89, 23);
 				panel.add(launch);
+				
+				jcb.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						if(jcb.isSelected()) {
+							videoName.setEnabled(true);
+						} else {
+							videoName.setEnabled(false);
+						}
+					}
+					
+				});
 				
 				browse.addActionListener(new ActionListener() {
 
@@ -205,16 +247,26 @@ public class RenderTab extends JPanel {
 						capturing = true;
 						capture.setText("Stop Capture");
 						offset = video.getDuration();
+						appendCharacterSystem();
 					} else {
 						capturing = false;
 						capture.setText("Capture");
 						duration = video.getDuration() - offset;
 						ro.getDurations().add((int) duration);
 						ro.getStartingPositions().add((int) offset);
-						String user = System.getProperty("user.name");
-						ro.getFileNames().add("C:\\Users\\"+user+"\\Desktop\\" + (ro.getFileNames().size() + 1) + ".mp4");
 						offset = 0;
 						duration = 0;
+						String user = System.getProperty("user.name");
+						appendCharacterSystem();
+						if(!jcb.isSelected()) {
+							ro.getFileNames().add("C:\\Users\\"+user+"\\Desktop\\" + (ro.getFileNames().size() + 1) + ".mp4");
+						} else {
+							ro.getFileNames().add("C:\\Users\\"+user+"\\Desktop\\" + Commands.interpretString(videoName.getText()) +".mp4");
+						}
+						// flush everything out
+						System.out.println("SIZE: " + playerOneCharacters.size());
+						playerOneCharacters.clear();
+						playerTwoCharacters.clear();
 					}
 				} catch (Exception e2) {}
 			}
@@ -251,6 +303,76 @@ public class RenderTab extends JPanel {
 			}
 			
 		});
+		
+	}
+	
+	private String buildCommandList() {
+		
+		String n = "<html>";
+		
+		BufferedReader reader = new BufferedReader(new InputStreamReader(RenderTab.class.getResourceAsStream("/Text/awesomecommands.txt")));
+		String line = null;
+		try {
+			while((line = reader.readLine()) != null) {
+				
+				n = n + line + "<br>";
+				
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return n + "</html>";
+		
+	}
+	
+	public static ArrayList<String> getPlayerOneCharacters() {
+		return playerOneCharacters;
+	}
+	
+	public static ArrayList<String> getPlayerTwoCharacters() {
+		return playerTwoCharacters;
+	}
+	
+	public static void setPlayerOneChars(ArrayList<String> tm) {
+		playerOneCharacters.clear();
+		for(int i = 0; i < tm.size(); i++)
+			playerOneCharacters.add(tm.get(i));
+	}
+	
+	public static void setPlayerTwoChars(ArrayList<String> tm) {
+		playerTwoCharacters.clear();
+		for(int i = 0; i < tm.size(); i++)
+			playerTwoCharacters.add(tm.get(i));
+	}
+	
+	public static boolean isStreaming() {
+		if(streamURL == null || streamURL.equals("")) {
+			return false;
+		} else
+			return true;
+	}
+	
+	public static void appendCharacterSystem() {
+		
+		String fileName = SavingFileConfiguration.getFiles()[14];
+		
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(new File(FilesTab.getTextFolder() + "/" + fileName)));
+			String line = null;
+			while((line = reader.readLine()) != null) {
+				getPlayerOneCharacters().add(line);
+			}
+			reader.close();
+			fileName = SavingFileConfiguration.getFiles()[15];
+			reader = new BufferedReader(new FileReader(new File(FilesTab.getTextFolder() + "/" + fileName)));
+			line = null;
+			while((line = reader.readLine()) != null) {
+				getPlayerTwoCharacters().add(line);
+			}
+			reader.close();
+		} catch (Exception e) {}
 		
 	}
 		
