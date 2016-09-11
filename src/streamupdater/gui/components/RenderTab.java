@@ -211,7 +211,8 @@ public class RenderTab extends JPanel {
 						duration = video.getDuration() - offset;
 						ro.getDurations().add((int) duration);
 						ro.getStartingPositions().add((int) offset);
-						ro.getFileNames().add("C:\\Users\\Kyle\\Desktop\\" + (ro.getFileNames().size() + 1) + ".mp4");
+						String user = System.getProperty("user.name");
+						ro.getFileNames().add("C:\\Users\\"+user+"\\Desktop\\" + (ro.getFileNames().size() + 1) + ".mp4");
 						offset = 0;
 						duration = 0;
 					}

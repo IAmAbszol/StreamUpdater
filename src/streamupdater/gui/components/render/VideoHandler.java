@@ -46,7 +46,7 @@ public class VideoHandler {
 			System.out.println(offset);
 			ProcessBuilder builder = new 
 					 ProcessBuilder(
-							 "cmd.exe", "/c", "ffmpeg -y -i " + inputFile + " -ss " + offset + " -c copy -t " + duration + " " + outputFile);
+							 "cmd.exe", "/c", "ffmpeg -y -i " + "\"" + inputFile + "\"" + " -ss " + offset + " -c copy -t " + duration + " " + "\"" + outputFile + "\"");
 	       builder.redirectErrorStream(true);
 	       Process p = builder.start();
 	       System.out.println("Render Complete");
@@ -58,7 +58,7 @@ public class VideoHandler {
 	public long getDuration() {
 		
 		if(inputFile != null) {
-		
+			System.out.println("ffmpeg -y -i " + "\"" + inputFile + "\"" + " -ss " + offset + " -c copy -t " + duration + " " + "\"" + outputFile + "\"");
 			try {
 			
 				long duration = 0;
@@ -66,7 +66,7 @@ public class VideoHandler {
 				
 				 ProcessBuilder builder = new 
 						 ProcessBuilder(
-				            "cmd.exe", "/c", "ffmpeg -i " + inputFile);
+				            "cmd.exe", "/c", "ffmpeg -i " + "\"" + inputFile + "\"");
 		        builder.redirectErrorStream(true);
 		        Process p = builder.start();
 		        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -74,6 +74,7 @@ public class VideoHandler {
 		        while (true) {
 		            line = r.readLine();
 		            if (line == null) { break; }
+		            System.out.println(line);
 		            if(line.contains("Duration"))
 		            	n = line;
 		        }	
