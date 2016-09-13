@@ -49,6 +49,8 @@ public class RenderTab extends JPanel {
 	private static ArrayList<String> playerOneCharacters = new ArrayList<String>();
 	private static ArrayList<String> playerTwoCharacters = new ArrayList<String>();
 	
+	private static String mediaFolderLocation = "";
+	
 	private VideoHandler video;
 	
 	private boolean renderingNow = false;
@@ -135,19 +137,25 @@ public class RenderTab extends JPanel {
 				
 				// render stoof
 				jcb = new JCheckBox();
-				jcb.setSelected(false);
+				jcb.setSelected(true);
 				jcb.setToolTipText("Enable to rename your video output to the stream");
 				jcb.setBounds(86, 245, 20, 20);
 				pan.add(jcb);
 				
-				videoName = new JTextField("VIDEOTITLE HERE. REPLACE WITH W/E");
+				videoName = new JTextField("MAINTITLE - PLAYERONENAME(PLAYERONECHAR) vs PLAYERTWONAME(PLAYERTWOCHAR) - CURRENTROUND");
 				videoName.setToolTipText(buildCommandList());
 				videoName.setFont(new Font("Dialog", Font.PLAIN, 14));
 				videoName.setBounds(124, 245, 323, 20);
 				videoName.setHorizontalAlignment(SwingConstants.CENTER);
 				videoName.setColumns(10);
-				videoName.setEnabled(false);
+				videoName.setEnabled(true);
 				pan.add(videoName);
+				
+				JButton thumbnailButton = new JButton("Thumbnail Editor");
+				thumbnailButton.setToolTipText("Build your own custom thumbnail");
+				thumbnailButton.setFont(new Font("Dialog", Font.BOLD, 14));
+				thumbnailButton.setBounds(86, 285, 361, 40);
+				pan.add(thumbnailButton);
 				
 				repaint();
 				
@@ -186,6 +194,15 @@ public class RenderTab extends JPanel {
 				launch.setBounds(315, 85, 89, 23);
 				panel.add(launch);
 				
+				thumbnailButton.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						new ThumbnailEditor();
+					}
+					
+				});
+				
 				jcb.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
@@ -217,8 +234,21 @@ public class RenderTab extends JPanel {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						while(true) {
+							if(!textField.getText().equals("")) {
+								if(textField.getText().contains(".flv")) {
+									streamURL = textField.getText();
+									break;
+								} else {
+									JOptionPane.showMessageDialog(null, "Invalid extension, please select a .flv selection");
+									return;
+								}
+							} else {
+								JOptionPane.showMessageDialog(null, "Please fill out the box");
+								return;
+							}
+						}
 						frame.dispose();
-						streamURL = textField.getText();
 						ro = new RenderObject(textField.getText());
 						capture.setToolTipText("Capturing at " + textField.getText());
 						video = new VideoHandler();
@@ -258,13 +288,19 @@ public class RenderTab extends JPanel {
 						duration = 0;
 						String user = System.getProperty("user.name");
 						appendCharacterSystem();
-						if(!jcb.isSelected()) {
-							ro.getFileNames().add("C:\\Users\\"+user+"\\Desktop\\" + (ro.getFileNames().size() + 1) + ".mp4");
-						} else {
-							ro.getFileNames().add("C:\\Users\\"+user+"\\Desktop\\" + Commands.interpretString(videoName.getText()) +".mp4");
+						String location = "C:\\Users\\"+user+"\\Desktop\\";
+						if(!FilesTab.getMediaFolder().equals("")) {
+							location = FilesTab.getMediaFolder().replaceAll("/", "\\\\") + "\\"; 
 						}
+						if(!jcb.isSelected()) {
+							ro.getFileNames().add(location + (ro.getFileNames().size() + 1) + ".mp4");
+							ro.getImageFileNames().add(location + (ro.getImageFileNames().size() + 1) + ".png");
+						} else {
+							ro.getFileNames().add(location + Commands.interpretString(videoName.getText()) + ".mp4");
+							ro.getImageFileNames().add(location + Commands.interpretString(videoName.getText()) + ".png");
+						}
+						ro.getImages().add(ThumbnailEditor.generateThumbnail());
 						// flush everything out
-						System.out.println("SIZE: " + playerOneCharacters.size());
 						playerOneCharacters.clear();
 						playerTwoCharacters.clear();
 					}

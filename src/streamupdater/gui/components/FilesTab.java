@@ -32,6 +32,7 @@ public class FilesTab extends JPanel {
 	private JTextField textField;
 	private JTextField commentators;
 	private JTextField textFileAccess;
+	private JTextField mediaFolder;
 	private JLabel images;
 	private JLabel sponsors;
 	private JLabel lblNewLabel_7;
@@ -56,6 +57,8 @@ public class FilesTab extends JPanel {
 	
 	private static File textFolder;
 	private static File[] textFiles;
+	
+	private static String mediaFolderLocation = "";
 	
 	// titles
 	private String field1 = "Characters Image Folder";
@@ -128,31 +131,31 @@ public class FilesTab extends JPanel {
 		JButton load = new JButton("Load Files");
 		load.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		load.setToolTipText("Load all the files you presently linked");
-		load.setBounds(10, 350, 300, 23);
+		load.setBounds(10, 410, 300, 23);
 		panel_2.add(load);
 		
 		JButton loadFromGoogleSheets = new JButton("Load Data From Excel Sheets (Beta)");
 		loadFromGoogleSheets.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		loadFromGoogleSheets.setToolTipText("Downloaded From Google Sheets, Read Users + Info All At Once");
-		loadFromGoogleSheets.setBounds(10, 390, 300, 23);
+		loadFromGoogleSheets.setBounds(10, 445, 300, 23);
 		panel_2.add(loadFromGoogleSheets);
 		
 		JButton loadBracket = new JButton("Load Bracket URL");
 		loadBracket.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		loadBracket.setToolTipText("If you have a bracket, use this to manage it within Bracket Tab");
-		loadBracket.setBounds(10, 430, 300, 23);
+		loadBracket.setBounds(10, 480, 300, 23);
 		panel_2.add(loadBracket);
 		
 		JButton save = new JButton("Save Configuration");
 		save.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		save.setToolTipText("Save the configuration based on your OS ("+findFile(saveConfigName)+")");
-		save.setBounds(10, 470, 300, 23);
+		save.setBounds(10, 515, 300, 23);
 		panel_2.add(save);
 		
 		JButton delete = new JButton("Remove Configuration");
 		delete.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		delete.setToolTipText("Remove the configuration at " + findFile(saveConfigName));
-		delete.setBounds(10, 510, 300, 23);
+		delete.setBounds(10, 550, 300, 23);
 		panel_2.add(delete);
 		
 		lblNewLabel_6 = new JLabel(field4);
@@ -175,6 +178,22 @@ public class FilesTab extends JPanel {
 		lblNewLabel_24.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel_24.setBounds(10, 271, 187, 23);
 		panel_2.add(lblNewLabel_24);
+		
+		label = new JLabel("Media Folder");
+		label.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		label.setBounds(10, 336, 187, 23);
+		panel_2.add(label);
+		
+		mediaFolder = new JTextField("");
+		mediaFolder.setBounds(10, 370, 224, 20);
+		mediaFolder.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel_2.add(mediaFolder);
+		mediaFolder.setColumns(10);
+		
+		JButton browseMedia = new JButton("Browse");
+		browseMedia.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		browseMedia.setBounds(244, 370, 89, 23);
+		panel_2.add(browseMedia);
 		
 		textFileAccess = new JTextField();
 		textFileAccess.setBounds(10, 305, 224, 20);
@@ -221,6 +240,21 @@ public class FilesTab extends JPanel {
 		change5.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		change5.setBounds(287, 277, 46, 14);
 		panel_2.add(change5);
+		
+		browseMedia.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				jfc = new JFileChooser();
+				jfc.setCurrentDirectory(new java.io.File("user.home"));
+				jfc.setDialogTitle("Please Select Your Media Save Folder");
+				jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				if (jfc.showOpenDialog(browseImageFolder1) == JFileChooser.APPROVE_OPTION) {
+					mediaFolder.setText(jfc.getSelectedFile().getAbsolutePath().replace("\\", "/"));
+				}
+			}
+			
+		});
 		
 		loadBracket.addActionListener(new ActionListener() {
 
@@ -490,8 +524,6 @@ public class FilesTab extends JPanel {
 				commentatorFiles = commentatorFolder.listFiles();
 				textFiles = textFolder.listFiles();
 				
-				
-				
 				if(!textField.getText().equals(""))
 					TournamentEnlisterTab.updatePlayerPath(textField.getText());
 				
@@ -500,6 +532,9 @@ public class FilesTab extends JPanel {
 				
 				if(!imageFolder2.getText().equals(""))
 					TournamentEnlisterTab.updateSponsorPath(imageFolder2.getText());
+				
+				if(!mediaFolder.getText().equals(""))
+					mediaFolderLocation = mediaFolder.getText();
 				
 				// loads everything for the combobox
 				StreamUpdaterTab.loadEverything(textFolder, playerFiles, commentatorFiles, image1Files, image2Files);
@@ -527,6 +562,10 @@ public class FilesTab extends JPanel {
 			
 		});
 		
+	}
+	
+	public static String getMediaFolder() {
+		return mediaFolderLocation;
 	}
 	
 	public static File[] getPlayerFiles() {
@@ -574,6 +613,7 @@ public class FilesTab extends JPanel {
 		saveStuff.add(field3);
 		saveStuff.add(field4);
 		saveStuff.add(field5);
+		saveStuff.add(mediaFolder.getText());
 		FilesTabSave fts = new FilesTabSave(saveStuff);
 	}
 	
@@ -588,6 +628,7 @@ public class FilesTab extends JPanel {
 		field3 = fts.getList().get(7);
 		field4 = fts.getList().get(8);
 		field5 = fts.getList().get(9);
+		mediaFolder.setText(fts.getList().get(10));
 		images.setText(field1);
 		sponsors.setText(field2);
 		lblNewLabel_7.setText(field3);

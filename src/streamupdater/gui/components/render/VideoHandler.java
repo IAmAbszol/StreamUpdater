@@ -1,7 +1,14 @@
 package streamupdater.gui.components.render;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
+
+import javax.imageio.ImageIO;
+
+import streamupdater.gui.components.FilesTab;
 
 /*
  * May branch into it's own development but for now it's all in this file
@@ -10,8 +17,10 @@ public class VideoHandler {
 
 	private String inputFile = null;
 	private String outputFile = null;
+	private String outputImageFile = null;
 	private long duration = 0;
 	private long offset = 0;
+	private BufferedImage image = null;
 	
 	//String pathToFile = "C:\\Users\\Kyle\\Desktop\\1855.mp4";
 	//String target = "C:\\Users\\Kyle\\Desktop\\hello.mp4";
@@ -38,6 +47,14 @@ public class VideoHandler {
 		offset = l;
 	}
 	
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
+	
+	public void setImageFileLocation(String n) {
+		outputImageFile = n;
+	}
+	
 	public void encode() {
 		try {
 			System.out.println(inputFile);
@@ -50,6 +67,10 @@ public class VideoHandler {
 	       builder.redirectErrorStream(true);
 	       Process p = builder.start();
 	       System.out.println("Render Complete");
+	       
+	       System.out.println("WHATS NULL\nImage" + image + "\nFile " + outputImageFile);
+			ImageIO.write(image, "png", new File(outputImageFile));
+	       
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

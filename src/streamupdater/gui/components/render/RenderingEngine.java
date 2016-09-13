@@ -1,6 +1,9 @@
 package streamupdater.gui.components.render;
 
 import java.io.File;
+import java.io.IOException;
+
+import streamupdater.gui.components.ThumbnailEditor;
 
 /*
  * Rendering engine, allows the program to gather information about files 
@@ -46,6 +49,8 @@ public class RenderingEngine {
 		video.setOffset(ro.getStartingPositions().get(pos));
 		video.setVideoInput(s);
 		video.setVideoOutput(ro.getFileNames().get(pos));
+		video.setImage(ro.getImages().get(pos));
+		video.setImageFileLocation(ro.getImageFileNames().get(pos));
 		video.encode();
 	}
 	

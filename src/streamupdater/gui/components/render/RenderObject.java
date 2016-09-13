@@ -1,5 +1,6 @@
 package streamupdater.gui.components.render;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,6 +20,8 @@ public class RenderObject implements Serializable {
 	private static ArrayList<Integer> startingPositions;
 	private static ArrayList<Integer> durations;
 	private static ArrayList<String> fileNames;
+	private static ArrayList<BufferedImage> thumbnails;
+	private static ArrayList<String> imageFile;
 	
 	// for serialization
 	public RenderObject() {}
@@ -28,6 +31,8 @@ public class RenderObject implements Serializable {
 		startingPositions = new ArrayList<Integer>();
 		durations = new ArrayList<Integer>();
 		fileNames = new ArrayList<String>();
+		thumbnails = new ArrayList<BufferedImage>();
+		imageFile = new ArrayList<String>();
 	}
 	
 	public static ArrayList<Integer> getStartingPositions() {
@@ -36,6 +41,14 @@ public class RenderObject implements Serializable {
 	
 	public static ArrayList<Integer> getDurations() {
 		return durations;
+	}
+	
+	public static ArrayList<String> getImageFileNames() {
+		return imageFile;
+	}
+	
+	public static ArrayList<BufferedImage> getImages() {
+		return thumbnails;
 	}
 	
 	public static ArrayList<String> getFileNames() {

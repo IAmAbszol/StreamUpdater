@@ -246,7 +246,7 @@ public class StreamUpdaterTab extends JPanel {
 		
 		// restrict to 1 line
 		lineBox = new JCheckBox("");
-		lineBox.setSelected(false);
+		lineBox.setSelected(true);
 		lineBox.setBounds(89, 480, 20, 20);
 		panel.add(lineBox);
 		
