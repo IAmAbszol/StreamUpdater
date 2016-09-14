@@ -231,15 +231,25 @@ public class StreamUpdaterTab extends JPanel {
 		playerTwoMinus.setIcon(new ImageIcon(getClass().getResource("/Minus.png")));
 		panel.add(playerTwoMinus);
 		
+		// swap players names, scores, sponsors, etc
+		JLabel swapLabel = new JLabel();
+		swapLabel.setToolTipText("Swap Player One Objects With Player Two Objects");
+		swapLabel.setBounds(240, 432, 40, 40);
+		try {
+			BufferedImage image = ImageIO.read(StreamUpdaterTab.class.getResource("/Images/swap.png"));
+			swapLabel.setIcon(new ImageIcon(image));
+		} catch (Exception e) {}
+		panel.add(swapLabel);
+		
 		// auto switch text
 		playerBox = new JCheckBox("");
 		playerBox.setSelected(false);
-		playerBox.setBounds(89, 440, 20, 20);
+		playerBox.setBounds(89, 475, 20, 20);
 		panel.add(playerBox);
 		
 		JLabel playersSwitch = new JLabel("Switch Players Every ");
 		playersSwitch.setToolTipText("This will switch the player names and information every set seconds.");
-		playersSwitch.setBounds(125, 440, 210, 20);
+		playersSwitch.setBounds(125, 475, 210, 20);
 		playersSwitch.setHorizontalAlignment(SwingConstants.LEFT);
 		playersSwitch.setFont(new Font("Dialog", Font.BOLD, 16));
 		panel.add(playersSwitch);
@@ -247,53 +257,53 @@ public class StreamUpdaterTab extends JPanel {
 		// restrict to 1 line
 		lineBox = new JCheckBox("");
 		lineBox.setSelected(true);
-		lineBox.setBounds(89, 480, 20, 20);
+		lineBox.setBounds(89, 510, 20, 20);
 		panel.add(lineBox);
 		
 		JLabel lineRestrict = new JLabel("Restrict Output To One Line");
 		lineRestrict.setToolTipText("Enable this feature to only show one line instead of two");
-		lineRestrict.setBounds(125, 480, 250, 20);
+		lineRestrict.setBounds(125, 510, 250, 20);
 		lineRestrict.setHorizontalAlignment(SwingConstants.LEFT);
 		lineRestrict.setFont(new Font("Dialog", Font.BOLD, 16));
 		panel.add(lineRestrict);
 		
 		playerSpin = new JSpinner();
 		playerSpin.setValue(10);
-		playerSpin.setBounds(350, 440, 80, 20);
+		playerSpin.setBounds(350, 475, 80, 20);
 		playerSpin.setFont(new Font("Dialog", Font.PLAIN, 16));
 		panel.add(playerSpin);
 		
 		JLabel lblNewLabel_17 = new JLabel("Commentators");
 		lblNewLabel_17.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_17.setFont(new Font("Dialog", Font.BOLD, 16));
-		lblNewLabel_17.setBounds(10, 523, 519, 20);
+		lblNewLabel_17.setBounds(10, 545, 519, 20);
 		panel.add(lblNewLabel_17);
 		
 		overCom1 = new JTextField("");
-		overCom1.setBounds(239, 554, 186, 20);
+		overCom1.setBounds(239, 575, 186, 20);
 		
 		overCom2 = new JTextField("");
-		overCom2.setBounds(239, 585, 186, 20);
+		overCom2.setBounds(239, 605, 186, 20);
 		
 		overrideC1  = new JButton("*");
-		overrideC1.setBounds(430, 554, 20, 20);
+		overrideC1.setBounds(430, 575, 20, 20);
 		panel.add(overrideC1);
 		
 		overrideC2 = new JButton("*");
-		overrideC2.setBounds(430, 585, 20, 20);
+		overrideC2.setBounds(430, 605, 20, 20);
 		panel.add(overrideC2);
 		
 		commentatorOne = new JComboBox();
-		commentatorOne.setBounds(239, 554, 186, 20);
+		commentatorOne.setBounds(239, 575, 186, 20);
 		panel.add(commentatorOne);
 		
 		commentatorTwo = new JComboBox();
-		commentatorTwo.setBounds(239, 585, 186, 20);
+		commentatorTwo.setBounds(239, 605, 186, 20);
 		panel.add(commentatorTwo);
 		
 		JButton updateButton = new JButton("Update!");
 		updateButton.setFont(new Font("Dialog", Font.BOLD, 16));
-		updateButton.setBounds(89, 629, 361, 50);
+		updateButton.setBounds(89, 640, 361, 50);
 		panel.add(updateButton);
 		
 		playerOneSponsor = new JComboBox();
@@ -313,13 +323,96 @@ public class StreamUpdaterTab extends JPanel {
 		panel.add(playerTwoCharacter);
 		
 		commentatorOneSponsor = new JComboBox();
-		commentatorOneSponsor.setBounds(89, 554, 140, 20);
+		commentatorOneSponsor.setBounds(89, 575, 140, 20);
 		panel.add(commentatorOneSponsor);
 		
 		commentatorTwoSponsor = new JComboBox();
-		commentatorTwoSponsor.setBounds(89, 585, 140, 20);
+		commentatorTwoSponsor.setBounds(89, 605, 140, 20);
 		panel.add(commentatorTwoSponsor);
 
+		swapLabel.addMouseListener(new MouseListener() {
+			public void mouseClicked(MouseEvent arg0) {
+				if(FilesTab.getImageFolder1() == null || FilesTab.getImageFolder2() == null 
+						|| FilesTab.getPlayerFolder() == null || FilesTab.getCommentatorFolder() == null 
+						|| FilesTab.getTextFolder() == null) {
+					JOptionPane.showMessageDialog(null, "Please Declare All The Paths In The Files Tab!"); GUI.switchTo(3);
+				} else {
+					int player1Pos = playerOneCombo.getSelectedIndex();
+					int player2Pos = playerTwoCombo.getSelectedIndex();
+					int player1Sponsor = playerOneSponsor.getSelectedIndex();
+					int player2Sponsor = playerTwoSponsor.getSelectedIndex();
+					int player1Char = playerOneCharacter.getSelectedIndex();
+					int player2Char = playerTwoCharacter.getSelectedIndex();
+					int player1Score = Integer.parseInt(playerOneScoreText.getText());
+					int player2Score = Integer.parseInt(playerTwoScoreText.getText());
+					String playerOneOver = overP1.getText();
+					String playerTwoOver = overP2.getText();
+					boolean op1 = overridePlayerOne;
+					boolean op2 = overridePlayerTwo;
+					//set score
+					playerOneScoreText.setText(""+player2Score);
+					playerTwoScoreText.setText(""+player1Score);
+					//set chars
+					playerOneCharacter.setSelectedIndex(player2Char);
+					playerTwoCharacter.setSelectedIndex(player1Char);
+					//set sponsor
+					playerOneSponsor.setSelectedIndex(player2Sponsor);
+					playerTwoSponsor.setSelectedIndex(player1Sponsor);
+					
+					// player one & two have a text field
+					if(overridePlayerOne && overridePlayerTwo) {
+						overP2.setText(playerOneOver);
+						overP1.setText(playerTwoOver);
+					} else 
+					// player one is text but player two is combo
+					if(overridePlayerOne && !overridePlayerTwo) {
+						// swap the booleans
+						overridePlayerOne = op2;
+						overridePlayerTwo = op1;
+						// enable p1 combo but enable p2 text
+						panel.remove(overP1);
+						panel.add(playerOneCombo);
+						panel.remove(playerTwoCombo);
+						panel.add(overP2);
+						repaint();
+						// set stuff
+						overP2.setText(playerOneOver);
+						playerOneCombo.setSelectedIndex(player2Pos);
+						
+					} else
+					// player one is combo but player two is text
+					if(!overridePlayerOne && overridePlayerTwo) {
+						// swap the booleans
+						overridePlayerOne = op2;
+						overridePlayerTwo = op1;
+						// enable p1 combo but enable p2 text
+						panel.remove(playerOneCombo);
+						panel.add(overP1);
+						panel.remove(overP2);
+						panel.add(playerTwoCombo);
+						repaint();
+						// set stuff
+						overP1.setText(playerTwoOver);
+						playerTwoCombo.setSelectedIndex(player1Pos);
+					} else
+					// both are combos
+					if(!overridePlayerOne && !overridePlayerTwo) {
+						playerTwoCombo.setSelectedIndex(player1Pos);
+						playerOneCombo.setSelectedIndex(player2Pos);
+					}
+					updateButton.doClick();
+				}
+			}
+			public void mouseEntered(MouseEvent arg0) {
+			}
+			public void mouseExited(MouseEvent arg0) {
+			}
+			public void mousePressed(MouseEvent arg0) {
+			}
+			public void mouseReleased(MouseEvent arg0) {
+			}
+		});
+		
 		gear.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent arg0) {
 				// only event I care about

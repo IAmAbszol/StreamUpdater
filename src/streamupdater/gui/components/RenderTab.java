@@ -52,6 +52,7 @@ public class RenderTab extends JPanel {
 	private static String mediaFolderLocation = "";
 	
 	private VideoHandler video;
+	private ThumbnailEditor te;
 	
 	private boolean renderingNow = false;
 	
@@ -124,6 +125,7 @@ public class RenderTab extends JPanel {
 				save.setToolTipText("Save the current object");
 				save.setFont(new Font("Dialog", Font.BOLD, 14));
 				save.setBounds(86, 125, 361, 40);
+				save.setEnabled(false);
 				pan.add(save);
 				render.setText("Render [Stream Has Completed]");
 				render.setFont(new Font("Dialog", Font.BOLD, 14));
@@ -198,7 +200,10 @@ public class RenderTab extends JPanel {
 
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						new ThumbnailEditor();
+						if(te == null) {
+							te = new ThumbnailEditor();
+						} else
+							te.getFrame().setVisible(true);
 					}
 					
 				});

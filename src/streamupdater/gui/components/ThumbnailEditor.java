@@ -94,7 +94,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 			
 			frame = new JFrame("Thumbnail Editor - Panels at 380 x 260");
 			frame.setResizable(false);
-			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 			frame.setBounds(100, 100, 620, 1000);
 			contentPane = new JPanel();
 			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -685,6 +685,10 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 			}
 		}
 		
+	}
+	
+	public JFrame getFrame() {
+		return frame;
 	}
 	
 }
