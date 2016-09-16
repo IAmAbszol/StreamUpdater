@@ -1,5 +1,6 @@
 package streamupdater.gui.components;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -353,7 +354,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 	
 	private void init() {
 		image = new BufferedImage(WIDTH, HEIGHT,
-				BufferedImage.TYPE_INT_RGB);
+				BufferedImage.TYPE_INT_ARGB);
 		g = (Graphics2D) image.getGraphics();
 		running = true;
 	}
@@ -433,7 +434,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		int genheight = Integer.parseInt(height.getText());
 		// manipulate the width and height to specs
 		
-		BufferedImage resized = new BufferedImage(genwidth, genheight, BufferedImage.TYPE_INT_RGB);
+		BufferedImage resized = new BufferedImage(genwidth, genheight, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = resized.createGraphics();
 		g.drawImage(image, 0, 0, genwidth, genheight, null);
 		g.dispose();
@@ -450,7 +451,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		int genheight = Integer.parseInt(height.getText());
 		// manipulate the width and height to specs
 		
-		BufferedImage resized = new BufferedImage(genwidth, genheight, BufferedImage.TYPE_INT_RGB);
+		BufferedImage resized = new BufferedImage(genwidth, genheight, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = resized.createGraphics();
 		g.drawImage(image, 0, 0, genwidth, genheight, null);
 		g.dispose();
@@ -492,14 +493,15 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 	public static BufferedImage convertTextToImage(File f) {
 		try {
 			int tmpy = 0;
-			BufferedImage tmp = new BufferedImage(WIDTH - 50, HEIGHT, BufferedImage.TYPE_INT_RGB);
-			Graphics gx = tmp.createGraphics();
+			BufferedImage tmp = new BufferedImage(WIDTH - 50, 72, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D gx = tmp.createGraphics();
 			gx.setColor(Color.white);
 			gx.setFont(customFont);
 			String line = null;
 			BufferedReader reader = new BufferedReader(new FileReader(f));
 			while((line = reader.readLine()) != null) {
-				gx.drawString(line, 0, (tmpy += gx.getFontMetrics().getHeight()));
+				int width = gx.getFontMetrics().stringWidth(line);
+				gx.drawString(line,((WIDTH - 50) / 2) -  (width / 2), (tmpy += gx.getFontMetrics().getHeight()));
 			}
 			reader.close();
 			return tmp;
@@ -513,7 +515,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		BufferedImage tmp = new BufferedImage(
 				layers[i].getImage().getWidth(),
 				layers[i].getImage().getHeight(),
-				BufferedImage.TYPE_INT_RGB);
+				BufferedImage.TYPE_INT_ARGB);
 		Graphics gx = tmp.createGraphics();
 		try {
 			if(layers[i].getFile().getName().contains(".txt")) {
@@ -526,8 +528,9 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		}
 		gx.drawImage(
 				layers[i].getImage(), 
-				layers[i].getX() + layers[i].getImage().getWidth(), 
-				layers[i].getY(), -layers[i].getImage().getWidth(), 
+				layers[i].getImage().getWidth(), 
+				0, 
+				-layers[i].getImage().getWidth(), 
 				layers[i].getImage().getHeight(), 
 				null);
 		gx.dispose();
