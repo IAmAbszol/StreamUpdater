@@ -102,6 +102,7 @@ public class ExcelSheetCollection extends JFrame {
 		
 		try {
 			
+			
 			String excelFilePath = n;
 	         
 	        XSSFWorkbook workbook = new XSSFWorkbook(new File(excelFilePath));
@@ -120,11 +121,12 @@ public class ExcelSheetCollection extends JFrame {
 	            while (cellIterator.hasNext()) {
 	                Cell cell = cellIterator.next();
 
-	                if (row.getRowNum() > 0) { // To filter column headings
+	                if (row.getRowNum() >= 0) { // To filter column headings
 	                    if (cell.getColumnIndex() == playerCol) {// To match column
 	                                                        // index
 	                        switch (cell.getCellType()) {
 	                        case Cell.CELL_TYPE_STRING:
+	                        	System.out.println(cell.getStringCellValue());
 	                            playerNames.add(cell.getStringCellValue());
 	                            break;
 	                        }
@@ -144,7 +146,7 @@ public class ExcelSheetCollection extends JFrame {
 	            while (cellIterator.hasNext()) {
 	                Cell cell = cellIterator.next();
 
-	                if (row.getRowNum() > 0) { // To filter column headings
+	                if (row.getRowNum() >= 0) { // To filter column headings
 	                    if (cell.getColumnIndex() == infoCol) {// To match column
 	                                                        // index
 	                        switch (cell.getCellType()) {

@@ -3,6 +3,7 @@ package streamupdater.gui.components;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -21,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import streamupdater.gui.components.render.RenderList;
 import streamupdater.gui.components.render.RenderObject;
 import streamupdater.gui.components.render.RenderingEngine;
 import streamupdater.gui.components.render.VideoHandler;
@@ -32,7 +34,7 @@ public class RenderTab extends JPanel {
 
 	private JFileChooser jfc;
 	
-	private JButton renderNow;
+	private JButton loadRender;
 	private JButton renderAfterStream;
 	
 	private JButton capture;
@@ -53,6 +55,7 @@ public class RenderTab extends JPanel {
 	
 	private VideoHandler video;
 	private ThumbnailEditor te;
+	private RenderList rl;
 	
 	private boolean renderingNow = false;
 	
@@ -73,12 +76,11 @@ public class RenderTab extends JPanel {
 		mainText.setBounds(10, 11, 519, 26);
 		pan.add(mainText);
 		
-		renderNow = new JButton("Render Now");
-		renderNow.setToolTipText("Render now, lets forget the stream");
-		renderNow.setFont(new Font("Dialog", Font.BOLD, 14));
-		renderNow.setBounds(86, 65, 361, 40);
-		renderNow.setEnabled(false); 									// temp
-		pan.add(renderNow);
+		loadRender = new JButton("Load Saved Object");
+		loadRender.setToolTipText("Load Saved Render File (Saves To Desktop or /Home/ BSD, Mac, Linux");
+		loadRender.setFont(new Font("Dialog", Font.BOLD, 14));
+		loadRender.setBounds(86, 65, 361, 40);
+		pan.add(loadRender);
 		
 		renderAfterStream = new JButton("Render Live During Stream");
 		renderAfterStream.setToolTipText("Render during the stream, is your computer strong enough?");
@@ -86,30 +88,57 @@ public class RenderTab extends JPanel {
 		renderAfterStream.setBounds(86, 125, 361, 40);
 		pan.add(renderAfterStream);
 		
-		renderNow.addActionListener(new ActionListener() {
+		loadRender.setEnabled(false);
+		loadRender.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				pan.remove(renderAfterStream);
-				pan.repaint();
-				if(renderingNow) {
-					renderingNow = false;
-					pan.add(renderAfterStream);
-					renderNow.setText("Render Now");
-					renderNow.setToolTipText("Render now, lets forget the stream");
-				} else {
-					renderingNow = true;
-					renderNow.setText("Stop Rendering");
-					renderNow.setToolTipText("Stop Rendering");
-					int tmp = RenderingEngine.renderProject(video);
-					if(tmp < 0) {
-						JOptionPane.showMessageDialog(null, "ERROR [" + tmp + "]! Corrupted Object/File?");
-						renderingNow = false;
-						pan.add(renderAfterStream);
-						renderNow.setText("Render Now");
-						renderNow.setToolTipText("Render now, lets forget the stream");
-					}
-				}
+				// make the layout like the one after launch. Get ro stream url to here
+				RenderObject tmpro = RenderObject.load();
+				System.out.println(tmpro.getStreamURL());
+				ro = new RenderObject(tmpro.getStreamURL());
+				ro.setStartingPositions(tmpro.getStartingPositions());
+				ro.setDurations(tmpro.getDurations());
+				ro.setFileNames(tmpro.getFileNames());
+				ro.setThumbnails(tmpro.getImages());
+				ro.setImageFile(tmpro.getImageFileNames());
+				save.setText("Save Object");
+				save.setToolTipText("Save the current object");
+				save.setFont(new Font("Dialog", Font.BOLD, 14));
+				save.setBounds(86, 125, 361, 40);
+				pan.add(save);
+				render.setText("Open Render List");
+				render.setFont(new Font("Dialog", Font.BOLD, 14));
+				render.setBounds(86, 185, 361, 40);
+				pan.add(render);
+				capture.setText("Start Capture");
+				capture.setToolTipText("Render during the stream, is your computer strong enough?");
+				capture.setFont(new Font("Dialog", Font.BOLD, 14));
+				capture.setBounds(86, 65, 361, 40);
+				pan.add(capture);
+				
+				// render stoof
+				jcb = new JCheckBox();
+				jcb.setSelected(true);
+				jcb.setToolTipText("Enable to rename your video output to the stream");
+				jcb.setBounds(86, 245, 20, 20);
+				pan.add(jcb);
+				
+				videoName = new JTextField("MAINTITLE - PLAYERONENAME(PLAYERONECHAR) vs PLAYERTWONAME(PLAYERTWOCHAR) - CURRENTROUND");
+				videoName.setToolTipText(buildCommandList());
+				videoName.setFont(new Font("Dialog", Font.PLAIN, 14));
+				videoName.setBounds(124, 245, 323, 20);
+				videoName.setHorizontalAlignment(SwingConstants.CENTER);
+				videoName.setColumns(10);
+				videoName.setEnabled(true);
+				pan.add(videoName);
+				
+				JButton thumbnailButton = new JButton("Thumbnail Editor");
+				thumbnailButton.setToolTipText("Build your own custom thumbnail");
+				thumbnailButton.setFont(new Font("Dialog", Font.BOLD, 14));
+				thumbnailButton.setBounds(86, 285, 361, 40);
+				pan.add(thumbnailButton);
+				
 				repaint();
 			}
 			
@@ -119,15 +148,14 @@ public class RenderTab extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				pan.remove(renderNow);
+				pan.remove(loadRender);
 				pan.remove(renderAfterStream);
 				save.setText("Save Object");
 				save.setToolTipText("Save the current object");
 				save.setFont(new Font("Dialog", Font.BOLD, 14));
 				save.setBounds(86, 125, 361, 40);
-				save.setEnabled(false);
 				pan.add(save);
-				render.setText("Render [Stream Has Completed]");
+				render.setText("Open Render List");
 				render.setFont(new Font("Dialog", Font.BOLD, 14));
 				render.setBounds(86, 185, 361, 40);
 				pan.add(render);
@@ -304,7 +332,10 @@ public class RenderTab extends JPanel {
 							ro.getFileNames().add(location + Commands.interpretString(videoName.getText()) + ".mp4");
 							ro.getImageFileNames().add(location + Commands.interpretString(videoName.getText()) + ".png");
 						}
-						ro.getImages().add(ThumbnailEditor.generateThumbnail());
+						if(te == null) {
+							ro.getImages().add(new BufferedImage(1280, 720, BufferedImage.TYPE_INT_RGB));
+						} else 
+							ro.getImages().add(ThumbnailEditor.generateThumbnail());
 						// flush everything out
 						playerOneCharacters.clear();
 						playerTwoCharacters.clear();
@@ -319,11 +350,11 @@ public class RenderTab extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(ro != null) {
-					ro.save(ro);
+					ro.save();
 				} else {
 					JOptionPane.showMessageDialog(null, "Render Object Broken? I'll rebuild it");
 					ro = new RenderObject(streamURL);
-					ro.save(ro);
+					ro.save();
 				}
 			}
 			
@@ -334,13 +365,9 @@ public class RenderTab extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				for(int i = 0; i < ro.getDurations().size(); i++) {
-					// garbonzo
-					RenderingEngine re = new RenderingEngine();
-					re.setObject(ro);
-					re.renderProject(video, i);
-					System.out.println("Rendering");
-				}
+				// open render list
+				rl = new RenderList(video, ro);
+				
 			}
 			
 		});

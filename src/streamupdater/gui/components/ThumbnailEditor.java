@@ -52,7 +52,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 	
 	private JSpinner localWidth;
 	private JSpinner localHeight;
-	private static Font customFont = new Font("Dialog", Font.BOLD, 36);			// custom, change here programmers
+	private static Font customFont = new Font("Dialog", Font.BOLD, 16);			// custom, change here programmers
 	private JSpinner posx;
 	private JSpinner posy;
 	private boolean ignore = false;
@@ -477,11 +477,15 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 					if(!layers[i].isReversed())
 						if(layers[i].getFile().getName().contains(".txt")) {
 							layers[i].setImage(convertTextToImage(layers[i].getFile()));
+							layers[i].setWidth(layers[i].getImage().getWidth());
+							layers[i].setHeight(layers[i].getImage().getHeight());
 						} else
 							layers[i].setImage(ImageIO.read(layers[i].getFile()));
 					else {
+						System.out.println("here");
 						reverseImage(i);
 					}
+					System.out.println(layers[i].getWidth());
 				} catch (Exception e) {
 					// image is loading, be patient
 				}
@@ -494,17 +498,31 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		try {
 			int tmpy = 0;
 			BufferedImage tmp = new BufferedImage(WIDTH - 50, 72, BufferedImage.TYPE_INT_ARGB);
+			BufferedImage actual;
 			Graphics2D gx = tmp.createGraphics();
 			gx.setColor(Color.white);
 			gx.setFont(customFont);
 			String line = null;
 			BufferedReader reader = new BufferedReader(new FileReader(f));
+			int longest = 0;
 			while((line = reader.readLine()) != null) {
-				int width = gx.getFontMetrics().stringWidth(line);
-				gx.drawString(line,((WIDTH - 50) / 2) -  (width / 2), (tmpy += gx.getFontMetrics().getHeight()));
+				if(gx.getFontMetrics().stringWidth(line) > longest) {
+					longest = gx.getFontMetrics().stringWidth(line);
+				}
+			}
+			actual = new BufferedImage(longest, 72, BufferedImage.TYPE_INT_ARGB);
+			gx.dispose();
+			tmp = null;
+			gx = actual.createGraphics();
+			gx.setColor(Color.white);
+			gx.setFont(customFont);
+			reader.close();
+			reader = new BufferedReader(new FileReader(f));
+			while((line = reader.readLine()) != null) {
+				gx.drawString(line,0, (tmpy += gx.getFontMetrics().getHeight()));
 			}
 			reader.close();
-			return tmp;
+			return actual;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

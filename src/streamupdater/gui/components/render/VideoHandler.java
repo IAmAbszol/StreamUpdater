@@ -1,14 +1,14 @@
 package streamupdater.gui.components.render;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.util.Scanner;
 
 import javax.imageio.ImageIO;
-
-import streamupdater.gui.components.FilesTab;
 
 /*
  * May branch into it's own development but for now it's all in this file
@@ -61,14 +61,14 @@ public class VideoHandler {
 			System.out.println(outputFile);
 			System.out.println(duration);
 			System.out.println(offset);
+
 			ProcessBuilder builder = new 
 					 ProcessBuilder(
-							 "cmd.exe", "/c", "ffmpeg -y -i " + "\"" + inputFile + "\"" + " -ss " + offset + " -c copy -t " + duration + " " + "\"" + outputFile + "\"");
-	       builder.redirectErrorStream(true);
-	       Process p = builder.start();
-	       System.out.println("Render Complete");
-	       
-	       System.out.println("WHATS NULL\nImage" + image + "\nFile " + outputImageFile);
+							 "cmd.exe", "/c", "ffmpeg -y -i " + "\"" + inputFile + "\" -c:v libx264 -crf 23 -preset ultrafast -f mp4 -r 59.940 " + " -ss " + offset + " -c:a copy -t " + duration + " " + "\"" + outputFile + "\"");
+			builder.redirectErrorStream(true);
+			Process p = builder.start();
+			inheritIO(p.getInputStream(), System.out);
+			
 			ImageIO.write(image, "png", new File(outputImageFile));
 	       
 		} catch (Exception e) {
@@ -76,10 +76,22 @@ public class VideoHandler {
 		}
 	}
 	
+	private void inheritIO(final InputStream src, final PrintStream dest) {
+	    new Thread(new Runnable() {
+	        public void run() {
+	            Scanner sc = new Scanner(src);
+	            while (sc.hasNextLine()) {
+	                dest.print(sc.nextLine());
+	            }
+	            System.out.println("Render Complete");
+	        }
+	    }).start();
+	}
+	
 	public long getDuration() {
 		
 		if(inputFile != null) {
-			System.out.println("ffmpeg -y -i " + "\"" + inputFile + "\"" + " -ss " + offset + " -c copy -t " + duration + " " + "\"" + outputFile + "\"");
+			//System.out.println("ffmpeg -y -i " + "\"" + inputFile + "\"" + " -vcodec libx264 -g 1 -async 1 -ss " + offset + " -c copy -t " + duration + " " + "\"" + outputFile + "\"");
 			try {
 			
 				long duration = 0;

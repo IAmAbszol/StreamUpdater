@@ -86,7 +86,7 @@ public class Selection {
 		jfc.setDialogTitle("Select Your Saved Render Object");
 		jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		if (jfc.showOpenDialog(tmp) == JFileChooser.APPROVE_OPTION) {
-			return f = new File(jfc.getSelectedFile().getAbsolutePath().replace("\\", "/"));
+			return f = new File(jfc.getSelectedFile().getAbsolutePath());
 		}
 		return f;
 	}

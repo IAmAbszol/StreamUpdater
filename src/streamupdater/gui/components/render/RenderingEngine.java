@@ -58,4 +58,18 @@ public class RenderingEngine {
 		this.ro = ro;
 	}
 	
+	public void removePartObject(int pos) {
+		
+		if(ro != null) {
+			System.out.println("Removed");
+			ro.getDurations().remove(pos);
+			ro.getFileNames().remove(pos);
+			ro.getImageFileNames().remove(pos);
+			ro.getImages().remove(pos);
+			ro.getStartingPositions().remove(pos);
+			
+		}
+		
+	}
+	
 }
