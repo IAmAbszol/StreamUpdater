@@ -24,9 +24,10 @@ import javax.swing.border.EmptyBorder;
 
 import streamupdater.gui.components.render.RenderList;
 import streamupdater.gui.components.render.RenderObject;
-import streamupdater.gui.components.render.RenderingEngine;
 import streamupdater.gui.components.render.VideoHandler;
+import streamupdater.gui.main.GUI;
 import streamupdater.util.Commands;
+import streamupdater.util.RenderSave;
 import streamupdater.util.SavingFileConfiguration;
 
 @SuppressWarnings("serial")
@@ -88,20 +89,27 @@ public class RenderTab extends JPanel {
 		renderAfterStream.setBounds(86, 125, 361, 40);
 		pan.add(renderAfterStream);
 		
-		loadRender.setEnabled(false);
 		loadRender.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if(FilesTab.getMediaFolder().equals("")) {
+					JOptionPane.showMessageDialog(null, "Please Declare All The Paths In The Files Tab!"); GUI.switchTo(3);
+					return;
+				}
 				// make the layout like the one after launch. Get ro stream url to here
-				RenderObject tmpro = RenderObject.load();
-				System.out.println(tmpro.getStreamURL());
-				ro = new RenderObject(tmpro.getStreamURL());
-				ro.setStartingPositions(tmpro.getStartingPositions());
-				ro.setDurations(tmpro.getDurations());
-				ro.setFileNames(tmpro.getFileNames());
-				ro.setThumbnails(tmpro.getImages());
-				ro.setImageFile(tmpro.getImageFileNames());
+				RenderSave rs = new RenderSave();
+				rs.load();
+				if(rs.getStreamURL() == null) return;
+				ro = new RenderObject(rs.getStreamURL());
+				ro.setStartingPositions(rs.getStartingPositions());
+				ro.setDurations(rs.getDurations());
+				ro.setFileNames(rs.getFileNames());
+				ro.setThumbnails(rs.getImages());
+				ro.setImageFile(rs.getImageFileNames());
+				
+				pan.remove(loadRender);
+				pan.remove(renderAfterStream);
 				save.setText("Save Object");
 				save.setToolTipText("Save the current object");
 				save.setFont(new Font("Dialog", Font.BOLD, 14));
@@ -139,7 +147,38 @@ public class RenderTab extends JPanel {
 				thumbnailButton.setBounds(86, 285, 361, 40);
 				pan.add(thumbnailButton);
 				
+				capture.setToolTipText("Capturing at " + ro.getStreamURL());
+				streamURL = ro.getStreamURL();
+				video = new VideoHandler();
+				video.setVideoInput(ro.getStreamURL());
+				
 				repaint();
+				
+				
+				thumbnailButton.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						if(te == null) {
+							te = new ThumbnailEditor();
+						} else
+							te.getFrame().setVisible(true);
+					}
+					
+				});
+				
+				jcb.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						if(jcb.isSelected()) {
+							videoName.setEnabled(true);
+						} else {
+							videoName.setEnabled(false);
+						}
+					}
+					
+				});
+				
 			}
 			
 		});
@@ -148,6 +187,10 @@ public class RenderTab extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if(FilesTab.getMediaFolder().equals("")) {
+					JOptionPane.showMessageDialog(null, "Please Declare All The Paths In The Files Tab!"); GUI.switchTo(3);
+					return;
+				}
 				pan.remove(loadRender);
 				pan.remove(renderAfterStream);
 				save.setText("Save Object");
@@ -350,11 +393,13 @@ public class RenderTab extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(ro != null) {
-					ro.save();
+					RenderSave rs = new RenderSave();
+					rs.save(ro.getStreamURL(), ro.getStartingPositions(), ro.getDurations(), ro.getFileNames(), ro.getImages(), ro.getImageFileNames());
 				} else {
 					JOptionPane.showMessageDialog(null, "Render Object Broken? I'll rebuild it");
 					ro = new RenderObject(streamURL);
-					ro.save();
+					RenderSave rs = new RenderSave();
+					rs.save(ro.getStreamURL(), ro.getStartingPositions(), ro.getDurations(), ro.getFileNames(), ro.getImages(), ro.getImageFileNames());
 				}
 			}
 			

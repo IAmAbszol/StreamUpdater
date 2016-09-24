@@ -38,16 +38,18 @@ To begin using this tab you must first declare all the locations
 within the Files Tab, an error will be thrown if you have not done so.
 
 
-[Render Tab] - The pre-existing Files Tab but BETTER.
-Features are Render Now and Render During Stream
-Render Now allows you to take a previous saved object
-and render it right then and there with ease.
-Render During/After stream (Doesn't matter)
-will take the capture and stop capture durations into account
-and will allow you to save the object or render it then and there.
-By clicking capture/stop capture, the information is stored, no garbage.
+[Render Tab] - Allows to control and render the stream.
+Using FFmpeg and Java, this part of the program is far more sophisticated 
+than the rest of the program.
+Load Render will allow you to select a saved object that appears on your Desktop.
+NOTICE! If you transfer the file between computers, there are problems.
+The second computer requires
+- Same user name
+- Same file name
+- Same file location aka where it was monitoring the file before.
 
-Still in beta, feel free to work on it.
+Render During Stream allows you to capture, create thumbnails, etc during the stream.
+Enjoy!
 
 
 [Bracket Tab] - Beta, Hidden. Developers this hasn't been built yet

@@ -482,10 +482,8 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 						} else
 							layers[i].setImage(ImageIO.read(layers[i].getFile()));
 					else {
-						System.out.println("here");
 						reverseImage(i);
 					}
-					System.out.println(layers[i].getWidth());
 				} catch (Exception e) {
 					// image is loading, be patient
 				}
