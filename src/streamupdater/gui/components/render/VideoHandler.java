@@ -64,7 +64,8 @@ public class VideoHandler {
 
 			ProcessBuilder builder = new 
 					 ProcessBuilder(
-							 "cmd.exe", "/c", "ffmpeg -y -i " + "\"" + inputFile + "\" -c:v libx264 -crf 23 -preset ultrafast -f mp4 -r 59.940 " + " -ss " + offset + " -c:a copy -t " + duration + " " + "\"" + outputFile + "\"");
+							 "cmd", "/c", "ffmpeg -y -i " + "\"" + inputFile + "\" -codec copy -ss " + offset + " -t " + duration + "" + "\"" + outputFile + "\"");
+							 //"cmd.exe", "/c", "ffmpeg -y -i " + "\"" + inputFile + "\" -c:v libx264 -crf 23 -preset ultrafast -f mp4 -r 59.940 -threads 2" + " -ss " + offset + " -c:a copy -t " + duration + " " + "\"" + outputFile + "\"");
 			builder.redirectErrorStream(true);
 			Process p = builder.start();
 			inheritIO(p.getInputStream(), System.out);
