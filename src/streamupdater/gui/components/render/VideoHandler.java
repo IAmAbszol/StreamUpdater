@@ -16,11 +16,16 @@ import javax.imageio.ImageIO;
 public class VideoHandler {
 
 	private String inputFile = null;
+	private String alteredFile = null;
 	private String outputFile = null;
 	private String outputImageFile = null;
 	private long duration = 0;
 	private long offset = 0;
 	private BufferedImage image = null;
+	
+	private String readConvert = null;
+	private boolean canEncode = true;
+	private String readEncode = null;
 	
 	//String pathToFile = "C:\\Users\\Kyle\\Desktop\\1855.mp4";
 	//String target = "C:\\Users\\Kyle\\Desktop\\hello.mp4";
@@ -29,6 +34,7 @@ public class VideoHandler {
 	
 	public void setVideoInput(String s) {
 		inputFile = s;
+		alteredFile = s.replaceAll(".flv", ".mp4");
 	}
 	
 	public void setExtension(String s) {
@@ -55,36 +61,59 @@ public class VideoHandler {
 		outputImageFile = n;
 	}
 	
+	public void convertToMp4() {
+		try {
+			alteredFile = inputFile.replace(".flv", ".mp4");
+			ProcessBuilder builder = new 
+					 ProcessBuilder(
+							 "cmd", "/c", "ffmpeg -y -i " + "\"" + inputFile + "\" -codec copy " + "\"" + alteredFile + "\"");
+			builder.redirectErrorStream(true);
+			Process p = builder.start();
+			inheritIO(p.getInputStream(), System.out, true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void encode() {
 		try {
 			System.out.println(inputFile);
+			System.out.println(alteredFile);
 			System.out.println(outputFile);
 			System.out.println(duration);
 			System.out.println(offset);
-
 			ProcessBuilder builder = new 
 					 ProcessBuilder(
-							 "cmd", "/c", "ffmpeg -y -i " + "\"" + inputFile + "\" -codec copy -ss " + offset + " -t " + duration + "" + "\"" + outputFile + "\"");
+							 "cmd", "/c", "ffmpeg -y -ss " + offset + " -i " + "\"" + alteredFile + "\" -t " + duration + " " + "\"" + outputFile + "\"");
 							 //"cmd.exe", "/c", "ffmpeg -y -i " + "\"" + inputFile + "\" -c:v libx264 -crf 23 -preset ultrafast -f mp4 -r 59.940 -threads 2" + " -ss " + offset + " -c:a copy -t " + duration + " " + "\"" + outputFile + "\"");
 			builder.redirectErrorStream(true);
 			Process p = builder.start();
-			inheritIO(p.getInputStream(), System.out);
+			inheritIO(p.getInputStream(), System.out, false);
 			
 			ImageIO.write(image, "png", new File(outputImageFile));
+			
+			System.out.println("Rendering Complete");
+			readEncode = null;
 	       
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void inheritIO(final InputStream src, final PrintStream dest) {
+	private void inheritIO(final InputStream src, final PrintStream dest, boolean convert) {
 	    new Thread(new Runnable() {
 	        public void run() {
 	            Scanner sc = new Scanner(src);
 	            while (sc.hasNextLine()) {
-	                dest.print(sc.nextLine());
+	            	if(convert) {
+	            		readConvert = sc.nextLine();
+		                dest.println(readConvert);
+	            	} else {
+	            		readEncode = sc.nextLine();
+	            		dest.println(readEncode);
+	            	}
 	            }
-	            System.out.println("Render Complete");
+	            sc.close();
 	        }
 	    }).start();
 	}

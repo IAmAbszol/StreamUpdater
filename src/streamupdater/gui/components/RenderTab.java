@@ -146,6 +146,12 @@ public class RenderTab extends JPanel {
 				thumbnailButton.setFont(new Font("Dialog", Font.BOLD, 14));
 				thumbnailButton.setBounds(86, 285, 361, 40);
 				pan.add(thumbnailButton);
+
+				JButton changePath = new JButton("Change Stream URL");
+				changePath.setToolTipText("Change the path to your file a.k.a file has moved");
+				changePath.setFont(new Font("Dialog", Font.BOLD, 14));
+				changePath.setBounds(86, 345, 361, 40);
+				pan.add(changePath);
 				
 				capture.setToolTipText("Capturing at " + ro.getStreamURL());
 				streamURL = ro.getStreamURL();
@@ -154,6 +160,93 @@ public class RenderTab extends JPanel {
 				
 				repaint();
 				
+				changePath.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						JFrame frame = new JFrame("Stream URL");
+						frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						frame.setBounds(100, 100, 450, 201);
+						JPanel contentPane = new JPanel();
+						contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+						frame.setContentPane(contentPane);
+						contentPane.setLayout(null);
+						
+						JPanel panel = new JPanel();
+						panel.setBounds(10, 11, 414, 140);
+						contentPane.add(panel);
+						panel.setLayout(null);
+						
+						JLabel lblNewLabel = new JLabel("Streaming File URL");
+						lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+						lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 14));
+						lblNewLabel.setBounds(10, 11, 394, 30);
+						panel.add(lblNewLabel);
+						
+						JTextField textField = new JTextField();
+						textField.setFont(new Font("Dialog", Font.PLAIN, 12));
+						textField.setBounds(10, 52, 295, 20);
+						panel.add(textField);
+						textField.setColumns(10);
+						
+						JButton browse = new JButton("Browse");
+						browse.setFont(new Font("Dialog", Font.PLAIN, 12));
+						browse.setBounds(315, 51, 89, 23);
+						panel.add(browse);
+						
+						JButton launch = new JButton("Launch");
+						launch.setFont(new Font("Dialog", Font.PLAIN, 12));
+						launch.setBounds(315, 85, 89, 23);
+						panel.add(launch);
+						
+						
+						browse.addActionListener(new ActionListener() {
+
+							@Override
+							public void actionPerformed(ActionEvent arg0) {
+								jfc = new JFileChooser();
+								jfc.setCurrentDirectory(new java.io.File("user.home"));
+								jfc.setDialogTitle("Select your streaming file");
+								jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+								if (jfc.showOpenDialog(browse) == JFileChooser.APPROVE_OPTION) {
+									textField.setText(jfc.getSelectedFile().getAbsolutePath().replace("\\", "\\\\"));
+								}
+							}
+							
+						});
+						
+						launch.addActionListener(new ActionListener() {
+
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								while(true) {
+									if(!textField.getText().equals("")) {
+										if(textField.getText().contains(".flv")) {
+											streamURL = textField.getText();
+											break;
+										} else {
+											JOptionPane.showMessageDialog(null, "Invalid extension, please select a .flv selection");
+											return;
+										}
+									} else {
+										JOptionPane.showMessageDialog(null, "Please fill out the box");
+										return;
+									}
+								}
+								frame.dispose();
+								ro.setStreamURL(streamURL);
+								video.setVideoInput(streamURL);
+								capture.setToolTipText("Capturing at " + ro.getStreamURL());
+							}
+							
+						});
+
+						frame.setResizable(false);
+						frame.setVisible(true);
+						
+					}
+					
+				});
 				
 				thumbnailButton.addActionListener(new ActionListener() {
 
@@ -230,6 +323,12 @@ public class RenderTab extends JPanel {
 				thumbnailButton.setBounds(86, 285, 361, 40);
 				pan.add(thumbnailButton);
 				
+				JButton changePath = new JButton("Change Stream URL");
+				changePath.setToolTipText("Change the path to your file a.k.a file has moved");
+				changePath.setFont(new Font("Dialog", Font.BOLD, 14));
+				changePath.setBounds(86, 345, 361, 40);
+				pan.add(changePath);
+				
 				repaint();
 				
 				JFrame frame = new JFrame("Stream URL");
@@ -266,7 +365,95 @@ public class RenderTab extends JPanel {
 				launch.setFont(new Font("Dialog", Font.PLAIN, 12));
 				launch.setBounds(315, 85, 89, 23);
 				panel.add(launch);
-				
+
+				changePath.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						JFrame frame = new JFrame("Stream URL");
+						frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						frame.setBounds(100, 100, 450, 201);
+						JPanel contentPane = new JPanel();
+						contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+						frame.setContentPane(contentPane);
+						contentPane.setLayout(null);
+						
+						JPanel panel = new JPanel();
+						panel.setBounds(10, 11, 414, 140);
+						contentPane.add(panel);
+						panel.setLayout(null);
+						
+						JLabel lblNewLabel = new JLabel("Streaming File URL");
+						lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+						lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 14));
+						lblNewLabel.setBounds(10, 11, 394, 30);
+						panel.add(lblNewLabel);
+						
+						JTextField textField = new JTextField();
+						textField.setFont(new Font("Dialog", Font.PLAIN, 12));
+						textField.setBounds(10, 52, 295, 20);
+						panel.add(textField);
+						textField.setColumns(10);
+						
+						JButton browse = new JButton("Browse");
+						browse.setFont(new Font("Dialog", Font.PLAIN, 12));
+						browse.setBounds(315, 51, 89, 23);
+						panel.add(browse);
+						
+						JButton launch = new JButton("Launch");
+						launch.setFont(new Font("Dialog", Font.PLAIN, 12));
+						launch.setBounds(315, 85, 89, 23);
+						panel.add(launch);
+						
+						
+						browse.addActionListener(new ActionListener() {
+
+							@Override
+							public void actionPerformed(ActionEvent arg0) {
+								jfc = new JFileChooser();
+								jfc.setCurrentDirectory(new java.io.File("user.home"));
+								jfc.setDialogTitle("Select your streaming file");
+								jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+								if (jfc.showOpenDialog(browse) == JFileChooser.APPROVE_OPTION) {
+									textField.setText(jfc.getSelectedFile().getAbsolutePath().replace("\\", "\\\\"));
+								}
+							}
+							
+						});
+						
+						launch.addActionListener(new ActionListener() {
+
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								while(true) {
+									if(!textField.getText().equals("")) {
+										if(textField.getText().contains(".flv")) {
+											streamURL = textField.getText();
+											break;
+										} else {
+											JOptionPane.showMessageDialog(null, "Invalid extension, please select a .flv selection");
+											return;
+										}
+									} else {
+										JOptionPane.showMessageDialog(null, "Please fill out the box");
+										return;
+									}
+								}
+								frame.dispose();
+								ro.setStreamURL(streamURL);
+								video.setVideoInput(streamURL);
+								capture.setToolTipText("Capturing at " + ro.getStreamURL());
+							}
+							
+						});
+
+						frame.setResizable(false);
+						frame.setVisible(true);
+						
+					}
+					
+				});
+
 				thumbnailButton.addActionListener(new ActionListener() {
 
 					@Override

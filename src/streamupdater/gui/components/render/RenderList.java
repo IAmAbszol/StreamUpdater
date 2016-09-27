@@ -54,15 +54,26 @@ public class RenderList {
 		frame.getContentPane().setLayout(null);
 		
 		JScrollPane scroll = new JScrollPane();
-		scroll.setBounds(10, 10, 604, 470);
+		scroll.setBounds(10, 10, 604, 360);
 		frame.getContentPane().add(scroll);
 		
-		JPanel borderlaoutpanel = new JPanel();
-        scroll.setViewportView(borderlaoutpanel);
-        borderlaoutpanel.setLayout(new BorderLayout(0, 0));
+		JPanel borderlayoutpanel = new JPanel();
+        scroll.setViewportView(borderlayoutpanel);
+        borderlayoutpanel.setLayout(new BorderLayout(0, 0));
 
+        JButton renderPanel = new JButton("Render");
+        renderPanel.setToolTipText("<html>Rendering during your stream may kill cpu usage, I advise not to do so.<br>Also this is very time consuming, save the object and come back later after the stream is done.</html>");
+       	renderPanel.setBounds(10, 400, 604, 30);
+       	renderPanel.setEnabled(false);
+       	frame.add(renderPanel);
+       	
+       	JButton convertPanel = new JButton("Convert to MP4");
+       	convertPanel.setToolTipText("Convert before rendering... errors will occur if not");
+       	convertPanel.setBounds(10, 370, 604, 30);
+       	frame.add(convertPanel);
+        
         columnpanel = new JPanel();
-        borderlaoutpanel.add(columnpanel, BorderLayout.NORTH);
+        borderlayoutpanel.add(columnpanel, BorderLayout.NORTH);
         columnpanel.setLayout(new GridLayout(0, 1, 0, 1));
         columnpanel.setBackground(Color.gray);
 		
@@ -87,12 +98,32 @@ public class RenderList {
             panel[i].add(render[i]);
             // build label
             description[i] = new JLabel("");
+            if(ro.getFileNames().get(i) == null) ro.getFileNames().set(i, "GENERATED VIDEO (" + i + ").mp4");
 			description[i].setText(ro.getFileNames().get(i));
 			description[i].setFont(new Font("Dialog", Font.PLAIN, 12));
 			description[i].setBounds(10, 5, 366, 23);
 			panel[i].add(description[i]);
         }
         frame.setVisible(true);
+        
+        convertPanel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				video.setVideoInput(ro.getStreamURL());
+				video.convertToMp4();
+			}
+        	
+        });
+        
+        renderPanel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				RenderingEngine re = new RenderingEngine();
+				re.setObject(ro);
+				re.renderProject(video);
+			}
+        	
+        });
 		
 	}
 	// this may cause issues with the re.removePartObject. Probably will
