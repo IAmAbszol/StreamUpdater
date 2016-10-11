@@ -1,6 +1,5 @@
 package streamupdater.gui.components;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -30,6 +29,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import streamupdater.util.TextEditor;
 import streamupdater.util.ThumbnailObject;
 
 public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, MouseListener {
@@ -46,7 +46,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 	private int pos = 0;
 	
 	private JButton[] layer;
-	private JButton[] bind;
+	private JButton[] edit;
 	private JButton[] remove;
 	private JButton[] select;
 	
@@ -77,18 +77,43 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 	private static BufferedImage image;
 	private Graphics2D g;
 	
+	// when it gets too big, annoying issues start to happen with the text. This automatically fixes it
+	private static int[] overrideSizes = {
+			8,
+			9,
+			10,
+			11,
+			12,
+			14,
+			16,
+			18,
+			20,
+			22,
+			24,
+			26,
+			28,
+			36,
+			48,
+			72
+	};
+	
+	// adjust this, low the more sensitive the changing of the font is.
+	private static int sensitivity = 4;
+	
 	// layer stoof
 	// layer 0 --> at 0. layer 1 --> at 1
 	private static ThumbnailObject[] layers;
+	public static TextEditor[] te;
 	
 	public ThumbnailEditor() {
 		try {
 
 			layers = new ThumbnailObject[numberOfLayers];
 			layer = new JButton[numberOfLayers];
-			bind = new JButton[numberOfLayers];
+			edit = new JButton[numberOfLayers];
 			select = new JButton[numberOfLayers];
 			remove = new JButton[numberOfLayers];
+			te = new TextEditor[numberOfLayers];
 			for(int i = 0; i < layers.length; i++) {
 				layers[i] = new ThumbnailObject();
 			}
@@ -119,7 +144,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 			for(int i = 0; i < numberOfLayers; i++) {
 				
 				layer[i] = new JButton("Layer " + i);
-				bind[i] = new JButton("Bind");
+				edit[i] = new JButton("Edit");
 				remove[i] = new JButton("Remove");
 				select[i] = new JButton("Select");
 				
@@ -128,8 +153,8 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 					layer[i].setBounds(22, (66 + (gap * line)), 97, 25);
 					panel.add(this.layer[i]);
 					
-					bind[i].setBounds(22, (106 + (gap * line)), 97, 25);
-					panel.add(this.bind[i]);
+					edit[i].setBounds(22, (106 + (gap * line)), 97, 25);
+					panel.add(this.edit[i]);
 					
 					remove[i].setBounds(131, (66 + (gap * line)), 97, 25);
 					panel.add(this.remove[i]);
@@ -143,8 +168,8 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 						layer[i].setBounds(360, (66 + (gap * line)), 97, 25);
 						panel.add(layer[i]);
 						
-						bind[i].setBounds(360, (106 + (gap * line)), 97, 25);
-						panel.add(bind[i]);
+						edit[i].setBounds(360, (106 + (gap * line)), 97, 25);
+						panel.add(edit[i]);
 						
 						remove[i].setBounds(469, (66 + (gap * line)), 97, 25);
 						panel.add(remove[i]);
@@ -161,7 +186,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 				
 				finalLinePos = (66 + (gap * line));
 				
-				bind[i].setEnabled(false);
+				edit[i].setEnabled(true);
 				
 			}
 			
@@ -278,7 +303,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 			localWidth.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
 					for(int i = 0; i < layers.length; i++) {
-						/*if(layers[i].isBinded() && layers[i].isSelected()) {
+						/*if(layers[i].isedited() && layers[i].isSelected()) {
 							// decrease
 							if(wval > (int)localWidth.getValue()) {
 								ignore = true;
@@ -305,7 +330,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 				public void stateChanged(ChangeEvent e) {
 					if(!ignore) {
 						for(int i = 0; i < layers.length; i++) {
-							/*if(layers[i].isBinded() && layers[i].isSelected()) {
+							/*if(layers[i].isedited() && layers[i].isSelected()) {
 								// decrease
 								if(hval > (int)localWidth.getValue()) {
 									localWidth.setValue((int) localWidth.getValue() - 1);
@@ -333,7 +358,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 				pos = i;
 				layer[i].addActionListener(new LayerButton(i));
 				remove[i].addActionListener(new RemoveButton(i));
-				bind[i].addActionListener(new BindButton(i));
+				edit[i].addActionListener(new editButton(i));
 				select[i].addActionListener(new SelectButton(i));
 			}
 			
@@ -476,7 +501,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 				try {
 					if(!layers[i].isReversed())
 						if(layers[i].getFile().getName().contains(".txt")) {
-							layers[i].setImage(convertTextToImage(layers[i].getFile()));
+							layers[i].setImage(convertTextToImage(layers[i].getFile(), i));
 							layers[i].setWidth(layers[i].getImage().getWidth());
 							layers[i].setHeight(layers[i].getImage().getHeight());
 						} else
@@ -492,14 +517,29 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 	}
 	
 	// really simple
-	public static BufferedImage convertTextToImage(File f) {
+	public static BufferedImage convertTextToImage(File f, int i) {
 		try {
 			int tmpy = 0;
-			BufferedImage tmp = new BufferedImage(WIDTH - 50, 72, BufferedImage.TYPE_INT_ARGB);
+			int type = Font.PLAIN;
+			if(layers[i].isBold()) type = Font.BOLD;
+			if(layers[i].isItalic()) type = type | Font.ITALIC;
+			if(layers[i].isUnderlined()) type = type | Font.HANGING_BASELINE;
+			layers[i].setFont(te[i].getFont());
+			layers[i].setSize(te[i].getSize());
+			layers[i].setColor(te[i].getColor()[0], te[i].getColor()[1], te[i].getColor()[2]);
+			layers[i].setBold(te[i].isBold());
+			layers[i].setItalic(te[i].isItalic());
+			layers[i].setUnderlined(te[i].isUnderlined());
+			layers[i].setWidth(te[i].getWidth());
+			layers[i].setHeight(te[i].getHeight());
+			
+			// grab width of longest line, if it's multi-line
+			BufferedImage tmp = new BufferedImage(layers[i].getWidth(), layers[i].getHeight(), BufferedImage.TYPE_INT_ARGB);
 			BufferedImage actual;
+			BufferedImage ghetto;
 			Graphics2D gx = tmp.createGraphics();
-			gx.setColor(Color.white);
-			gx.setFont(customFont);
+			gx.setColor(new Color(layers[i].getColor()[0], layers[i].getColor()[1], layers[i].getColor()[2]));
+			gx.setFont(new Font(layers[i].getFont(), type, layers[i].getSize()));
 			String line = null;
 			BufferedReader reader = new BufferedReader(new FileReader(f));
 			int longest = 0;
@@ -508,19 +548,60 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 					longest = gx.getFontMetrics().stringWidth(line);
 				}
 			}
-			actual = new BufferedImage(longest, 72, BufferedImage.TYPE_INT_ARGB);
-			gx.dispose();
-			tmp = null;
-			gx = actual.createGraphics();
-			gx.setColor(Color.white);
-			gx.setFont(customFont);
-			reader.close();
-			reader = new BufferedReader(new FileReader(f));
-			while((line = reader.readLine()) != null) {
-				gx.drawString(line,0, (tmpy += gx.getFontMetrics().getHeight()));
+			
+			if(longest > layers[i].getWidth()) {
+				int tmpnum = longest - layers[i].getWidth();
+				int reduce = 0;
+				while(tmpnum > sensitivity) {
+					tmpnum %= sensitivity;
+					reduce++;
+				}
+				for(int z = 0; z < overrideSizes.length; z++) {
+					if(overrideSizes[z] > layers[i].getSize()) {
+						if(z - reduce > 0) {
+							layers[i].setSize(overrideSizes[z - reduce]);
+						} else {
+							layers[i].setSize(overrideSizes[0]);
+						}
+						break;
+					}
+				}
+				// draw to image, ignore controllers wish of width, we will do that later
+				actual = new BufferedImage(longest, layers[i].getHeight(), BufferedImage.TYPE_INT_ARGB);
+				gx.dispose();
+				tmp = null;
+				gx = actual.createGraphics();
+				gx.setColor(new Color(te[i].getColor()[0], te[i].getColor()[1], te[i].getColor()[2]));
+				gx.setFont(new Font(layers[i].getFont(), type, layers[i].getSize()));
+				reader.close();
+				reader = new BufferedReader(new FileReader(f));
+				while((line = reader.readLine()) != null) {
+					gx.drawString(line,0, (tmpy += gx.getFontMetrics().getHeight()));
+				}
+				reader.close();
+			
+				// now lets resize this
+				ghetto = new BufferedImage(layers[i].getWidth(), layers[i].getHeight(), BufferedImage.TYPE_INT_ARGB);
+				Graphics2D g2x = ghetto.createGraphics();
+				g2x.drawImage(actual, 0, 0, layers[i].getWidth(), layers[i].getHeight(), null);
+				g2x.dispose();
+				return ghetto;
+			} else {
+				actual = new BufferedImage(layers[i].getWidth(), layers[i].getHeight(), BufferedImage.TYPE_INT_ARGB);
+				gx.dispose();
+				tmp = null;
+				gx = actual.createGraphics();
+				gx.setColor(new Color(te[i].getColor()[0], te[i].getColor()[1], te[i].getColor()[2]));
+				gx.setFont(new Font(layers[i].getFont(), type, layers[i].getSize()));
+				reader.close();
+				reader = new BufferedReader(new FileReader(f));
+				while((line = reader.readLine()) != null) {
+					gx.drawString(line,0, (tmpy += gx.getFontMetrics().getHeight()));
+				}
+				reader.close();
+				return actual;
 			}
-			reader.close();
-			return actual;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -535,7 +616,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		Graphics gx = tmp.createGraphics();
 		try {
 			if(layers[i].getFile().getName().contains(".txt")) {
-				layers[i].setImage(convertTextToImage(layers[i].getFile()));
+				layers[i].setImage(convertTextToImage(layers[i].getFile(), i));
 			} else
 				layers[i].setImage(ImageIO.read(layers[i].getFile()));
 		} catch (IOException e) {
@@ -629,23 +710,19 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		
 	}
 
-	private class BindButton implements ActionListener {
+	private class editButton implements ActionListener {
 
 		private int pos = 0;
 		
-		public BindButton(int i) {
+		public editButton(int i) {
 			pos = i;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(layers[pos].getImage() != null) {
-				if(layers[pos].isBinded()) {
-					bind[pos].setText("Bind");
-					layers[pos].setBinded(false);
-				} else {
-					bind[pos].setText("Unbind");
-					layers[pos].setBinded(true);
+				if(te[pos] != null) {
+					te[pos].getFrame().setVisible(true);
 				}
 			}
 		}
@@ -664,6 +741,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		public void actionPerformed(ActionEvent e) {
 			layers[pos].reset();
 			layer[pos].setToolTipText("");
+			te[pos].getFrame().dispose();
 		}
 		
 	}
@@ -687,16 +765,31 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 					layers[pos].setFile(jfc.getSelectedFile());
 					if(!layers[pos].isReversed())
 						if(layers[pos].getFile().getName().contains(".txt")) {
-							layers[pos].setImage(convertTextToImage(layers[pos].getFile()));
-						} else
+							if(te[pos] == null)
+								te[pos] = new TextEditor(pos);
+							else
+								te[pos].getFrame().setVisible(true);
+							// load defaults, this will be overriden when saved
+							layers[pos].setFont(te[pos].getFont());
+							layers[pos].setSize(te[pos].getSize());
+							layers[pos].setColor(te[pos].getColor()[0], te[pos].getColor()[1], te[pos].getColor()[2]);
+							layers[pos].setBold(te[pos].isBold());
+							layers[pos].setItalic(te[pos].isItalic());
+							layers[pos].setUnderlined(te[pos].isUnderlined());
+							layers[pos].setWidth(te[pos].getWidth());
+							layers[pos].setHeight(te[pos].getHeight());
+							layers[pos].setImage(convertTextToImage(layers[pos].getFile(), pos));
+						} else {
 							layers[pos].setImage(ImageIO.read(layers[pos].getFile()));
+							layers[pos].setX(0);
+							layers[pos].setY(0);
+							layers[pos].setWidth((int) (layers[pos].getImage().getWidth() * multix));
+							layers[pos].setHeight((int) (layers[pos].getImage().getHeight() * multiy));
+						}
 					else {
 						reverseImage(pos);
 					}
-					layers[pos].setX(0);
-					layers[pos].setY(0);
-					layers[pos].setWidth((int) (layers[pos].getImage().getWidth() * multix));
-					layers[pos].setHeight((int) (layers[pos].getImage().getHeight() * multiy));
+					edit[pos].setEnabled(true);
 					layer[pos].setToolTipText(jfc.getSelectedFile().getAbsolutePath());
 				} catch (IOException e) {
 					e.printStackTrace();

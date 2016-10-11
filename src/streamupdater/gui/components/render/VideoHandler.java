@@ -99,6 +99,15 @@ public class VideoHandler {
 			e.printStackTrace();
 		}
 	}
+
+	public void createImages() {
+		
+		try {
+			ImageIO.write(image, "png", new File(outputImageFile));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	private void inheritIO(final InputStream src, final PrintStream dest, boolean convert) {
 	    new Thread(new Runnable() {

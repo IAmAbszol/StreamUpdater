@@ -67,9 +67,14 @@ public class RenderList {
        	renderPanel.setEnabled(false);
        	frame.add(renderPanel);
        	
+       	JButton renderImages = new JButton("Create Thumbnails");
+       	renderImages.setToolTipText("I advise doing this before saving the object, issues are still a problem for images");
+       	renderImages.setBounds(414, 370, 200, 30);
+       	frame.add(renderImages);
+       	
        	JButton convertPanel = new JButton("Convert to MP4");
        	convertPanel.setToolTipText("Convert before rendering... errors will occur if not");
-       	convertPanel.setBounds(10, 370, 604, 30);
+       	convertPanel.setBounds(10, 370, 404, 30);
        	frame.add(convertPanel);
         
         columnpanel = new JPanel();
@@ -105,6 +110,17 @@ public class RenderList {
 			panel[i].add(description[i]);
         }
         frame.setVisible(true);
+        
+        renderImages.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				RenderingEngine re = new RenderingEngine();
+				re.setObject(ro);
+				re.renderImages(video);
+			}
+        	
+        });
         
         convertPanel.addActionListener(new ActionListener() {
 

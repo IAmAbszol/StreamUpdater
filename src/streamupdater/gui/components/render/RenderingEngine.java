@@ -32,6 +32,16 @@ public class RenderingEngine {
 			return -2;
 		return -1;
 	}
+	
+	public void renderImages(VideoHandler video) {
+		if(ro.getImages().size() == ro.getImageFileNames().size()) {
+			for(int i = 0; i < ro.getImages().size(); i++) {
+				video.setImage(ro.getImages().get(i));
+				video.setImageFileLocation(ro.getImageFileNames().get(i));
+				video.createImages();
+			}
+		}
+	}
 
 	// class that handles the overall rendering of the file
 	private static void handleRender(VideoHandler video, String s, int pos) {
