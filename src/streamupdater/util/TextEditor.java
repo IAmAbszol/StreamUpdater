@@ -12,11 +12,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-
-import com.sun.prism.paint.Color;
 
 public class TextEditor {
 	
@@ -30,22 +27,23 @@ public class TextEditor {
 	private int[] color = { r, g, b };
 	private boolean bold = false;
 	private boolean italic = false;
-	private boolean underlined = false;
+	private boolean adjust = false;
 	private String font = "Arial";
+	private String alignment = "left";
 	
 	private JFrame f;
 	
 	public TextEditor(int s) {
 		f = new JFrame("Text Editor - Layer " + s);
 		f.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		f.setBounds(100, 100, 250, 365);
+		f.setBounds(100, 100, 250, 400);
 		JPanel contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		f.setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 11, 214, 310);
+		panel.setBounds(10, 11, 214, 350);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
@@ -103,8 +101,14 @@ public class TextEditor {
 		blue.setBounds(155, 101, 50, 20);
 		panel.add(blue);
 		
+		String[] a = { "left", "right", "center" };
+		JComboBox align = new JComboBox(a);
+		align.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		align.setBounds(10, 280, 100, 20);
+		panel.add(align);
+		
 		JButton btnSave = new JButton("Save");
-		btnSave.setBounds(10, 277, 168, 23);
+		btnSave.setBounds(10, 320, 168, 23);
 		panel.add(btnSave);
 		
 		JCheckBox bolds = new JCheckBox("Bold");
@@ -118,10 +122,11 @@ public class TextEditor {
 		italics.setBounds(10, 221, 97, 23);
 		panel.add(italics);
 		
-		JCheckBox underlines = new JCheckBox("Underline");
-		underlines.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		underlines.setBounds(10, 247, 97, 23);
-		panel.add(underlines);
+		JCheckBox adj = new JCheckBox("Adjust Text");
+		adj.setToolTipText("Attempts to recognize and adjust the size of font, beta.");
+		adj.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		adj.setBounds(10, 247, 97, 23);
+		panel.add(adj);
 		
 		JLabel lblNewLabel = new JLabel("Width & Height");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -144,6 +149,7 @@ public class TextEditor {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				font = (String) fontBox.getSelectedItem();
+				alignment = (String) align.getSelectedItem();
 				size = (int) sizes.getValue();
 				width = (int) widths.getValue();
 				height = (int) heights.getValue();
@@ -152,7 +158,7 @@ public class TextEditor {
 				color[2] = (int) blue.getValue();
 				bold = bolds.isSelected();
 				italic = italics.isSelected();
-				underlined = underlines.isSelected();
+				adjust = adj.isSelected();
 				completed = true;
 			}
 			
@@ -168,6 +174,10 @@ public class TextEditor {
 	
 	public String getFont() {
 		return font;
+	}
+	
+	public String getAlignment() {
+		return alignment;
 	}
 	
 	public int getSize() {
@@ -194,8 +204,8 @@ public class TextEditor {
 		return italic;
 	}
 	
-	public boolean isUnderlined() {
-		return underlined;
+	public boolean isAdjusted() {
+		return adjust;
 	}
 	
 	public JFrame getFrame() {

@@ -22,8 +22,9 @@ public class ThumbnailObject {
 	private int[] color = { 255, 255, 255 };
 	private boolean bold = false;
 	private boolean italic = false;
-	private boolean underlined = false;
+	private boolean adjust = false;
 	private String font = "Arial";
+	private String alignment = "left";
 	
 	public ThumbnailObject() {
 		file = null;
@@ -125,8 +126,16 @@ public class ThumbnailObject {
 		return font;
 	}
 	
+	public String getAlignment() {
+		return alignment;
+	}
+	
 	public void setFont(String f) {
 		font = f;
+	}
+	
+	public void setAlignment(String n) {
+		alignment = n;
 	}
 	
 	public void setSize(int s) {
@@ -155,8 +164,8 @@ public class ThumbnailObject {
 		italic = b;
 	}
 	
-	public void setUnderlined(boolean b) {
-		underlined = b;
+	public void setAdjusted(boolean b) {
+		adjust = b;
 	}
 	
 	public boolean isBold() {
@@ -167,8 +176,8 @@ public class ThumbnailObject {
 		return italic;
 	}
 	
-	public boolean isUnderlined() {
-		return underlined;
+	public boolean isAdjusted() {
+		return adjust;
 	}
 
 	
