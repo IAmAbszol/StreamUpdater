@@ -124,6 +124,7 @@ public class TextEditor {
 		
 		JCheckBox adj = new JCheckBox("Adjust Text");
 		adj.setToolTipText("Attempts to recognize and adjust the size of font, beta.");
+		adj.setSelected(true);
 		adj.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		adj.setBounds(10, 247, 97, 23);
 		panel.add(adj);

@@ -373,14 +373,19 @@ public class TournamentEnlisterTab extends JPanel {
 	}
 	
 	private static String removeIllegal(String n) {
+		char[] illegal = {
+				'>', '<', ':', '\"', '/', '\\', '|', '?', '*'
+		};
 		String build = "";
 		boolean start = false;
 		for(int i = 0; i < n.length(); i++) {
 			if(n.charAt(i) != ' ' && start) {
 				build = build + n.charAt(i);
 			}
-			if(n.charAt(i) == '|') {
-				start = true;
+			for(int z = 0; z < illegal.length; z++) {
+				if(n.charAt(i) == illegal[z]) {
+					start = true;
+				}
 			}
 		}
 		if(!start) return n;

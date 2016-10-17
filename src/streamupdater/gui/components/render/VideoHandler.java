@@ -90,8 +90,10 @@ public class VideoHandler {
 			Process p = builder.start();
 			inheritIO(p.getInputStream(), System.out, false);
 			
-			ImageIO.write(image, "png", new File(outputImageFile));
-			
+			try {
+				ImageIO.write(image, "png", new File(outputImageFile));
+			} catch (Exception e) {
+			}
 			System.out.println("Rendering Complete");
 			readEncode = null;
 	       

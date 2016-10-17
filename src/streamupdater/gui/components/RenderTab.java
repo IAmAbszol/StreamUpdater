@@ -555,18 +555,21 @@ public class RenderTab extends JPanel {
 						if(!FilesTab.getMediaFolder().equals("")) {
 							location = FilesTab.getMediaFolder().replaceAll("/", "\\\\") + "\\"; 
 						}
+						String fileName = removeIllegal(videoName.getText());
 						if(!jcb.isSelected()) {
 							ro.getFileNames().add(location + (ro.getFileNames().size() + 1) + ".mp4");
 							ro.getImageFileNames().add(location + (ro.getImageFileNames().size() + 1) + ".png");
 						} else {
-							ro.getFileNames().add(location + Commands.interpretString(videoName.getText()) + ".mp4");
-							ro.getImageFileNames().add(location + Commands.interpretString(videoName.getText()) + ".png");
+							ro.getFileNames().add(location + Commands.interpretString(fileName) + ".mp4");
+							ro.getImageFileNames().add(location + Commands.interpretString(fileName) + ".png");
 						}
 						if(te == null) {
 							ro.getImages().add(new BufferedImage(1280, 720, BufferedImage.TYPE_INT_RGB));
-						} else 
+						} else {
+							ThumbnailEditor.deselect();
 							ro.getImages().add(ThumbnailEditor.generateThumbnail());
-						// flush everything out
+						}
+							// flush everything out
 						playerOneCharacters.clear();
 						playerTwoCharacters.clear();
 					}
@@ -604,6 +607,26 @@ public class RenderTab extends JPanel {
 			
 		});
 		
+	}
+	
+	private String removeIllegal(String n) {
+		char[] illegal = {
+				'>', '<', ':', '\"', '/', '\\', '|', '?', '*'
+		};
+		String build = "";
+		boolean start = false;
+		for(int i = 0; i < n.length(); i++) {
+			if(n.charAt(i) != ' ' && start) {
+				build = build + n.charAt(i);
+			}
+			for(int z = 0; z < illegal.length; z++) {
+				if(n.charAt(i) == illegal[z]) {
+					start = true;
+				}
+			}
+		}
+		if(!start) return n;
+		return build;
 	}
 	
 	private String buildCommandList() {

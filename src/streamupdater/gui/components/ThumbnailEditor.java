@@ -76,6 +76,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 	private static File location;
 	private static BufferedImage image;
 	private Graphics2D g;
+	private static boolean pause = false;
 	
 	// when it gets too big, annoying issues start to happen with the text. This automatically fixes it
 	private static int[] overrideSizes = {
@@ -240,7 +241,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 			panel.add(lblWidthAndHeight);
 			
 			height = new JTextField();
-			height.setText("720");
+			height.setText("260");
 			height.setHorizontalAlignment(SwingConstants.CENTER);
 			height.setBounds(84, finalLinePos + 86, 50, 25);
 			panel.add(height);
@@ -248,7 +249,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 			
 			width = new JTextField();
 			width.setHorizontalAlignment(SwingConstants.CENTER);
-			width.setText("1280");
+			width.setText("380");
 			width.setBounds(22, finalLinePos + 86, 50, 25);
 			panel.add(width);
 			width.setColumns(10);
@@ -408,8 +409,8 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		
 		draw();
 		
-		drawToScreen();
-		
+		if(!pause)
+			drawToScreen();
 		
 		return System.currentTimeMillis() - t;
 	}
@@ -471,6 +472,8 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 	}
 
 	public static BufferedImage generateThumbnail() {
+		// so draw doesnt interfere
+		if(!pause) pause = true;
 		for(int i = 0; i < numberOfLayers; i++) {
 			layers[i].setSelected(false);
 		}
@@ -482,7 +485,14 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		Graphics g = resized.createGraphics();
 		g.drawImage(image, 0, 0, genwidth, genheight, null);
 		g.dispose();
+		pause = false;
 		return resized;
+	}
+	
+	public static void deselect() {
+		for(int i = 0; i < numberOfLayers; i++) {
+			layers[i].setSelected(false);
+		}
 	}
 	
 	public static void generatePanel(String n) throws IOException {
@@ -568,6 +578,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 				}
 			}
 			
+			// check if the image/text is longer then designated width
 			if(longest > layers[i].getWidth()) {
 				if(layers[i].isAdjusted()) {
 					int tmpnum = longest - layers[i].getWidth();
@@ -578,8 +589,11 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 					}
 					for(int z = 0; z < overrideSizes.length; z++) {
 						if(overrideSizes[z] > layers[i].getSize()) {
-							if(z - reduce > 0) {
+							if(z - reduce >= 0) {
 								layers[i].setSize(overrideSizes[z - reduce]);
+								if(layers[i].getAlignment().equals("right") || layers[i].getAlignment().equals("center")) {
+									if(z - (reduce + 1) >= 0) layers[i].setSize(overrideSizes[z - (reduce + 1)]);
+								}
 							} else {
 								layers[i].setSize(overrideSizes[0]);
 							}
@@ -597,17 +611,9 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 				reader.close();
 				reader = new BufferedReader(new FileReader(f));
 				while((line = reader.readLine()) != null) {
-					if(layers[i].getAlignment().equals("left"))
-						gx.drawString(line,0, (tmpy += gx.getFontMetrics().getHeight()));
-					else
-					if(layers[i].getAlignment().equals("right"))
-						gx.drawString(line, layers[i].getWidth() - gx.getFontMetrics().stringWidth(line), (tmpy += gx.getFontMetrics().getHeight()));
-					else
-					if(layers[i].getAlignment().equals("center"))
-						gx.drawString(line, (layers[i].getWidth() / 2) - (gx.getFontMetrics().stringWidth(line) / 2), (tmpy += gx.getFontMetrics().getHeight()));
+					gx.drawString(line,0, (tmpy += gx.getFontMetrics().getHeight()));
 				}
 				reader.close();
-			
 				// now lets resize this
 				ghetto = new BufferedImage(layers[i].getWidth(), layers[i].getHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2x = ghetto.createGraphics();
