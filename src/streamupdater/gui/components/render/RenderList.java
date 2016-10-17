@@ -7,17 +7,15 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.util.ArrayList;
+import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
-import com.sun.glass.events.WindowEvent;
 
 public class RenderList {
 	
@@ -153,6 +151,11 @@ public class RenderList {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			String tmp = ro.getStreamURL().replace("flv", "mp4");
+			if(!new File(tmp).exists()) {
+				JOptionPane.showMessageDialog(null, "Please Convert FLV to MP4 with the Convert to MP4 button before continuing!");
+				return;
+			}
 			RenderingEngine re = new RenderingEngine();
 			re.setObject(ro);
 			re.removePartObject(pos);
