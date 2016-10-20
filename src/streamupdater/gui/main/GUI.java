@@ -102,12 +102,6 @@ public class GUI extends JFrame {
 		at = new AboutMeTab();
 		tabbedPane.addTab("About Me", at);
 		
-		ScanForFFMpeg s = new ScanForFFMpeg();
-		if(!s.scan()) {
-			JOptionPane.showMessageDialog(null, "FFMpeg has not been detected, please refer to my FFMpeg install video.");
-			tabbedPane.remove(rt);
-		} 
-		
 		setVisible(true);
 			
 	}

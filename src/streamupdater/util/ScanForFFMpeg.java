@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class ScanForFFMpeg {
 	
+	@Deprecated
 	public boolean scan() {
 		try {
 			

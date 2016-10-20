@@ -52,7 +52,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 	
 	private JSpinner localWidth;
 	private JSpinner localHeight;
-	private static Font customFont = new Font("Dialog", Font.BOLD, 16);			// custom, change here programmers
+	private static Font customFFont = new Font("Dialog", Font.BOLD, 16);			// custom, change here programmers
 	private JSpinner posx;
 	private JSpinner posy;
 	private boolean ignore = false;
@@ -241,7 +241,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 			panel.add(lblWidthAndHeight);
 			
 			height = new JTextField();
-			height.setText("260");
+			height.setText("480");
 			height.setHorizontalAlignment(SwingConstants.CENTER);
 			height.setBounds(84, finalLinePos + 86, 50, 25);
 			panel.add(height);
@@ -249,7 +249,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 			
 			width = new JTextField();
 			width.setHorizontalAlignment(SwingConstants.CENTER);
-			width.setText("380");
+			width.setText("640");
 			width.setBounds(22, finalLinePos + 86, 50, 25);
 			panel.add(width);
 			width.setColumns(10);
