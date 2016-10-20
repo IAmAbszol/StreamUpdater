@@ -23,6 +23,8 @@ import java.util.zip.ZipFile;
 
 import javax.imageio.ImageIO;
 
+import streamupdater.util.ScanForFFMpeg;
+
 /*
  * May branch into it's own development but for now it's all in this file
  */
@@ -80,12 +82,18 @@ public class VideoHandler {
 			
 			final URI uri;
 	        final String exe;
+	        String arg = null;
+	        
+	        if(!ScanForFFMpeg.scan()) {
 
-	        uri = getJarURI();
-	        exe = getFile(uri, "streamupdater/gui/components/render/ffmpeg.exe").toString().replace("file:/", "");
-			
-	        String arg = " -y -i " + "\"" + inputFile + "\" -codec copy " + "\"" + alteredFile + "\"";
-	        arg = exe + arg;
+		        uri = getJarURI();
+		        exe = getFile(uri, "streamupdater/gui/components/render/ffmpeg.exe").toString().replace("file:/", "");
+				
+		        arg = " -y -i " + "\"" + inputFile + "\" -codec copy " + "\"" + alteredFile + "\"";
+		        arg = exe + arg;
+	        
+	        } else
+	        	arg = "ffmpeg -y -i " + "\"" + inputFile + "\" -codec copy " + "\"" + alteredFile + "\"";
 	        
 			ProcessBuilder builder = new 
 					 ProcessBuilder(
@@ -109,13 +117,19 @@ public class VideoHandler {
 			
 			final URI uri;
 	        final String exe;
-
-	        uri = getJarURI();
-	        exe = getFile(uri, "streamupdater/gui/components/render/ffmpeg.exe").toString().replace("file:/", "");
-			
-	        String arg = " -y -ss " + offset + " -i " + "\"" + alteredFile + "\" -t " + duration + " " + "\"" + outputFile + "\"";
-	        arg = exe + arg;
+	        String arg = null;
 	        
+	        if(!ScanForFFMpeg.scan()) {
+	        
+		        uri = getJarURI();
+		        exe = getFile(uri, "streamupdater/gui/components/render/ffmpeg.exe").toString().replace("file:/", "");
+				
+		        arg = " -y -ss " + offset + " -i " + "\"" + alteredFile + "\" -t " + duration + " " + "\"" + outputFile + "\"";
+		        arg = exe + arg;
+	        
+	        } else 
+	        	arg = "ffmpeg -y -ss " + offset + " -i " + "\"" + alteredFile + "\" -t " + duration + " " + "\"" + outputFile + "\"";
+	        	
 			ProcessBuilder builder = new 
 					 ProcessBuilder(
 							 "cmd", "/c", arg);
@@ -282,12 +296,18 @@ public class VideoHandler {
 				
 				final URI uri;
 		        final String exe;
+		        String arg = null;
 
-		        uri = getJarURI();
-		        exe = getFile(uri, "streamupdater/gui/components/render/ffmpeg.exe").toString().replace("file:/", "");
-				
-		        String arg = " -i " + "\"" + inputFile + "\"";
-		        arg = exe + arg;
+		        if(!ScanForFFMpeg.scan()) {
+		        
+			        uri = getJarURI();
+			        exe = getFile(uri, "streamupdater/gui/components/render/ffmpeg.exe").toString().replace("file:/", "");
+					
+			        arg = " -i " + "\"" + inputFile + "\"";
+			        arg = exe + arg;
+			        
+		        } else
+		        	arg = "ffmpeg -i " + "\"" + inputFile + "\"";
 		        
 				ProcessBuilder builder = new 
 						 ProcessBuilder(

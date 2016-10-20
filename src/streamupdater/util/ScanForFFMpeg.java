@@ -5,8 +5,7 @@ import java.util.Map;
 
 public class ScanForFFMpeg {
 	
-	@Deprecated
-	public boolean scan() {
+	public static boolean scan() {
 		try {
 			
 			ProcessBuilder pb = new ProcessBuilder("CMD", "/C", "SET");
