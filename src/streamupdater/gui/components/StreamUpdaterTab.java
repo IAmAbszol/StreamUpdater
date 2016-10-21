@@ -975,6 +975,8 @@ public class StreamUpdaterTab extends JPanel {
 							setPlayerThreeName(swap);
 						if(playerFourCombo.getItemCount() > 0 || !overP4.getText().equals(""))
 							setPlayerFourName(swap);
+						setTeamOne();
+						setTeamTwo();
 						setPlayerTwoScore();
 						if((commentatorOne.getItemCount() > 0 && commentatorTwo.getItemCount() > 0) || (!overCom1.getText().equals("") && !overCom2.getText().equals("")))
 							setCommentators();
@@ -1882,6 +1884,8 @@ public class StreamUpdaterTab extends JPanel {
 							setPlayerThreeName(swap);
 						if(playerFourCombo.getItemCount() > 0 || !overP4.getText().equals(""))
 							setPlayerFourName(swap);
+						setTeamOne();
+						setTeamTwo();
 						setPlayerTwoScore();
 						if((commentatorOne.getItemCount() > 0 && commentatorTwo.getItemCount() > 0) || (!overCom1.getText().equals("") && !overCom2.getText().equals("")))
 							setCommentators();
@@ -2143,6 +2147,14 @@ public class StreamUpdaterTab extends JPanel {
 		} else {
 			sfc.setCommentators(overCom1.getText(), overCom2.getText());
 		}
+	}
+	
+	private void setTeamOne() {
+		sfc.setTeamOne(sfc.getPlayerOne(), connector.getText(), sfc.getPlayerTwo());
+	}
+	
+	private void setTeamTwo() {
+		sfc.setTeamTwo(sfc.getPlayerThree(), connector.getText(), sfc.getPlayerFour());
 	}
 	
 	private void setPlayerOneCharacter() {

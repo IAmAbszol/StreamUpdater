@@ -55,12 +55,22 @@ public class Commands {
 				n = n.replaceAll("MAINTITLE", getTitle());
 			}
 			
-			return n;
+			return removeIllegal(n);
 			
 		} else
 			
-			return n;
+			return removeIllegal(n);
 		
+	}
+	
+	private static String removeIllegal(String n) {
+		char[] illegal = {
+				':', '\"', '/', '\\', '|', '?'
+		};
+		for(int i = 0; i < illegal.length; i++) {
+			n = n.replace("" + illegal[i] + " ", "");
+		}
+		return n;
 	}
 	
 	private static String getCharacters(boolean playerOne) {

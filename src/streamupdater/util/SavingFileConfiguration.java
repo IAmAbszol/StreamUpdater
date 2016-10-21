@@ -288,6 +288,14 @@ public class SavingFileConfiguration
 	  commentatorsInfo[1] = com2;
   }
   
+  public void setTeamOne(String one, String con, String two) {
+	  teamOne = one + " " + con + " " + two;
+  }
+  
+  public void setTeamTwo(String one, String con, String two) {
+	  teamTwo = one + " " + con + " " + two;
+  }
+  
   public void increasePlayerOneScore()
   {
     this.playerOneScore += 1;
@@ -542,12 +550,10 @@ public class SavingFileConfiguration
       writer.close();
       
       writer = new PrintWriter(this.PATH + this.files[18]);
-      teamOne = playerOne + " " + this.teamCombineCharacter + " " + playerTwo;
       writer.print(teamOne);
       writer.close();
       
       writer = new PrintWriter(this.PATH + this.files[19]);
-      teamTwo = playerThree + " " + this.teamCombineCharacter + " " + playerFour;
       writer.print(teamTwo);
       writer.close();
       

@@ -555,7 +555,7 @@ public class RenderTab extends JPanel {
 						if(!FilesTab.getMediaFolder().equals("")) {
 							location = FilesTab.getMediaFolder().replaceAll("/", "\\\\") + "\\"; 
 						}
-						String fileName = removeIllegal(videoName.getText());
+						String fileName = videoName.getText();
 						if(!jcb.isSelected()) {
 							ro.getFileNames().add(location + (ro.getFileNames().size() + 1) + ".mp4");
 							ro.getImageFileNames().add(location + (ro.getImageFileNames().size() + 1) + ".png");
@@ -607,26 +607,6 @@ public class RenderTab extends JPanel {
 			
 		});
 		
-	}
-	
-	private String removeIllegal(String n) {
-		char[] illegal = {
-				'>', '<', ':', '\"', '/', '\\', '|', '?', '*'
-		};
-		String build = "";
-		boolean start = false;
-		for(int i = 0; i < n.length(); i++) {
-			if(n.charAt(i) != ' ' && start) {
-				build = build + n.charAt(i);
-			}
-			for(int z = 0; z < illegal.length; z++) {
-				if(n.charAt(i) == illegal[z]) {
-					start = true;
-				}
-			}
-		}
-		if(!start) return n;
-		return build;
 	}
 	
 	private String buildCommandList() {
