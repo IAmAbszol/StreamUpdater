@@ -16,11 +16,27 @@ public class Commands {
 		if(!FilesTab.getTextFolder().equals("")) {
 			
 			if(n.contains("PLAYERONENAME")) {
-				n = n.replaceAll("PLAYERONENAME", getPlayerName(true));
+				n = n.replaceAll("PLAYERONENAME", getPlayerName(1));
 			}
 			
 			if(n.contains("PLAYERTWONAME")) {
-				n = n.replaceAll("PLAYERTWONAME", getPlayerName(false));
+				n = n.replaceAll("PLAYERTWONAME", getPlayerName(2));
+			}
+			
+			if(n.contains("PLAYERTHREENAME")) {
+				n = n.replaceAll("PLAYERTHREENAME", getPlayerName(3));
+			}
+			
+			if(n.contains("PLAYERFOURNAME")) {
+				n = n.replaceAll("PLAYERFOURNAME", getPlayerName(4));
+			}
+			
+			if(n.contains("TEAM1")) {
+				n = n.replaceAll("TEAM1", getTeamName(1));
+			}
+			
+			if(n.contains("TEAM2")) {
+				n = n.replaceAll("TEAM2", getTeamName(2));
 			}
 			
 			if(n.contains("PLAYERONECHAR")) {
@@ -134,16 +150,47 @@ public class Commands {
 		return "BLANK";
 	}
 	
-	
-	private static String getPlayerName(boolean playerOne) {
+	private static String getTeamName(int i) {
 		
 		String fileName = "";
 		
-		if(playerOne) {
-			fileName = SavingFileConfiguration.getFiles()[2];
-		} else
-			fileName = SavingFileConfiguration.getFiles()[3];
+		if(i == 1) 
+			fileName = SavingFileConfiguration.getFiles()[18];
+		else
+		if(i == 2)
+			fileName = SavingFileConfiguration.getFiles()[19];
+			
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(new File(FilesTab.getTextFolder() + "/" + fileName)));
+			String line = null;
+			while((line = reader.readLine()) != null) {
+				return line;
+			}
+			reader.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		return "BLANK";
+		
+	}
+	
+	private static String getPlayerName(int i) {
+		
+		String fileName = "";
+		
+		if(i == 1) 
+			fileName = SavingFileConfiguration.getFiles()[2];
+		else
+		if(i == 2)
+			fileName = SavingFileConfiguration.getFiles()[3];
+		else
+		if(i == 3) 
+			fileName = SavingFileConfiguration.getFiles()[16];
+		else
+		if(i == 4)
+			fileName = SavingFileConfiguration.getFiles()[17];
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(new File(FilesTab.getTextFolder() + "/" + fileName)));
 			String line = null;

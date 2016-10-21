@@ -139,7 +139,7 @@ public class VideoHandler {
 			inheritIO(p.getInputStream(), System.out, false);
 			
 			try {
-				ImageIO.write(image, "png", new File(outputImageFile));
+				ImageIO.write(image, "png", new File(removeIllegal(outputImageFile)));
 			} catch (Exception e) {
 			}
 			System.out.println("Rendering Complete");
@@ -153,10 +153,30 @@ public class VideoHandler {
 	public void createImages() {
 		
 		try {
-			ImageIO.write(image, "png", new File(outputImageFile));
+			ImageIO.write(image, "png", new File(removeIllegal(outputImageFile)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private String removeIllegal(String n) {
+		char[] illegal = {
+				'|'
+		};
+		String build = "";
+		boolean start = false;
+		for(int i = 0; i < n.length(); i++) {
+			if(n.charAt(i) != ' ' && start) {
+				build = build + n.charAt(i);
+			}
+			for(int z = 0; z < illegal.length; z++) {
+				if(n.charAt(i) == illegal[z]) {
+					start = true;
+				}
+			}
+		}
+		if(!start) return n;
+		return build;
 	}
 	
 	private void inheritIO(final InputStream src, final PrintStream dest, boolean convert) {

@@ -251,6 +251,7 @@ public class TournamentEnlisterTab extends JPanel {
 				sponsorImage = ImageIO.read(new File(sponsorImageLocation.getText()));
 				ImageIO.write(sponsorImage, "png", name);
 				sponsorImageLocation.setText("");
+				FilesTab.useLoad();
 			} catch (Exception e2) {  JOptionPane.showMessageDialog(null, "File Not Found! Please Revise"); }
 				
 		} else { JOptionPane.showMessageDialog(null, "Please Declare the Sponsors Path Using The Files Tab!"); GUI.switchTo(3); }

@@ -12,9 +12,9 @@ import streamupdater.gui.components.StreamUpdaterTab;
 
 public class SavingFileConfiguration
 {
-  private static String[] contents = { "Main Title", "Current Round", "Player One", "Player Two", "0", "0", "Commentator1", "Commentator2", "null", "null", "null", "null", "null", "null", "", "" };
+  private static String[] contents = { "Main Title", "Current Round", "Player One", "Player Two", "0", "0", "Commentator1", "Commentator2", "null", "null", "null", "null", "null", "null", "", "", "Player Three", "Player Four", "Team 1", "Team 2", "null", "null", "", ""};
   private static String[] files = { "maintitle.txt", "round.txt", "player1name.txt", "player2name.txt", "player1score.txt", "player2score.txt", "commentator1.txt", "commentator2.txt", "player1character.png", 
-		  					 "player1sponsor.png", "player2character.png", "player2sponsor.png", "commentator1sponsor.png", "commentator2sponsor.png", "playerOneCharacter.txt", "playerTwoCharacter.txt"};
+		  					 "player1sponsor.png", "player2character.png", "player2sponsor.png", "commentator1sponsor.png", "commentator2sponsor.png", "playerOneCharacter.txt", "playerTwoCharacter.txt", "player3name.txt", "player4name.txt", "team1name.txt", "team2name.txt", "player3character.png", "player4character.png", "playerThreeCharacter.txt", "playerFourCharacter.txt"};
   private int playerTwoScore = 0;
   private String playerTwo = "Player Two";
   private int playerOneScore = 0;
@@ -28,6 +28,22 @@ public class SavingFileConfiguration
   private String playerOneCharacterText = "";
   private String playerTwoCharacterText = "";
   private String PATH;
+  
+  /*
+   * Doubles
+   */
+  private String playerThree = "Player Three";
+  private String playerThreeInfo = "@PlayerThree";
+  private String playerThreeCharacterText = "";
+  private String playerFour = "Player Four";
+  private String playerFourInfo = "@PlayerFour";
+  private String playerFourCharacterText = "";
+  private String teamOne = "Team 1";
+  private String teamTwo = "Team 2";
+  private String teamCombineCharacter = "&";
+  private BufferedImage playerThreeCharacter;
+  private BufferedImage playerFourCharacter;
+  
   
   private BufferedImage playerOneCharacter;
   private BufferedImage playerTwoCharacter;
@@ -44,12 +60,28 @@ public class SavingFileConfiguration
 	  return playerTwoCharacter;
   }
   
+  public BufferedImage getPlayerThreeCharacter() {
+	  return playerThreeCharacter;
+  }
+  
+  public BufferedImage getPlayerFourCharacter() {
+	  return playerFourCharacter;
+  }
+  
   public String getPlayerOneCharacterText() {
 	  return playerOneCharacterText;
   }
   
   public String getPlayerTwoCharacterText() {
 	  return playerTwoCharacterText;
+  }
+  
+  public String getPlayerThreeCharacterText() {
+	  return playerThreeCharacterText;
+  }
+  
+  public String getPlayerFourCharacterText() {
+	  return playerFourCharacterText;
   }
   
   public BufferedImage getPlayerOneSponsor() {
@@ -76,12 +108,32 @@ public class SavingFileConfiguration
 	  playerTwoCharacterText = n;
   }
   
+  public void setPlayerThreeCharacterText(String n) {
+	  playerThreeCharacterText = n;
+  }
+  
+  public void setPlayerFourCharacterText(String n) {
+	  playerFourCharacterText = n;
+  }
+  
+  public void setTeamCombineCharacter(String n) {
+	  this.teamCombineCharacter = n;
+  }
+  
   public void setPlayerOneCharacter(BufferedImage i) {
 	  playerOneCharacter = i;
   }
   
   public void setPlayerTwoCharacter(BufferedImage i) {
 	  playerTwoCharacter = i;
+  }
+  
+  public void setPlayerThreeCharacter(BufferedImage i) {
+	  playerThreeCharacter = i;
+  }
+  
+  public void setPlayerFourCharacter(BufferedImage i) {
+	  playerFourCharacter = i;
   }
   
   public void setPlayerOneSponsor(BufferedImage i) {
@@ -138,6 +190,22 @@ public class SavingFileConfiguration
     return this.playerTwo;
   }
   
+  public String getPlayerThree() {
+	  return playerThree;
+  }
+  
+  public String getPlayerThreeInfo() {
+	  return playerThreeInfo;
+  }
+  
+  public String getPlayerFour() {
+	  return playerFour;
+  }
+  
+  public String getPlayerFourInfo() {
+	  return playerFourInfo;
+  }
+  
   public String[] getCommentators() {
 	  return commentators;
   }
@@ -187,6 +255,22 @@ public class SavingFileConfiguration
   
   public void setPlayerTwoInfo(String n) {
 	  this.playerTwoInfo = n;
+  }
+  
+  public void setPlayerThree(String n) {
+	  playerThree = n;
+  }
+  
+  public void setPlayerFour(String n) {
+	  playerFour = n;
+  }
+  
+  public void setPlayerThreeInfo(String n) {
+	  playerThreeInfo = n;
+  }
+  
+  public void setPlayerFourInfo(String n) {
+	  playerFourInfo = n;
   }
   
   public void setPath(String n)
@@ -298,6 +382,7 @@ public class SavingFileConfiguration
       while ((line = reader.readLine()) != null) {
         this.playerTwoScore = Integer.parseInt(line);
       }
+      reader.close();
       
       reader = new BufferedReader(new FileReader(this.PATH + this.files[6]));
       if((line = reader.readLine()) != null) {
@@ -318,6 +403,39 @@ public class SavingFileConfiguration
       playerTwoSponsor = ImageIO.read(new File(this.PATH + this.files[11]));
       commentatorOneSponsor = ImageIO.read(new File(this.PATH + this.files[12]));
       commentatorTwoSponsor = ImageIO.read(new File(this.PATH + this.files[13]));
+      
+      /*
+       * Doubles
+       */
+      
+      reader = new BufferedReader(new FileReader(this.PATH + this.files[16]));
+      if((line = reader.readLine()) != null) {
+    	  playerThree = line;
+    	  if(line != null) playerThreeInfo = line;
+      }
+      reader.close();
+      
+      reader = new BufferedReader(new FileReader(this.PATH + this.files[17]));
+      if((line = reader.readLine()) != null) {
+    	  playerFour = line;
+    	  if(line != null) playerFourInfo = line;
+      }
+      reader.close();
+      
+      reader = new BufferedReader(new FileReader(this.PATH + this.files[18]));
+      if((line = reader.readLine()) != null) {
+    	  teamOne = line;
+      }
+      reader.close();
+      
+      reader = new BufferedReader(new FileReader(this.PATH + this.files[19]));
+      if((line = reader.readLine()) != null) {
+    	 teamTwo = line;
+      }
+      reader.close();
+      
+      playerThreeCharacter = ImageIO.read(new File(this.PATH + this.files[20]));
+      playerFourCharacter = ImageIO.read(new File(this.PATH + this.files[21]));
       
     }
     catch (Exception localException) {}
@@ -350,7 +468,7 @@ public class SavingFileConfiguration
   {
     try
     {
-    	HTMLBreak hb = new HTMLBreak(PATH, this);
+		HTMLBreak hb = new HTMLBreak(PATH, this);
 		hb.createFiles();
 		hb.writeToFiles();
       PrintWriter writer = null;
@@ -407,6 +525,40 @@ public class SavingFileConfiguration
       writer.println(playerTwoCharacterText);
       writer.close();
       
+      writer = new PrintWriter(this.PATH + this.files[16]);
+      if(!StreamUpdaterTab.getRestriction()) {
+	      writer.println(playerThree);
+	      writer.print(playerThreeInfo);
+      } else 
+    	  writer.print(playerThree);
+      writer.close();
+      
+      writer = new PrintWriter(this.PATH + this.files[17]);
+      if(!StreamUpdaterTab.getRestriction()) {
+    	  writer.println(playerFour);
+    	  writer.print(playerFourInfo);
+      } else
+    	  writer.print(playerFour);
+      writer.close();
+      
+      writer = new PrintWriter(this.PATH + this.files[18]);
+      teamOne = playerOne + " " + this.teamCombineCharacter + " " + playerTwo;
+      writer.print(teamOne);
+      writer.close();
+      
+      writer = new PrintWriter(this.PATH + this.files[19]);
+      teamTwo = playerThree + " " + this.teamCombineCharacter + " " + playerFour;
+      writer.print(teamTwo);
+      writer.close();
+      
+      writer = new PrintWriter(this.PATH + this.files[20]);
+      writer.print(playerThreeCharacter);
+      writer.close();
+      
+      writer = new PrintWriter(this.PATH + this.files[21]);
+      writer.print(playerFourCharacter);
+      writer.close();
+    	  
       Thread tmp = new Thread(new Runnable() {
 
 		@Override
@@ -438,6 +590,15 @@ public class SavingFileConfiguration
 			      f = new File(PATH + files[13]);
 			      ImageIO.write(commentatorTwoSponsor, "png", f);
 			      Thread.sleep(250);
+			      
+			      f = new File(PATH + files[20]);
+			      ImageIO.write(playerThreeCharacter, "png", f);
+			      Thread.sleep(250);
+			      
+			      f = new File(PATH + files[21]);
+			      ImageIO.write(playerFourCharacter, "png", f);
+			      Thread.sleep(250);
+			      
 			      
 			} catch (Exception e) {
 				

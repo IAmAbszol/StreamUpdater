@@ -2,6 +2,10 @@ Command List
 
 PLAYERONENAME - Get P1 Name
 PLAYERTWONAME - Get P2 Name
+PLAYERTHREENAME - Get P3 Name
+PLAYERFOURNAME - Get P4 Name
+TEAM1 			- Get Team 1 Name
+TEAM2			- Get Team 2 Name
 PLAYERONECHAR - Get P1 Character
 PLAYERTWOCHAR - Get P2 Character
 CURRENTROUND  - Get The Round

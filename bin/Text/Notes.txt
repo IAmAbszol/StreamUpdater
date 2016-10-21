@@ -1,7 +1,7 @@
 
 ///////////////////////////////////////////////////////////////
 // Developed by Kyle 'Abszol' Darling
-// Version 3.9.3, Copyright 2016-
+// Version 3.9.5, Copyright 2016-
 
 Tutorial(s)
 Setting up the stream updater -> https://www.youtube.com/watch?v=kq2FmqMH7e4
@@ -37,6 +37,10 @@ this does it automatically to save a HUGE amount of time.
 To begin using this tab you must first declare all the locations
 within the Files Tab, an error will be thrown if you have not done so.
 
+[Singles vs Doubles]
+The singles feature allows you to control the easy 1v1 action
+The doubles feature allows you to control the 2v2 action.
+
 
 [Render Tab] - Allows to control and render the stream.
 Using FFmpeg and Java, this part of the program is far more sophisticated 
@@ -50,6 +54,12 @@ The second computer requires
 
 Render During Stream allows you to capture, create thumbnails, etc during the stream.
 Enjoy!
+
+[Thumbnail Editor]
+Only unlocked once a streaming file has been chosen.
+By opening up this feature, the number of layers may be altered by the text field 
+located on the bottom left of the page. Everything is automated when it comes to this feature.
+Thumbnails will be loaded into your media folder, any editing is done in there.
 
 
 [Bracket Tab] - Beta, Hidden. Developers this hasn't been built yet

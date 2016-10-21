@@ -57,7 +57,7 @@ public class GUI extends JFrame {
 
 		constructRounds();
 		
-		setTitle("Stream Updater Version 3.9.3 by Kyle Darling");
+		setTitle("Stream Updater Version 3.9.5 by Kyle Darling");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 		setBounds(100, 100, 600, 800);

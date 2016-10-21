@@ -67,6 +67,8 @@ public class FilesTab extends JPanel {
 	private String field4 = "Commentator Name(s) Folder";
 	private String field5 = "Root File Access Folder";
 	
+	private static JButton load;
+	
 	private static String saveConfigName = "filesconfig.cfg";
 	
 	private ArrayList<String> saveStuff;
@@ -128,7 +130,7 @@ public class FilesTab extends JPanel {
 		browsePlayerNames.setBounds(244, 174, 89, 23);
 		panel_2.add(browsePlayerNames);
 		
-		JButton load = new JButton("Load Files");
+		load = new JButton("Load Files");
 		load.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		load.setToolTipText("Load all the files you presently linked");
 		load.setBounds(10, 410, 300, 23);
@@ -569,11 +571,31 @@ public class FilesTab extends JPanel {
 	}
 	
 	public static File[] getPlayerFiles() {
-		return playerFiles = playerFolder.listFiles();
+		if(playerFolder != null && playerFolder.listFiles() != null)
+			return playerFiles = playerFolder.listFiles();
+		else
+			return null;
 	}
 	
 	public static File[] getCommentatorFiles() {
-		return commentatorFiles = commentatorFolder.listFiles();
+		if(commentatorFolder != null && commentatorFolder.listFiles() != null)
+			return commentatorFiles = commentatorFolder.listFiles();
+		else
+			return null;
+	}
+	
+	public static File[] getImage1Files() {
+		if(image1Files != null)
+			return image1Files;
+		else
+			return null;
+	}
+	
+	public static File[] getImage2Files() {
+		if(image2Files != null)
+			return image2Files;
+		else
+			return null;
 	}
 	
 	public static File getImageFolder1() {
@@ -634,6 +656,10 @@ public class FilesTab extends JPanel {
 		lblNewLabel_7.setText(field3);
 		lblNewLabel_6.setText(field4);
 		lblNewLabel_24.setText(field5);
+	}
+	
+	public static void useLoad() {
+		load.doClick();
 	}
 	
 	private static String findFile(String name) {
