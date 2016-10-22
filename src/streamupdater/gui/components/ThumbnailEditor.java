@@ -1,6 +1,7 @@
 package streamupdater.gui.components;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -36,6 +37,7 @@ import streamupdater.util.ThumbnailObject;
 public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, MouseListener {
 	
 	private JFrame frame;
+	private JFrame preview;
 	private JPanel contentPane;
 	
 	private JFileChooser jfc;
@@ -60,15 +62,12 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 	
 	private static JTextField width;
 	private static JTextField height;
+	private static JTextField previewWidth;
+	private static JTextField previewHeight;
 	
 	// drawing stoof
-	public static int WIDTH = 380;
-	public static int HEIGHT = 260;
-	public static int BASEX = 640;
-	public static int BASEY = 480;
-	
-	private double multix = (double)WIDTH / (double)BASEX;
-	private double multiy = (double)HEIGHT / (double)BASEY;
+	public static int WIDTH = 1280;
+	public static int HEIGHT = 720;
 	
 	private Thread thread;
 	private boolean running;
@@ -246,6 +245,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 			
 			JTextField jlayers = new JTextField(""+numberOfLayers);
 			jlayers.setBounds(22, finalLinePos+180, 153, 25);
+			jlayers.setHorizontalAlignment(SwingConstants.CENTER);
 			panel.add(jlayers);
 			
 			JLabel lblWidthAndHeight = new JLabel("Width and Height");
@@ -255,7 +255,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 			panel.add(lblWidthAndHeight);
 			
 			height = new JTextField();
-			height.setText("480");
+			height.setText(""+HEIGHT);
 			height.setHorizontalAlignment(SwingConstants.CENTER);
 			height.setBounds(84, finalLinePos + 86, 50, 25);
 			panel.add(height);
@@ -263,24 +263,87 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 			
 			width = new JTextField();
 			width.setHorizontalAlignment(SwingConstants.CENTER);
-			width.setText("640");
+			width.setText(""+WIDTH);
 			width.setBounds(22, finalLinePos + 86, 50, 25);
 			panel.add(width);
 			width.setColumns(10);
 			
-			setBounds(185, finalLinePos + 10, WIDTH, HEIGHT);
-			panel.add(this);
-			
+			/*
+			 * Thumbnail editor
+			 */
+			setPreferredSize(new Dimension(WIDTH, HEIGHT));
 			requestFocus();
 			setFocusable(true);
 			
-			frame.setBounds(100, 100, 620, finalLinePos + 350);
+			preview = new JFrame("Preview Window");
+			preview.setContentPane(this);
+			preview.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+			preview.setResizable(false);
+			preview.pack();
+			preview.setVisible(false);	
 			
-			panel.setBounds(12, 13, 578, finalLinePos + 277);
+			JButton previewWindow = new JButton("Preview Thumbnail");
+			previewWindow.setBounds(360, finalLinePos + 10, 150, 25);
+			panel.add(previewWindow);
+			
+			JLabel previewLabel = new JLabel("Preview Width & Height");
+			previewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			previewLabel.setToolTipText("Adjust thumbnail size, keeping ");
+			previewLabel.setBounds(360, finalLinePos + 48, 220, 25);
+			panel.add(previewLabel);
+			
+			previewWidth = new JTextField();
+			previewWidth.setHorizontalAlignment(SwingConstants.CENTER);
+			previewWidth.setText(""+WIDTH);
+			previewWidth.setBounds(360, finalLinePos + 86, 50, 25);
+			previewWidth.setColumns(10);
+			panel.add(previewWidth);
+			
+			previewHeight = new JTextField();
+			previewHeight.setHorizontalAlignment(SwingConstants.CENTER);
+			previewHeight.setText(""+HEIGHT);
+			previewHeight.setBounds(422, finalLinePos + 86, 50, 25);
+			previewHeight.setColumns(10);
+			panel.add(previewHeight);
+			
+			JButton update = new JButton("Update Preview");
+			update.setBounds(360, finalLinePos + 120, 200, 25);
+			panel.add(update);
+			
+			frame.setBounds(100, 100, 620, finalLinePos + 325);
+			
+			panel.setBounds(12, 13, 578, finalLinePos + 222);
 			
 			frame.setVisible(true);
 			repaint();
 			pause = false;
+			
+			update.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					WIDTH = Integer.parseInt(previewWidth.getText());
+					HEIGHT = Integer.parseInt(previewHeight.getText());
+					setPreferredSize(new Dimension(WIDTH, HEIGHT));
+					repaint();
+					preview.repaint();
+					panel.repaint();
+					frame.repaint();
+					preview.pack();
+					width.setText(""+WIDTH);
+					height.setText(""+HEIGHT);
+				}
+				
+			});
+			
+			previewWindow.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					preview.setVisible(true);
+				}
+				
+			});
 			
 			jlayers.addActionListener(new ActionListener() {
 
@@ -533,8 +596,8 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		if(!FilesTab.getMediaFolder().equals("")) {
 			location = FilesTab.getMediaFolder().replaceAll("/", "\\\\") + "\\"; 
 		}
-		int genwidth = Integer.parseInt(width.getText());
-		int genheight = Integer.parseInt(height.getText());
+		int genwidth = WIDTH;
+		int genheight = HEIGHT;
 		// manipulate the width and height to specs
 		
 		BufferedImage resized = new BufferedImage(genwidth, genheight, BufferedImage.TYPE_INT_ARGB);
@@ -857,8 +920,8 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 							layers[pos].setImage(ImageIO.read(layers[pos].getFile()));
 							layers[pos].setX(0);
 							layers[pos].setY(0);
-							layers[pos].setWidth((int) (layers[pos].getImage().getWidth() * multix));
-							layers[pos].setHeight((int) (layers[pos].getImage().getHeight() * multiy));
+							layers[pos].setWidth((int) (layers[pos].getImage().getWidth()));
+							layers[pos].setHeight((int) (layers[pos].getImage().getHeight()));
 						}
 					else {
 						reverseImage(pos);
