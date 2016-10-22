@@ -29,6 +29,8 @@ public class SavingFileConfiguration
   private String playerTwoCharacterText = "";
   private String PATH;
   
+  private static boolean sleeping = false;
+  
   /*
    * Doubles
    */
@@ -480,6 +482,8 @@ public class SavingFileConfiguration
 		hb.createFiles();
 		hb.writeToFiles();
       PrintWriter writer = null;
+      sleeping = true;
+      System.out.println("Enacting Sleep: Image preservation for slowing computers");
       
       writer = new PrintWriter(this.PATH + this.files[0]);
       writer.print(this.mainTitle);
@@ -605,6 +609,8 @@ public class SavingFileConfiguration
 			      ImageIO.write(playerFourCharacter, "png", f);
 			      Thread.sleep(250);
 			      
+			      Thread.sleep(1500);
+			      sleeping = false;
 			      
 			} catch (Exception e) {
 				
@@ -627,6 +633,10 @@ public class SavingFileConfiguration
   
   public static String[] getContents() {
 	  return contents;
+  }
+  
+  public static boolean isSleeping() {
+	  return sleeping;
   }
   
 }

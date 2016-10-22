@@ -1100,7 +1100,7 @@ public class StreamUpdaterTab extends JPanel {
 		panel.add(playerTwoCombo);
 		
 		overP2 = new JTextField("");
-		overP2.setBounds(285, 154, 186, 20);
+		overP2.setBounds(285, 154, 140, 20);
 		
 		overrideP2 = new JButton("*");
 		overrideP2.setBounds(430, 154, 20, 20);
