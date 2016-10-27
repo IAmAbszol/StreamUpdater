@@ -1,5 +1,6 @@
 package streamupdater.util;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -483,7 +484,7 @@ public class SavingFileConfiguration
 		hb.writeToFiles();
       PrintWriter writer = null;
       sleeping = true;
-      System.out.println("Enacting Sleep: Image preservation for slowing computers");
+      System.out.println("Enacting Sleep: Image preservation for slower computers");
       
       writer = new PrintWriter(this.PATH + this.files[0]);
       writer.print(this.mainTitle);
@@ -574,46 +575,58 @@ public class SavingFileConfiguration
 		@Override
 		public void run() {
 			
-			try {
-				// first declare a file, this is to our output
-			      File f;
-			      
-			      f = new File(PATH + files[8]);
-			      ImageIO.write(playerOneCharacter, "png", f);
-			      
-			      f = new File(PATH + files[10]);
-			      ImageIO.write(playerTwoCharacter, "png", f);
-			      Thread.sleep(250);
-			      
-			      f = new File(PATH + files[9]);
-			      ImageIO.write(playerOneSponsor, "png", f);
-			      Thread.sleep(250);
-			      
-			      f = new File(PATH + files[11]);
-			      ImageIO.write(playerTwoSponsor, "png", f);
-			      Thread.sleep(250);
-			      
-			      f = new File(PATH + files[12]);
-			      ImageIO.write(commentatorOneSponsor, "png", f);
-			      Thread.sleep(250);
-			      
-			      f = new File(PATH + files[13]);
-			      ImageIO.write(commentatorTwoSponsor, "png", f);
-			      Thread.sleep(250);
-			      
-			      f = new File(PATH + files[20]);
-			      ImageIO.write(playerThreeCharacter, "png", f);
-			      Thread.sleep(250);
-			      
-			      f = new File(PATH + files[21]);
-			      ImageIO.write(playerFourCharacter, "png", f);
-			      Thread.sleep(250);
-			      
-			      Thread.sleep(1500);
-			      sleeping = false;
-			      
-			} catch (Exception e) {
-				
+			while(true) {
+			
+				try {
+					// first declare a file, this is to our output
+				      File f;
+				      
+				      f = new File(PATH + files[8]);
+				      if(f.exists() && playerOneCharacter != null)
+				    	  ImageIO.write(playerOneCharacter, "png", f);
+				      Thread.sleep(250);
+				      
+				      f = new File(PATH + files[10]);
+				      if(f.exists() && playerTwoCharacter != null)
+				    	  ImageIO.write(playerTwoCharacter, "png", f);
+				      Thread.sleep(250);
+				      
+				      f = new File(PATH + files[9]);
+				      if(f.exists() && playerOneSponsor != null)
+				    	  ImageIO.write(playerOneSponsor, "png", f);
+				      Thread.sleep(250);
+				      
+				      f = new File(PATH + files[11]);
+				      if(f.exists() && playerTwoSponsor != null)
+				    	  ImageIO.write(playerTwoSponsor, "png", f);
+				      Thread.sleep(250);
+				      
+				      f = new File(PATH + files[12]);
+				      if(f.exists() && commentatorOneSponsor != null)
+				    	  ImageIO.write(commentatorOneSponsor, "png", f);
+				      Thread.sleep(250);
+				      
+				      f = new File(PATH + files[13]);
+				      if(f.exists() && commentatorTwoSponsor != null)
+				    	  ImageIO.write(commentatorTwoSponsor, "png", f);
+				      Thread.sleep(250);
+				      
+				      f = new File(PATH + files[20]);
+				      if(f.exists() && playerThreeCharacter != null)
+				    	  ImageIO.write(playerThreeCharacter, "png", f);
+				      Thread.sleep(250);
+				      
+				      f = new File(PATH + files[21]);
+				      if(f.exists() && playerFourCharacter != null)
+				    	  ImageIO.write(playerFourCharacter, "png", f);
+				      Thread.sleep(250);
+				      
+				      Thread.sleep(1500);
+				      sleeping = false;
+				      
+				} catch (Exception e) {
+					
+				}
 			}
 		}
     	  

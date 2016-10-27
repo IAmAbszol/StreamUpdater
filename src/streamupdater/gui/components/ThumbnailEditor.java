@@ -855,7 +855,10 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		public void actionPerformed(ActionEvent e) {
 			layers[pos].reset();
 			layer[pos].setToolTipText("");
-			//te[pos].getFrame().dispose();
+			if(te[pos] != null) {
+				te[pos].getFrame().dispose();
+				te[pos] = null;
+			}
 		}
 		
 	}
