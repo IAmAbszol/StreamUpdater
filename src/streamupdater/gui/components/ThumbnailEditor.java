@@ -600,19 +600,26 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		 */ 
 		for(int i = 0; i < layers.length; i++) {
 			if(layers[i] != null && layers[i].getFile() != null && layers[i].getImage() != null) {
-				try {
-					if(!layers[i].isReversed())
-						if(layers[i].getFile().getName().contains(".txt")) {
-							layers[i].setImage(convertTextToImage(layers[i].getFile(), i));
-							layers[i].setWidth(layers[i].getImage().getWidth());
-							layers[i].setHeight(layers[i].getImage().getHeight());
-						} else
-							layers[i].setImage(ImageIO.read(layers[i].getFile()));
-					else {
-						reverseImage(i);
+				if(layers[i].getFile().lastModified() != layers[i].getTimeStamp()) {
+					try {
+						if(!layers[i].isReversed())
+							if(layers[i].getFile().getName().contains(".txt")) {
+								layers[i].setImage(convertTextToImage(layers[i].getFile(), i));
+								layers[i].setWidth(layers[i].getImage().getWidth());
+								layers[i].setHeight(layers[i].getImage().getHeight());
+							} else
+								layers[i].setImage(ImageIO.read(layers[i].getFile()));
+						else {
+							reverseImage(i);
+						}
+						try{
+							layers[i].collectTimeStamp();
+						} catch (Exception e2) {
+							
+						}
+					} catch (Exception e) {
+						// image is loading, be patient
 					}
-				} catch (Exception e) {
-					// image is loading, be patient
 				}
 			}
 		}

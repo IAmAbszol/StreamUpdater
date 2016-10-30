@@ -821,7 +821,7 @@ public class StreamUpdaterTab extends JPanel {
 													setPlayerFourName(swap);
 												swap = false;
 											}
-											sfc.writeToFiles();
+											sfc.writeToText();
 											Thread.sleep((int)playerSpin.getValue() * 1000);
 										}
 										// feel free to add anything here, basically this is an active thread once switch is on
@@ -1730,7 +1730,7 @@ public class StreamUpdaterTab extends JPanel {
 													setPlayerFourName(swap);
 												swap = false;
 											}
-											sfc.writeToFiles();
+											sfc.writeToText();
 											Thread.sleep((int)playerSpin.getValue() * 1000);
 										}
 										// feel free to add anything here, basically this is an active thread once switch is on

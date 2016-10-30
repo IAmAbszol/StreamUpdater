@@ -475,6 +475,103 @@ public class SavingFileConfiguration
 	  }
   }
   
+  public void writeToText() {
+	  try {
+		  HTMLBreak hb = new HTMLBreak(PATH, this);
+			hb.createFiles();
+			hb.writeToFiles();
+	      PrintWriter writer = null;
+	      sleeping = true;
+	      System.out.println("Enacting Sleep: Image preservation for slower computers");
+	      
+	      writer = new PrintWriter(this.PATH + this.files[0]);
+	      writer.print(this.mainTitle);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[1]);
+	      writer.print(this.currentRound);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[2]);
+	      if(!StreamUpdaterTab.getRestriction()) {
+	    	  writer.println(this.playerOne);
+	    	  writer.print(this.playerOneInfo);
+	      } else {
+	    	  writer.print(this.playerOne);
+	      }
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[3]);
+	      if(!StreamUpdaterTab.getRestriction()) {
+	    	  writer.println(this.playerTwo);
+	    	  writer.print(this.playerTwoInfo);
+	      } else {
+	    	  writer.print(this.playerTwo);
+	      }
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[4]);
+	      writer.print(this.playerOneScore);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[5]);
+	      writer.print(this.playerTwoScore);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[6]);
+	      writer.println(commentators[0]);
+	      writer.print(commentatorsInfo[0]);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[7]);
+	      writer.println(commentators[1]);
+	      writer.print(commentatorsInfo[1]);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[14]);
+	      writer.println(playerOneCharacterText);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[15]);
+	      writer.println(playerTwoCharacterText);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[16]);
+	      if(!StreamUpdaterTab.getRestriction()) {
+		      writer.println(playerThree);
+		      writer.print(playerThreeInfo);
+	      } else 
+	    	  writer.print(playerThree);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[17]);
+	      if(!StreamUpdaterTab.getRestriction()) {
+	    	  writer.println(playerFour);
+	    	  writer.print(playerFourInfo);
+	      } else
+	    	  writer.print(playerFour);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[18]);
+	      writer.print(teamOne);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[19]);
+	      writer.print(teamTwo);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[20]);
+	      writer.print(playerThreeCharacter);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[21]);
+	      writer.print(playerFourCharacter);
+	      writer.close();
+	      
+	      hb = null;
+	  } catch (Exception e) {}
+  }
+  
   public void writeToFiles()
   {
     try
@@ -575,58 +672,54 @@ public class SavingFileConfiguration
 		@Override
 		public void run() {
 			
-			while(true) {
-			
-				try {
-					// first declare a file, this is to our output
-				      File f;
-				      
-				      f = new File(PATH + files[8]);
-				      if(f.exists() && playerOneCharacter != null)
-				    	  ImageIO.write(playerOneCharacter, "png", f);
-				      Thread.sleep(250);
-				      
-				      f = new File(PATH + files[10]);
-				      if(f.exists() && playerTwoCharacter != null)
-				    	  ImageIO.write(playerTwoCharacter, "png", f);
-				      Thread.sleep(250);
-				      
-				      f = new File(PATH + files[9]);
-				      if(f.exists() && playerOneSponsor != null)
-				    	  ImageIO.write(playerOneSponsor, "png", f);
-				      Thread.sleep(250);
-				      
-				      f = new File(PATH + files[11]);
-				      if(f.exists() && playerTwoSponsor != null)
-				    	  ImageIO.write(playerTwoSponsor, "png", f);
-				      Thread.sleep(250);
-				      
-				      f = new File(PATH + files[12]);
-				      if(f.exists() && commentatorOneSponsor != null)
-				    	  ImageIO.write(commentatorOneSponsor, "png", f);
-				      Thread.sleep(250);
-				      
-				      f = new File(PATH + files[13]);
-				      if(f.exists() && commentatorTwoSponsor != null)
-				    	  ImageIO.write(commentatorTwoSponsor, "png", f);
-				      Thread.sleep(250);
-				      
-				      f = new File(PATH + files[20]);
-				      if(f.exists() && playerThreeCharacter != null)
-				    	  ImageIO.write(playerThreeCharacter, "png", f);
-				      Thread.sleep(250);
-				      
-				      f = new File(PATH + files[21]);
-				      if(f.exists() && playerFourCharacter != null)
-				    	  ImageIO.write(playerFourCharacter, "png", f);
-				      Thread.sleep(250);
-				      
-				      Thread.sleep(1500);
-				      sleeping = false;
-				      
-				} catch (Exception e) {
-					
-				}
+			try {
+				// first declare a file, this is to our output
+			      File f;
+			      
+			      f = new File(PATH + files[8]);
+			      if(f.exists() && playerOneCharacter != null)
+			    	  ImageIO.write(playerOneCharacter, "png", f);
+			      Thread.sleep(250);
+			      
+			      f = new File(PATH + files[10]);
+			      if(f.exists() && playerTwoCharacter != null)
+			    	  ImageIO.write(playerTwoCharacter, "png", f);
+			      Thread.sleep(250);
+			      
+			      f = new File(PATH + files[9]);
+			      if(f.exists() && playerOneSponsor != null)
+			    	  ImageIO.write(playerOneSponsor, "png", f);
+			      Thread.sleep(250);
+			      
+			      f = new File(PATH + files[11]);
+			      if(f.exists() && playerTwoSponsor != null)
+			    	  ImageIO.write(playerTwoSponsor, "png", f);
+			      Thread.sleep(250);
+			      
+			      f = new File(PATH + files[12]);
+			      if(f.exists() && commentatorOneSponsor != null)
+			    	  ImageIO.write(commentatorOneSponsor, "png", f);
+			      Thread.sleep(250);
+			      
+			      f = new File(PATH + files[13]);
+			      if(f.exists() && commentatorTwoSponsor != null)
+			    	  ImageIO.write(commentatorTwoSponsor, "png", f);
+			      Thread.sleep(250);
+			      
+			      f = new File(PATH + files[20]);
+			      if(f.exists() && playerThreeCharacter != null)
+			    	  ImageIO.write(playerThreeCharacter, "png", f);
+			      Thread.sleep(250);
+			      
+			      f = new File(PATH + files[21]);
+			      if(f.exists() && playerFourCharacter != null)
+			    	  ImageIO.write(playerFourCharacter, "png", f);
+			      Thread.sleep(250);
+			      Thread.sleep(1500);
+			      sleeping = false;
+			      
+			} catch (Exception e) {
+				
 			}
 		}
     	  

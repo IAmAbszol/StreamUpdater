@@ -26,6 +26,9 @@ public class ThumbnailObject {
 	private String font = "Arial";
 	private String alignment = "left";
 	
+	// file
+	private long timestamp;
+	
 	public ThumbnailObject() {
 		file = null;
 		this.image = null;
@@ -36,6 +39,7 @@ public class ThumbnailObject {
 		this.selected = false;
 		edited = false;
 		rev = false;
+		timestamp = 0;
 	}
 	
 	public void reset() {
@@ -48,6 +52,24 @@ public class ThumbnailObject {
 		this.selected = false;
 		edited = false;
 		rev = false;
+		timestamp = 0;
+		size = 32;
+		color = new int[] { 255, 255, 255 };
+		bold = false;
+		italic = false;
+		adjust = false;
+		font = "Arial";
+		alignment = "left";
+	}
+	
+	public void collectTimeStamp() {
+		if(file != null) {
+			timestamp = file.lastModified();
+		}
+	}
+	
+	public long getTimeStamp() {
+		return timestamp;
 	}
 	
 	public boolean isReversed() {
