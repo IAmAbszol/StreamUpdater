@@ -32,10 +32,10 @@ public class RenderList {
 	
 	private int gap = 5;
 	
-	public RenderList(VideoHandler video, RenderObject ro) {
+	public RenderList(VideoHandler video, RenderObject ros) {
 		
 		this.video = video;
-		this.ro = ro;
+		this.ro = ros;
 		
 		int size = ro.getDurations().size();
 		
@@ -69,6 +69,7 @@ public class RenderList {
        	renderImages.setToolTipText("I advise doing this before saving the object, issues are still a problem for images");
        	renderImages.setBounds(414, 370, 200, 30);
        	frame.add(renderImages);
+       	renderImages.setEnabled(false);
        	
        	JButton convertPanel = new JButton("Convert to MP4");
        	convertPanel.setToolTipText("Convert before rendering... errors will occur if not");
@@ -101,8 +102,7 @@ public class RenderList {
             panel[i].add(render[i]);
             // build label
             description[i] = new JLabel("");
-            if(ro.getFileNames().get(i) == null) ro.getFileNames().set(i, "GENERATED VIDEO (" + i + ").mp4");
-			description[i].setText(ro.getFileNames().get(i));
+            description[i].setText(ro.getFileNames().get(i));
 			description[i].setFont(new Font("Dialog", Font.PLAIN, 12));
 			description[i].setBounds(10, 5, 366, 23);
 			panel[i].add(description[i]);
@@ -151,11 +151,6 @@ public class RenderList {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String tmp = ro.getStreamURL().replace("flv", "mp4");
-			if(!new File(tmp).exists()) {
-				JOptionPane.showMessageDialog(null, "Please Convert FLV to MP4 with the Convert to MP4 button before continuing!");
-				return;
-			}
 			RenderingEngine re = new RenderingEngine();
 			re.setObject(ro);
 			re.removePartObject(pos);
@@ -176,6 +171,18 @@ public class RenderList {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			String tmp = ro.getStreamURL().replace("flv", "mp4");
+			if(!new File(tmp).exists()) {
+				System.out.println("New override method for rendering");
+				RenderingEngine re = new RenderingEngine();
+				re.setObject(ro);
+				re.forceRenderProject(video, pos);
+				re.removePartObject(pos);
+				frame.setVisible(false);
+				RenderList rl = new RenderList(video, ro);
+				frame.dispose();
+				return;
+			}
 			RenderingEngine re = new RenderingEngine();
 			re.setObject(ro);
 			re.renderProject(video, pos);

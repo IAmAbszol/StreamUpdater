@@ -15,6 +15,8 @@ import javax.swing.JSpinner;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import streamupdater.gui.components.ThumbnailEditor;
+
 public class TextEditor {
 	
 	private boolean completed = false;
@@ -160,6 +162,7 @@ public class TextEditor {
 				bold = bolds.isSelected();
 				italic = italics.isSelected();
 				adjust = adj.isSelected();
+				ThumbnailEditor.reupdateImagesOverride();
 				completed = true;
 			}
 			

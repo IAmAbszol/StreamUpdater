@@ -76,6 +76,42 @@ public class VideoHandler {
 		outputImageFile = n;
 	}
 	
+	public void forceRender() {
+		try {
+			alteredFile = inputFile.replace(".flv", ".mp4");
+			
+			final URI uri;
+	        final String exe;
+	        String arg = null;
+	        
+	        if(!ScanForFFMpeg.scan()) {
+
+		        uri = getJarURI();
+		        exe = getFile(uri, "streamupdater/gui/components/render/ffmpeg.exe").toString().replace("file:/", "");
+				
+		        arg = " -y -ss " + offset + " -i " + "\"" + inputFile + "\" -codec copy -t " +  duration + "" + "\"" + alteredFile + "\"";
+		        arg = exe + arg;
+	        
+	        } else
+	        	arg = "ffmpeg -y -i " + "\"" + inputFile + "\" -codec copy " + "\"" + alteredFile + "\"";
+	        
+			ProcessBuilder builder = new 
+					 ProcessBuilder(
+							 "cmd", "/c", arg);
+			
+			builder.redirectErrorStream(true);
+			Process p = builder.start();
+			inheritIO(p.getInputStream(), System.out, true);
+			
+			try {
+				ImageIO.write(image, "png", new File(outputImageFile));
+			} catch (Exception e) {
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void convertToMp4() {
 		try {
 			alteredFile = inputFile.replace(".flv", ".mp4");

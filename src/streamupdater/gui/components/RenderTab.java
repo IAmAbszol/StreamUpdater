@@ -127,7 +127,8 @@ public class RenderTab extends JPanel {
 				
 				// render stoof
 				jcb = new JCheckBox();
-				jcb.setSelected(true);
+				jcb.setSelected(false);
+				//jcb.setEnabled(false);
 				jcb.setToolTipText("Enable to rename your video output to the stream");
 				jcb.setBounds(86, 245, 20, 20);
 				pan.add(jcb);
@@ -304,6 +305,7 @@ public class RenderTab extends JPanel {
 				// render stoof
 				jcb = new JCheckBox();
 				jcb.setSelected(true);
+				//jcb.setEnabled(false); // temporary, glitch is causing issues. Issues seem to be special characters, thanks LGBT | Che$$...
 				jcb.setToolTipText("Enable to rename your video output to the stream");
 				jcb.setBounds(86, 245, 20, 20);
 				pan.add(jcb);
@@ -560,6 +562,7 @@ public class RenderTab extends JPanel {
 							ro.getFileNames().add(location + (ro.getFileNames().size() + 1) + ".mp4");
 							ro.getImageFileNames().add(location + (ro.getImageFileNames().size() + 1) + ".png");
 						} else {
+							System.out.println("Generated Filename " + location + Commands.interpretString(fileName) + ".mp4");
 							ro.getFileNames().add(location + Commands.interpretString(fileName) + ".mp4");
 							ro.getImageFileNames().add(location + Commands.interpretString(fileName) + ".png");
 						}
@@ -573,7 +576,9 @@ public class RenderTab extends JPanel {
 						playerOneCharacters.clear();
 						playerTwoCharacters.clear();
 					}
-				} catch (Exception e2) {}
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
 			}
 			
 		});
@@ -582,15 +587,19 @@ public class RenderTab extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(ro != null) {
-					RenderSave rs = new RenderSave();
-					rs.save(ro.getStreamURL(), ro.getStartingPositions(), ro.getDurations(), ro.getFileNames(), ro.getImages(), ro.getImageFileNames());
-				} else {
-					JOptionPane.showMessageDialog(null, "Render Object Broken? I'll rebuild it");
-					ro = new RenderObject(streamURL);
-					RenderSave rs = new RenderSave();
-					rs.save(ro.getStreamURL(), ro.getStartingPositions(), ro.getDurations(), ro.getFileNames(), ro.getImages(), ro.getImageFileNames());
-				}
+					new Thread(new Runnable() {
+						public void run() {
+							if(ro != null) {
+								RenderSave rs = new RenderSave();
+								rs.save(ro.getStreamURL(), ro.getStartingPositions(), ro.getDurations(), ro.getFileNames(), ro.getImages(), ro.getImageFileNames());
+							} else {
+								JOptionPane.showMessageDialog(null, "Render Object Broken? I'll rebuild it");
+								ro = new RenderObject(streamURL);
+								RenderSave rs = new RenderSave();
+								rs.save(ro.getStreamURL(), ro.getStartingPositions(), ro.getDurations(), ro.getFileNames(), ro.getImages(), ro.getImageFileNames());
+						}
+					}
+					}).start();
 			}
 			
 		});

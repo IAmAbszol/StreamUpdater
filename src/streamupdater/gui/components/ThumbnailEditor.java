@@ -480,10 +480,10 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		if(!SavingFileConfiguration.isSleeping())
 			update();
 		
-		draw();
-		
-		if(!pause)
+		if(!pause) {
+			draw();
 			drawToScreen();
+		}
 		
 		return System.currentTimeMillis() - t;
 	}
@@ -593,6 +593,36 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 
 	}
 	
+	public static void reupdateImagesOverride() {
+		/* basically, this will update any changes thus
+		 * if a char change happened, it will change ONLY if you are
+		 * using root as your media center
+		 */ 
+		for(int i = 0; i < layers.length; i++) {
+			if(layers[i] != null && layers[i].getFile() != null && layers[i].getImage() != null) {
+				try {
+					if(!layers[i].isReversed()) {
+						if(layers[i].getFile().getName().contains(".txt")) {
+							layers[i].setImage(convertTextToImage(layers[i].getFile(), i));
+							layers[i].setWidth(layers[i].getImage().getWidth());
+							layers[i].setHeight(layers[i].getImage().getHeight());
+						} else
+							layers[i].setImage(ImageIO.read(layers[i].getFile()));
+					} else {
+						reverseImage(i);
+					}
+					try{
+						layers[i].collectTimeStamp();
+					} catch (Exception e2) {
+						
+					}
+				} catch (Exception e) {
+					// image is loading, be patient
+				}
+			}
+		}
+	}
+	
 	private void reupdateImages() {
 		/* basically, this will update any changes thus
 		 * if a char change happened, it will change ONLY if you are
@@ -602,14 +632,14 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 			if(layers[i] != null && layers[i].getFile() != null && layers[i].getImage() != null) {
 				if(layers[i].getFile().lastModified() != layers[i].getTimeStamp()) {
 					try {
-						if(!layers[i].isReversed())
+						if(!layers[i].isReversed()) {
 							if(layers[i].getFile().getName().contains(".txt")) {
 								layers[i].setImage(convertTextToImage(layers[i].getFile(), i));
 								layers[i].setWidth(layers[i].getImage().getWidth());
 								layers[i].setHeight(layers[i].getImage().getHeight());
 							} else
 								layers[i].setImage(ImageIO.read(layers[i].getFile()));
-						else {
+						} else {
 							reverseImage(i);
 						}
 						try{
@@ -729,7 +759,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		return null;
 	}
 	
-	private void reverseImage(int i) {
+	private static void reverseImage(int i) {
 		BufferedImage tmp = new BufferedImage(
 				layers[i].getImage().getWidth(),
 				layers[i].getImage().getHeight(),
@@ -771,9 +801,11 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 				if(layers[i].getFile() != null && layers[i].getImage() != null && layers[i].isSelected()) {
 					if(layers[i].isReversed()) {
 						layers[i].setReversed(false);
+						reupdateImagesOverride();
 						return;
 					} else {
 						layers[i].setReversed(true);
+						reupdateImagesOverride();
 						return;
 					}
 				}

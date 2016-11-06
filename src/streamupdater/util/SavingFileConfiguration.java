@@ -292,10 +292,14 @@ public class SavingFileConfiguration
   }
   
   public void setTeamOne(String one, String con, String two) {
+	  if(one.equals("") || one.equals(" ")) one = playerOne;
+	  if(two.equals("") || two.equals(" ")) two = playerTwo;
 	  teamOne = one + " " + con + " " + two;
   }
   
   public void setTeamTwo(String one, String con, String two) {
+	  if(one.equals("") || one.equals(" ")) one = playerOne;
+	  if(two.equals("") || two.equals(" ")) two = playerTwo;
 	  teamTwo = one + " " + con + " " + two;
   }
   
@@ -519,13 +523,21 @@ public class SavingFileConfiguration
 	      writer.close();
 	      
 	      writer = new PrintWriter(this.PATH + this.files[6]);
-	      writer.println(commentators[0]);
-	      writer.print(commentatorsInfo[0]);
+	      if(!StreamUpdaterTab.getRestriction()) {
+	    	  writer.println(commentators[0]);
+		      writer.print(commentatorsInfo[0]);
+	      } else {
+	    	  writer.print(commentators[0]);
+	      }
 	      writer.close();
 	      
 	      writer = new PrintWriter(this.PATH + this.files[7]);
-	      writer.println(commentators[1]);
-	      writer.print(commentatorsInfo[1]);
+	      if(!StreamUpdaterTab.getRestriction()) {
+	    	  writer.println(commentators[1]);
+		      writer.print(commentatorsInfo[1]);
+	      } else {
+	    	  writer.print(commentators[1]);
+	      }
 	      writer.close();
 	      
 	      writer = new PrintWriter(this.PATH + this.files[14]);
@@ -618,13 +630,21 @@ public class SavingFileConfiguration
       writer.close();
       
       writer = new PrintWriter(this.PATH + this.files[6]);
-      writer.println(commentators[0]);
-      writer.print(commentatorsInfo[0]);
+      if(!StreamUpdaterTab.getRestriction()) {
+    	  writer.println(commentators[0]);
+	      writer.print(commentatorsInfo[0]);
+      } else {
+    	  writer.print(commentators[0]);
+      }
       writer.close();
       
       writer = new PrintWriter(this.PATH + this.files[7]);
-      writer.println(commentators[1]);
-      writer.print(commentatorsInfo[1]);
+      if(!StreamUpdaterTab.getRestriction()) {
+    	  writer.println(commentators[1]);
+	      writer.print(commentatorsInfo[1]);
+      } else {
+    	  writer.print(commentators[1]);
+      }
       writer.close();
       
       writer = new PrintWriter(this.PATH + this.files[14]);

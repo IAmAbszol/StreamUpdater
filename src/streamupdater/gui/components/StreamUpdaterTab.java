@@ -111,6 +111,7 @@ public class StreamUpdaterTab extends JPanel {
 	
 	private static JPanel panel;
 	private static JTextField connector;
+	private static AdjustRounds roundControl;
 	
 	public StreamUpdaterTab() {
 		
@@ -589,7 +590,10 @@ public class StreamUpdaterTab extends JPanel {
 		gear.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent arg0) {
 				// only event I care about
-				new AdjustRounds();
+				if(roundControl == null)
+					roundControl = new AdjustRounds();
+				else
+					roundControl.unhide();
 			}
 			public void mouseEntered(MouseEvent arg0) {}
 			public void mouseExited(MouseEvent arg0) {}
@@ -1498,7 +1502,10 @@ public class StreamUpdaterTab extends JPanel {
 		gear.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent arg0) {
 				// only event I care about
-				new AdjustRounds();
+				if(roundControl == null) {
+					roundControl = new AdjustRounds();
+				} else
+					roundControl.unhide();
 			}
 			public void mouseEntered(MouseEvent arg0) {}
 			public void mouseExited(MouseEvent arg0) {}
