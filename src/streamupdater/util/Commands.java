@@ -70,7 +70,6 @@ public class Commands {
 		for(int i = 0; i < illegal.length; i++) {
 			n = n.replace("" + illegal[i] + " ", "");
 		}
-		System.out.println("\n\n\nGenerated File " + n + "\n\n\n\n");
 		return n;
 	}
 	

@@ -373,7 +373,7 @@ public class RenderTab extends JPanel {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						JFrame frame = new JFrame("Stream URL");
-						frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 						frame.setBounds(100, 100, 450, 201);
 						JPanel contentPane = new JPanel();
 						contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

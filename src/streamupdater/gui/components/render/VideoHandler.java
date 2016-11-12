@@ -89,11 +89,13 @@ public class VideoHandler {
 		        uri = getJarURI();
 		        exe = getFile(uri, "streamupdater/gui/components/render/ffmpeg.exe").toString().replace("file:/", "");
 				
-		        arg = " -y -ss " + offset + " -i " + "\"" + inputFile + "\" -codec copy -t " +  duration + "" + "\"" + alteredFile + "\"";
+		        arg = " -y -ss " + offset + " -i " + "\"" + inputFile + "\" -codec copy -t " +  duration + "" + "\"" + outputFile + "\"";
 		        arg = exe + arg;
 	        
 	        } else
-	        	arg = "ffmpeg -y -i " + "\"" + inputFile + "\" -codec copy " + "\"" + alteredFile + "\"";
+	        	arg = "ffmpeg -y -ss " + offset + " -i " + "\"" + inputFile + "\" -codec copy -t " +  duration + "" + "\"" + outputFile + "\"";
+	        
+	        System.out.println(arg);
 	        
 			ProcessBuilder builder = new 
 					 ProcessBuilder(
