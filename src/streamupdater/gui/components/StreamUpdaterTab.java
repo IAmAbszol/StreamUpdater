@@ -125,7 +125,6 @@ public class StreamUpdaterTab extends JPanel {
 		
 		buildSingles();
 		
-		
 	}
 	
 	private void buildSingles() {
@@ -2144,6 +2143,25 @@ public class StreamUpdaterTab extends JPanel {
 			}
 		} else {
 			sfc.setPlayerFour(overP4.getText());
+		}
+	}
+	
+	/*
+	 * Incase of failure to set
+	 */
+	public static String getPlayerOneName() {
+		if(!overridePlayerOne) {
+				return (String) playerOneCombo.getSelectedItem();
+		} else {
+			return overP1.getText();
+		}
+	}
+	
+	public static String getPlayerTwoName() {
+		if(!overridePlayerTwo) {
+			return (String) playerTwoCombo.getSelectedItem();
+		} else {
+			return overP2.getText();
 		}
 	}
 	

@@ -245,11 +245,15 @@ public class SavingFileConfiguration
   public void setPlayerOne(String n)
   {
     this.playerOne = n;
+    if(n.equals(""))
+    	this.playerOne = StreamUpdaterTab.getPlayerOneName();
   }
   
   public void setPlayerTwo(String n)
   {
     this.playerTwo = n;
+    if(n.equals(""))
+    	this.playerTwo = StreamUpdaterTab.getPlayerTwoName();
   }
   
   public void setPlayerOneInfo(String n) {
