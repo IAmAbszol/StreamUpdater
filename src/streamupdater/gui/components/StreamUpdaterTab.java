@@ -111,6 +111,7 @@ public class StreamUpdaterTab extends JPanel {
 	
 	private static JPanel panel;
 	private static JTextField connector;
+	private static AdjustRounds roundControl;
 	
 	public StreamUpdaterTab() {
 		
@@ -123,7 +124,6 @@ public class StreamUpdaterTab extends JPanel {
 		panel = new JPanel();
 		
 		buildSingles();
-		
 		
 	}
 	
@@ -589,7 +589,10 @@ public class StreamUpdaterTab extends JPanel {
 		gear.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent arg0) {
 				// only event I care about
-				new AdjustRounds();
+				if(roundControl == null)
+					roundControl = new AdjustRounds();
+				else
+					roundControl.unhide();
 			}
 			public void mouseEntered(MouseEvent arg0) {}
 			public void mouseExited(MouseEvent arg0) {}
@@ -821,7 +824,7 @@ public class StreamUpdaterTab extends JPanel {
 													setPlayerFourName(swap);
 												swap = false;
 											}
-											sfc.writeToFiles();
+											sfc.writeToText();
 											Thread.sleep((int)playerSpin.getValue() * 1000);
 										}
 										// feel free to add anything here, basically this is an active thread once switch is on
@@ -1100,7 +1103,7 @@ public class StreamUpdaterTab extends JPanel {
 		panel.add(playerTwoCombo);
 		
 		overP2 = new JTextField("");
-		overP2.setBounds(285, 154, 186, 20);
+		overP2.setBounds(285, 154, 140, 20);
 		
 		overrideP2 = new JButton("*");
 		overrideP2.setBounds(430, 154, 20, 20);
@@ -1498,7 +1501,10 @@ public class StreamUpdaterTab extends JPanel {
 		gear.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent arg0) {
 				// only event I care about
-				new AdjustRounds();
+				if(roundControl == null) {
+					roundControl = new AdjustRounds();
+				} else
+					roundControl.unhide();
 			}
 			public void mouseEntered(MouseEvent arg0) {}
 			public void mouseExited(MouseEvent arg0) {}
@@ -1730,7 +1736,7 @@ public class StreamUpdaterTab extends JPanel {
 													setPlayerFourName(swap);
 												swap = false;
 											}
-											sfc.writeToFiles();
+											sfc.writeToText();
 											Thread.sleep((int)playerSpin.getValue() * 1000);
 										}
 										// feel free to add anything here, basically this is an active thread once switch is on
@@ -2137,6 +2143,25 @@ public class StreamUpdaterTab extends JPanel {
 			}
 		} else {
 			sfc.setPlayerFour(overP4.getText());
+		}
+	}
+	
+	/*
+	 * Incase of failure to set
+	 */
+	public static String getPlayerOneName() {
+		if(!overridePlayerOne) {
+				return (String) playerOneCombo.getSelectedItem();
+		} else {
+			return overP1.getText();
+		}
+	}
+	
+	public static String getPlayerTwoName() {
+		if(!overridePlayerTwo) {
+			return (String) playerTwoCombo.getSelectedItem();
+		} else {
+			return overP2.getText();
 		}
 	}
 	

@@ -1,5 +1,6 @@
 package streamupdater.util;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,6 +29,8 @@ public class SavingFileConfiguration
   private String playerOneCharacterText = "";
   private String playerTwoCharacterText = "";
   private String PATH;
+  
+  private static boolean sleeping = false;
   
   /*
    * Doubles
@@ -242,11 +245,15 @@ public class SavingFileConfiguration
   public void setPlayerOne(String n)
   {
     this.playerOne = n;
+    if(n.equals(""))
+    	this.playerOne = StreamUpdaterTab.getPlayerOneName();
   }
   
   public void setPlayerTwo(String n)
   {
     this.playerTwo = n;
+    if(n.equals(""))
+    	this.playerTwo = StreamUpdaterTab.getPlayerTwoName();
   }
   
   public void setPlayerOneInfo(String n) {
@@ -289,10 +296,14 @@ public class SavingFileConfiguration
   }
   
   public void setTeamOne(String one, String con, String two) {
+	  if(one.equals("") || one.equals(" ")) one = playerOne;
+	  if(two.equals("") || two.equals(" ")) two = playerTwo;
 	  teamOne = one + " " + con + " " + two;
   }
   
   public void setTeamTwo(String one, String con, String two) {
+	  if(one.equals("") || one.equals(" ")) one = playerOne;
+	  if(two.equals("") || two.equals(" ")) two = playerTwo;
 	  teamTwo = one + " " + con + " " + two;
   }
   
@@ -472,6 +483,111 @@ public class SavingFileConfiguration
 	  }
   }
   
+  public void writeToText() {
+	  try {
+		  HTMLBreak hb = new HTMLBreak(PATH, this);
+			hb.createFiles();
+			hb.writeToFiles();
+	      PrintWriter writer = null;
+	      sleeping = true;
+	      System.out.println("Enacting Sleep: Image preservation for slower computers");
+	      
+	      writer = new PrintWriter(this.PATH + this.files[0]);
+	      writer.print(this.mainTitle);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[1]);
+	      writer.print(this.currentRound);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[2]);
+	      if(!StreamUpdaterTab.getRestriction()) {
+	    	  writer.println(this.playerOne);
+	    	  writer.print(this.playerOneInfo);
+	      } else {
+	    	  writer.print(this.playerOne);
+	      }
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[3]);
+	      if(!StreamUpdaterTab.getRestriction()) {
+	    	  writer.println(this.playerTwo);
+	    	  writer.print(this.playerTwoInfo);
+	      } else {
+	    	  writer.print(this.playerTwo);
+	      }
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[4]);
+	      writer.print(this.playerOneScore);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[5]);
+	      writer.print(this.playerTwoScore);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[6]);
+	      if(!StreamUpdaterTab.getRestriction()) {
+	    	  writer.println(commentators[0]);
+		      writer.print(commentatorsInfo[0]);
+	      } else {
+	    	  writer.print(commentators[0]);
+	      }
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[7]);
+	      if(!StreamUpdaterTab.getRestriction()) {
+	    	  writer.println(commentators[1]);
+		      writer.print(commentatorsInfo[1]);
+	      } else {
+	    	  writer.print(commentators[1]);
+	      }
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[14]);
+	      writer.println(playerOneCharacterText);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[15]);
+	      writer.println(playerTwoCharacterText);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[16]);
+	      if(!StreamUpdaterTab.getRestriction()) {
+		      writer.println(playerThree);
+		      writer.print(playerThreeInfo);
+	      } else 
+	    	  writer.print(playerThree);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[17]);
+	      if(!StreamUpdaterTab.getRestriction()) {
+	    	  writer.println(playerFour);
+	    	  writer.print(playerFourInfo);
+	      } else
+	    	  writer.print(playerFour);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[18]);
+	      writer.print(teamOne);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[19]);
+	      writer.print(teamTwo);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[20]);
+	      writer.print(playerThreeCharacter);
+	      writer.close();
+	      
+	      writer = new PrintWriter(this.PATH + this.files[21]);
+	      writer.print(playerFourCharacter);
+	      writer.close();
+	      
+	      hb = null;
+	  } catch (Exception e) {}
+  }
+  
   public void writeToFiles()
   {
     try
@@ -480,6 +596,8 @@ public class SavingFileConfiguration
 		hb.createFiles();
 		hb.writeToFiles();
       PrintWriter writer = null;
+      sleeping = true;
+      System.out.println("Enacting Sleep: Image preservation for slower computers");
       
       writer = new PrintWriter(this.PATH + this.files[0]);
       writer.print(this.mainTitle);
@@ -516,13 +634,21 @@ public class SavingFileConfiguration
       writer.close();
       
       writer = new PrintWriter(this.PATH + this.files[6]);
-      writer.println(commentators[0]);
-      writer.print(commentatorsInfo[0]);
+      if(!StreamUpdaterTab.getRestriction()) {
+    	  writer.println(commentators[0]);
+	      writer.print(commentatorsInfo[0]);
+      } else {
+    	  writer.print(commentators[0]);
+      }
       writer.close();
       
       writer = new PrintWriter(this.PATH + this.files[7]);
-      writer.println(commentators[1]);
-      writer.print(commentatorsInfo[1]);
+      if(!StreamUpdaterTab.getRestriction()) {
+    	  writer.println(commentators[1]);
+	      writer.print(commentatorsInfo[1]);
+      } else {
+    	  writer.print(commentators[1]);
+      }
       writer.close();
       
       writer = new PrintWriter(this.PATH + this.files[14]);
@@ -613,11 +739,11 @@ public class SavingFileConfiguration
 			      if(f.exists() && playerFourCharacter != null)
 			    	  ImageIO.write(playerFourCharacter, "png", f);
 			      Thread.sleep(250);
-			      
 			      Thread.sleep(1500);
+			      sleeping = false;
 			      
 			} catch (Exception e) {
-				e.printStackTrace();
+				
 			}
 		}
     	  
@@ -637,6 +763,10 @@ public class SavingFileConfiguration
   
   public static String[] getContents() {
 	  return contents;
+  }
+  
+  public static boolean isSleeping() {
+	  return sleeping;
   }
   
 }

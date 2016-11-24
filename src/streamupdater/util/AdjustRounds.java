@@ -24,12 +24,13 @@ public class AdjustRounds {
 	
 	private JTextField bracket;
 	private JTextField pools;
+	private JFrame frame;
 	
 	public AdjustRounds() {
 		
-		JFrame frame = new JFrame();
+		frame = new JFrame();
 		frame.setTitle("Adjust Rounds Configuration");
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.setBounds(100, 100, 450, 360);
 		JPanel contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -512,6 +513,12 @@ public class AdjustRounds {
 		sb.append("%b --> 256,192,128,etc<br>");
 		sb.append("%ad --> a1,a2,a3,b1,etc<br>");
 		return sb.toString();
+	}
+	
+	public void unhide() {
+		if(frame != null) {
+			frame.setVisible(true);
+		}
 	}
 
 }

@@ -33,17 +33,49 @@ public class RenderingEngine {
 		return -1;
 	}
 	
+	public static int forceRenderProject(VideoHandler video, int pos) {
+		if(ro != null) {
+			if(ro.getDurations().size() == ro.getFileNames().size() && ro.getStartingPositions().size() == ro.getFileNames().size() ) {
+				forceHandleRender(video, ro.getStreamURL(), pos);
+			} else
+				return -3;
+		} else
+			return -2;
+		return -1;
+	}
+	
 	public void renderImages(VideoHandler video) {
 		if(ro.getImages().size() == ro.getImageFileNames().size()) {
-			for(int i = 0; i < ro.getImages().size(); i++) {
-				video.setImage(ro.getImages().get(i));
-				video.setImageFileLocation(ro.getImageFileNames().get(i));
-				video.createImages();
-			}
+			Thread garbage = new Thread(new Runnable() {
+				public void run() {
+					for(int i = 0; i < ro.getImages().size(); i++) {
+						video.setImage(ro.getImages().get(i));
+						video.setImageFileLocation(ro.getImageFileNames().get(i));
+						video.createImages();
+						try {
+							Thread.sleep(500);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			});
+			garbage.start();
 		}
 	}
 
 	// class that handles the overall rendering of the file
+	private static void forceHandleRender(VideoHandler video, String s, int pos) {
+		video.setDuration(ro.getDurations().get(pos));
+		video.setOffset(ro.getStartingPositions().get(pos));
+		video.setVideoInput(s);
+		video.setVideoOutput(ro.getFileNames().get(pos));
+		video.setImage(ro.getImages().get(pos));
+		video.setImageFileLocation(ro.getImageFileNames().get(pos));
+		video.forceRender();
+	}
+	
 	private static void handleRender(VideoHandler video, String s, int pos) {
 		video.setDuration(ro.getDurations().get(pos));
 		video.setOffset(ro.getStartingPositions().get(pos));

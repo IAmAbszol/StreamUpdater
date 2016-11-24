@@ -16,43 +16,43 @@ public class Commands {
 		if(!FilesTab.getTextFolder().equals("")) {
 			
 			if(n.contains("PLAYERONENAME")) {
-				n = n.replaceAll("PLAYERONENAME", getPlayerName(1));
+				n = n.replace("PLAYERONENAME", getPlayerName(1));
 			}
 			
 			if(n.contains("PLAYERTWONAME")) {
-				n = n.replaceAll("PLAYERTWONAME", getPlayerName(2));
+				n = n.replace("PLAYERTWONAME", getPlayerName(2));
 			}
 			
 			if(n.contains("PLAYERTHREENAME")) {
-				n = n.replaceAll("PLAYERTHREENAME", getPlayerName(3));
+				n = n.replace("PLAYERTHREENAME", getPlayerName(3));
 			}
 			
 			if(n.contains("PLAYERFOURNAME")) {
-				n = n.replaceAll("PLAYERFOURNAME", getPlayerName(4));
+				n = n.replace("PLAYERFOURNAME", getPlayerName(4));
 			}
 			
 			if(n.contains("TEAM1")) {
-				n = n.replaceAll("TEAM1", getTeamName(1));
+				n = n.replace("TEAM1", getTeamName(1));
 			}
 			
 			if(n.contains("TEAM2")) {
-				n = n.replaceAll("TEAM2", getTeamName(2));
+				n = n.replace("TEAM2", getTeamName(2));
 			}
 			
 			if(n.contains("PLAYERONECHAR")) {
-				n = n.replaceAll("PLAYERONECHAR", getCharacters(true));
+				n = n.replace("PLAYERONECHAR", getCharacters(true));
 			}
 			
 			if(n.contains("PLAYERTWOCHAR")) {
-				n = n.replaceAll("PLAYERTWOCHAR", getCharacters(false));
+				n = n.replace("PLAYERTWOCHAR", getCharacters(false));
 			}
 			
 			if(n.contains("CURRENTROUND")) {
-				n = n.replaceAll("CURRENTROUND", getRound());
+				n = n.replace("CURRENTROUND", getRound());
 			}
 			
 			if(n.contains("MAINTITLE")) {
-				n = n.replaceAll("MAINTITLE", getTitle());
+				n = n.replace("MAINTITLE", getTitle());
 			}
 			
 			return removeIllegal(n);
