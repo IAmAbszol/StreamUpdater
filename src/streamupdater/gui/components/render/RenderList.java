@@ -173,6 +173,8 @@ public class RenderList {
 		public void actionPerformed(ActionEvent e) {
 			String tmp = ro.getStreamURL().replace("flv", "mp4");
 			if(!new File(tmp).exists()) {
+				JOptionPane.showMessageDialog(null, "MP4 not detected! Please click Convert to MP4 after stream has finished!");
+				/* currently in development
 				System.out.println("New override method for rendering");
 				RenderingEngine re = new RenderingEngine();
 				re.setObject(ro);
@@ -180,7 +182,7 @@ public class RenderList {
 				re.removePartObject(pos);
 				frame.setVisible(false);
 				RenderList rl = new RenderList(video, ro);
-				frame.dispose();
+				frame.dispose();*/
 				return;
 			}
 			RenderingEngine re = new RenderingEngine();
