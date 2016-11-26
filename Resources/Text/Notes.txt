@@ -10,7 +10,7 @@ Linking OBS with the files created + Setting it up -> https://www.youtube.com/wa
 Donations are always much appreciated, donations actually help me keep going and pay for college without having to do something
 I dislike and rather do something I love.
 
-Bug? Email me at -> 
+Bug? Email me at -> kdarl1@u.brockport.edu [School email is subject to be changed]
 
 Features & Use
 ===============
@@ -40,12 +40,16 @@ within the Files Tab, an error will be thrown if you have not done so.
 [Singles vs Doubles]
 The singles feature allows you to control the easy 1v1 action
 The doubles feature allows you to control the 2v2 action.
+Currently there is a glitch I am trying to track down, causes player 1 to stop functioning?
+I suggest restarting the programs so finish a singles chunk of a tournament or vice-versa before starting the other.
 
 
 [Render Tab] - Allows to control and render the stream.
 Using FFmpeg and Java, this part of the program is far more sophisticated 
 than the rest of the program.
 Load Render will allow you to select a saved object that appears on your Desktop.
+
+** This still might be an issue, I'll be testing this within the coming weeks **
 NOTICE! If you transfer the file between computers, there are problems.
 The second computer requires
 - Same user name
@@ -60,12 +64,6 @@ Only unlocked once a streaming file has been chosen.
 By opening up this feature, the number of layers may be altered by the text field 
 located on the bottom left of the page. Everything is automated when it comes to this feature.
 Thumbnails will be loaded into your media folder, any editing is done in there.
-
-
-[Bracket Tab] - Beta, Hidden. Developers this hasn't been built yet
-Soon to be the very own bracket generator, not needing Internet 
-to use it unlike Challonge (I enjoy using this). 
-Temporary/Perm solution is within the Files Tab.
 
 
 [Files Tab]
@@ -91,11 +89,10 @@ This function is quite simply, save your configurations to the system
 or remove them. Developers, this function checks for the OS, check it out.
 
 
-
 Want to develop?
 ================
 Before developing I suggest the following
 - Donate, I really enjoy people using this program and money (sadly)
 helps me stay programming things I WANT to program.
-- Know Java and JavaFX (Java but stranger)
+- Know Java and JavaFX (Java but stranger, though its not even that much used)
 - Have eclipse, netbeans, any IDE.

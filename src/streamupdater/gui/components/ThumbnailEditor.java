@@ -23,6 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -947,12 +948,25 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 							layers[pos].setWidth(te[pos].getWidth());
 							layers[pos].setHeight(te[pos].getHeight());
 							layers[pos].setImage(convertTextToImage(layers[pos].getFile(), pos));
-						} else {
+						} else 
+							if(layers[pos].getFile().getName().contains("png") ||
+									layers[pos].getFile().getName().contains("jpg") ||
+									layers[pos].getFile().getName().contains("jpeg") ||
+									layers[pos].getFile().getName().contains("bmp")){
 							layers[pos].setImage(ImageIO.read(layers[pos].getFile()));
 							layers[pos].setX(0);
 							layers[pos].setY(0);
 							layers[pos].setWidth((int) (layers[pos].getImage().getWidth()));
 							layers[pos].setHeight((int) (layers[pos].getImage().getHeight()));
+						} else {
+							JOptionPane.showMessageDialog(null, "txt, png, jpg, and bmp files only!");
+							layers[pos].reset();
+							layer[pos].setToolTipText("");
+							if(te[pos] != null) {
+								te[pos].getFrame().dispose();
+								te[pos] = null;
+							}
+							return;
 						}
 					else {
 						reverseImage(pos);

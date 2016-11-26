@@ -64,11 +64,20 @@ public class Commands {
 	}
 	
 	private static String removeIllegal(String n) {
-		char[] illegal = {
-				':', '\"', '/', '\\', '|', '?'
-		};
-		for(int i = 0; i < illegal.length; i++) {
-			n = n.replace("" + illegal[i] + " ", "");
+		boolean containsIllegal = true;
+		while(containsIllegal) {
+			char[] illegal = {
+					':', '\"', '/', '\\', '|', '?'
+			};
+			for(int i = 0; i < illegal.length; i++) {
+				n = n.replace("" + illegal[i] + "", "");
+			}
+			containsIllegal = false;
+			for(int i = 0; i < illegal.length; i++) {
+				if(n.contains(""+illegal[i])) {
+					containsIllegal = true;
+				}
+			}
 		}
 		return n;
 	}
