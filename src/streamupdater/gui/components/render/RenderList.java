@@ -69,7 +69,7 @@ public class RenderList {
        	renderImages.setToolTipText("I advise doing this before saving the object, issues are still a problem for images");
        	renderImages.setBounds(414, 370, 200, 30);
        	frame.add(renderImages);
-       	renderImages.setEnabled(false);
+       	renderImages.setEnabled(true);
        	
        	JButton convertPanel = new JButton("Convert to MP4");
        	convertPanel.setToolTipText("Convert before rendering... errors will occur if not");
