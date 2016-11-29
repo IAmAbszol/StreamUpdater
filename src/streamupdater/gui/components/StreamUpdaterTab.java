@@ -129,6 +129,11 @@ public class StreamUpdaterTab extends JPanel {
 	
 	private void buildSingles() {
 		
+		overridePlayerOne = false;
+		overridePlayerTwo = false;
+		overridePlayerThree = false;
+		overridePlayerFour = false;
+		
 		panel.removeAll();
 		panel.setBounds(10, 11, 539, 690);
 		add(panel);
@@ -1017,6 +1022,12 @@ public class StreamUpdaterTab extends JPanel {
 	}
 	
 	private void buildDoubles() {
+		
+		overridePlayerOne = false;
+		overridePlayerTwo = false;
+		overridePlayerThree = false;
+		overridePlayerFour = false;
+		
 		panel.removeAll();
 		panel.setBounds(10, 11, 539, 690);
 		add(panel);
