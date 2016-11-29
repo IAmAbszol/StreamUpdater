@@ -23,6 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -75,6 +76,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 	private int FPS = 60;
 
 	private static File location;
+	private static BufferedImage panelImage;
 	private static BufferedImage image;
 	private Graphics2D g;
 	private static boolean pause = false;
@@ -541,22 +543,25 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		g2.drawImage(image, 0, 0, 
 				WIDTH, HEIGHT, 
 				null);
+		panelImage = image;
 		g2.dispose();
 	}
 
-	public static BufferedImage generateThumbnail() {
+	public BufferedImage generateThumbnail() {
 		// so draw doesnt interfere
 		if(!pause) pause = true;
 		for(int i = 0; i < numberOfLayers; i++) {
 			layers[i].setSelected(false);
 		}
+		draw();
+		drawToScreen();
 		int genwidth = Integer.parseInt(width.getText());
 		int genheight = Integer.parseInt(height.getText());
 		// manipulate the width and height to specs
 		
 		BufferedImage resized = new BufferedImage(genwidth, genheight, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = resized.createGraphics();
-		g.drawImage(image, 0, 0, genwidth, genheight, null);
+		g.drawImage(panelImage, 0, 0, genwidth, genheight, null);
 		g.dispose();
 		pause = false;
 		return resized;
@@ -568,7 +573,13 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		}
 	}
 	
-	public static void generatePanel(String n) throws IOException {
+	private void generatePanel(String n) throws IOException {
+		if(!pause) pause = true;
+		for(int i = 0; i < numberOfLayers; i++) {
+			layers[i].setSelected(false);
+		}
+		draw();
+		drawToScreen();
 		String user = System.getProperty("user.name");
 		String location = "C:\\Users\\"+user+"\\Desktop\\";
 		if(!FilesTab.getMediaFolder().equals("")) {
@@ -580,7 +591,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 		
 		BufferedImage resized = new BufferedImage(genwidth, genheight, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = resized.createGraphics();
-		g.drawImage(image, 0, 0, genwidth, genheight, null);
+		g.drawImage(panelImage, 0, 0, genwidth, genheight, null);
 		g.dispose();
 		
 		//print
@@ -589,6 +600,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 			outputfile = new File(location + "\\test.png");
 		else
 			outputfile = new File(n);
+		pause = false;
 		ImageIO.write(resized, "png", outputfile);
 
 	}
@@ -936,12 +948,25 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 							layers[pos].setWidth(te[pos].getWidth());
 							layers[pos].setHeight(te[pos].getHeight());
 							layers[pos].setImage(convertTextToImage(layers[pos].getFile(), pos));
-						} else {
+						} else 
+							if(layers[pos].getFile().getName().contains("png") ||
+									layers[pos].getFile().getName().contains("jpg") ||
+									layers[pos].getFile().getName().contains("jpeg") ||
+									layers[pos].getFile().getName().contains("bmp")){
 							layers[pos].setImage(ImageIO.read(layers[pos].getFile()));
 							layers[pos].setX(0);
 							layers[pos].setY(0);
 							layers[pos].setWidth((int) (layers[pos].getImage().getWidth()));
 							layers[pos].setHeight((int) (layers[pos].getImage().getHeight()));
+						} else {
+							JOptionPane.showMessageDialog(null, "txt, png, jpg, and bmp files only!");
+							layers[pos].reset();
+							layer[pos].setToolTipText("");
+							if(te[pos] != null) {
+								te[pos].getFrame().dispose();
+								te[pos] = null;
+							}
+							return;
 						}
 					else {
 						reverseImage(pos);

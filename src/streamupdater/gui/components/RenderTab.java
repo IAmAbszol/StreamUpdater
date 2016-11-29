@@ -553,24 +553,26 @@ public class RenderTab extends JPanel {
 						duration = 0;
 						String user = System.getProperty("user.name");
 						appendCharacterSystem();
+						/* testing
 						String location = "C:\\Users\\"+user+"\\Desktop\\";
 						if(!FilesTab.getMediaFolder().equals("")) {
 							location = FilesTab.getMediaFolder().replaceAll("/", "\\\\") + "\\"; 
 						}
+						*/
 						String fileName = videoName.getText();
 						if(!jcb.isSelected()) {
-							ro.getFileNames().add(location + (ro.getFileNames().size() + 1) + ".mp4");
-							ro.getImageFileNames().add(location + (ro.getImageFileNames().size() + 1) + ".png");
+							ro.getFileNames().add((ro.getFileNames().size() + 1) + ".mp4");
+							ro.getImageFileNames().add((ro.getImageFileNames().size() + 1) + ".png");
 						} else {
-							System.out.println("Generated Filename " + location + Commands.interpretString(fileName) + ".mp4");
-							ro.getFileNames().add(location + Commands.interpretString(fileName) + ".mp4");
-							ro.getImageFileNames().add(location + Commands.interpretString(fileName) + ".png");
+							System.out.println("Generated Filename " + Commands.interpretString(fileName) + ".mp4");
+							ro.getFileNames().add(Commands.interpretString(fileName) + ".mp4");
+							ro.getImageFileNames().add(Commands.interpretString(fileName) + ".png");
 						}
 						if(te == null) {
 							ro.getImages().add(new BufferedImage(1280, 720, BufferedImage.TYPE_INT_RGB));
 						} else {
 							ThumbnailEditor.deselect();
-							ro.getImages().add(ThumbnailEditor.generateThumbnail());
+							ro.getImages().add(te.generateThumbnail());
 						}
 							// flush everything out
 						playerOneCharacters.clear();

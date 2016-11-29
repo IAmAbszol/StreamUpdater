@@ -58,7 +58,7 @@ public class GUI extends JFrame {
 		constructRounds();
 		
 		setTitle("Stream Updater Version 3.9.5 by Kyle Darling");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setResizable(false);
 		setBounds(100, 100, 600, 800);
 		contentPane = new JPanel();
@@ -101,6 +101,18 @@ public class GUI extends JFrame {
 		
 		at = new AboutMeTab();
 		tabbedPane.addTab("About Me", at);
+	
+		addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		        if (JOptionPane.showConfirmDialog(null, 
+		            "Are you sure you want to close?", null,
+		            JOptionPane.YES_NO_OPTION,
+		            JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+		            System.exit(0);
+		        }
+		    }
+		});
 		
 		setVisible(true);
 			

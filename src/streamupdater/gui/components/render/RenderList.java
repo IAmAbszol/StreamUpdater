@@ -69,7 +69,7 @@ public class RenderList {
        	renderImages.setToolTipText("I advise doing this before saving the object, issues are still a problem for images");
        	renderImages.setBounds(414, 370, 200, 30);
        	frame.add(renderImages);
-       	renderImages.setEnabled(false);
+       	renderImages.setEnabled(true);
        	
        	JButton convertPanel = new JButton("Convert to MP4");
        	convertPanel.setToolTipText("Convert before rendering... errors will occur if not");
@@ -173,6 +173,8 @@ public class RenderList {
 		public void actionPerformed(ActionEvent e) {
 			String tmp = ro.getStreamURL().replace("flv", "mp4");
 			if(!new File(tmp).exists()) {
+				JOptionPane.showMessageDialog(null, "MP4 not detected! Please click Convert to MP4 after stream has finished!");
+				/* currently in development
 				System.out.println("New override method for rendering");
 				RenderingEngine re = new RenderingEngine();
 				re.setObject(ro);
@@ -180,7 +182,7 @@ public class RenderList {
 				re.removePartObject(pos);
 				frame.setVisible(false);
 				RenderList rl = new RenderList(video, ro);
-				frame.dispose();
+				frame.dispose();*/
 				return;
 			}
 			RenderingEngine re = new RenderingEngine();

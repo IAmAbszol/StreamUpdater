@@ -23,6 +23,7 @@ import java.util.zip.ZipFile;
 
 import javax.imageio.ImageIO;
 
+import streamupdater.gui.components.FilesTab;
 import streamupdater.util.ScanForFFMpeg;
 
 /*
@@ -57,7 +58,13 @@ public class VideoHandler {
 	}
 	
 	public void setVideoOutput(String s) {
-		outputFile = s;
+		String location = "";
+		if(FilesTab.getMediaFolder().equals("")) {
+			String user = System.getProperty("user.name");
+			location = "C:\\Users\\" + user  + "\\Desktop\\";
+		} else
+			location = FilesTab.getMediaFolder().replaceAll("/", "\\\\") + "\\";
+		outputFile = location + s;
 	}
 	
 	public void setDuration(long l) {
