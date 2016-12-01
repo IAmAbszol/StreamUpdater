@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import streamupdater.util.CheckStreaming;
+
 public class RenderList {
 	
 	public RenderObject ro;
@@ -59,7 +61,7 @@ public class RenderList {
         scroll.setViewportView(borderlayoutpanel);
         borderlayoutpanel.setLayout(new BorderLayout(0, 0));
 
-        JButton renderPanel = new JButton("Render");
+        JButton renderPanel = new JButton("Render All");
         renderPanel.setToolTipText("<html>Rendering during your stream may kill cpu usage, I advise not to do so.<br>Also this is very time consuming, save the object and come back later after the stream is done.</html>");
        	renderPanel.setBounds(10, 400, 604, 30);
        	renderPanel.setEnabled(true);
@@ -129,6 +131,11 @@ public class RenderList {
 					JOptionPane.showMessageDialog(null, "MP4 not detected! Please click Convert to MP4 after stream has finished!");
 					return;
 				}
+				CheckStreaming cs = new CheckStreaming(ro.getStreamURL());
+				if(cs.isStreaming()) {
+					JOptionPane.showMessageDialog(null, "Please stop file streaming before continuing!");
+					return;
+				}
 				RenderingEngine re = new RenderingEngine();
 				re.setObject(ro);
 				re.renderAll(video);
@@ -140,6 +147,11 @@ public class RenderList {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				CheckStreaming cs = new CheckStreaming(ro.getStreamURL());
+				if(cs.isStreaming()) {
+					JOptionPane.showMessageDialog(null, "Please stop file streaming before continuing!");
+					return;
+				}
 				video.setVideoInput(ro.getStreamURL());
 				video.convertToMp4();
 			}
