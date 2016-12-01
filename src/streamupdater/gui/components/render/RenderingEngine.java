@@ -20,6 +20,7 @@ public class RenderingEngine {
 		return -1;
 	}
 	
+	@Deprecated
 	public static int renderProject(VideoHandler video) {
 		if(ro != null) {
 			if(ro.getDurations().size() == ro.getFileNames().size() && ro.getStartingPositions().size() == ro.getFileNames().size() ) {
@@ -31,6 +32,34 @@ public class RenderingEngine {
 		} else
 			return -2;
 		return -1;
+	}
+	
+	public void renderAll(VideoHandler video) {
+		
+		if(ro != null) {
+			if(ro.getDurations().size() == ro.getFileNames().size() && ro.getStartingPositions().size() == ro.getFileNames().size() ) {
+		
+				for(int i = 0; i < ro.getDurations().size(); i++) {
+				
+					video.setDuration(ro.getDurations().get(i));
+					video.setOffset(ro.getStartingPositions().get(i));
+					video.setVideoInput(ro.getStreamURL());
+					video.setVideoOutput(ro.getFileNames().get(i));
+					video.setImage(ro.getImages().get(i));
+					video.setImageFileLocation(ro.getImageFileNames().get(i));
+					video.encode();
+					if(video.getProcess() != null) {
+						ProcMon.create(video.getProcess());
+						while(!ProcMon.isComplete()) {
+							System.out.print("");
+						}
+					}
+					
+				}
+				
+			}
+		}
+		
 	}
 	
 	public static int forceRenderProject(VideoHandler video, int pos) {

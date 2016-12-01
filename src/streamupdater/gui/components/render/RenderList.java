@@ -62,7 +62,7 @@ public class RenderList {
         JButton renderPanel = new JButton("Render");
         renderPanel.setToolTipText("<html>Rendering during your stream may kill cpu usage, I advise not to do so.<br>Also this is very time consuming, save the object and come back later after the stream is done.</html>");
        	renderPanel.setBounds(10, 400, 604, 30);
-       	renderPanel.setEnabled(false);
+       	renderPanel.setEnabled(true);
        	frame.add(renderPanel);
        	
        	JButton renderImages = new JButton("Create Thumbnails");
@@ -120,6 +120,22 @@ public class RenderList {
         	
         });
         
+        renderPanel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String tmp = ro.getStreamURL().replace("flv", "mp4");
+				if(!new File(tmp).exists()) {
+					JOptionPane.showMessageDialog(null, "MP4 not detected! Please click Convert to MP4 after stream has finished!");
+					return;
+				}
+				RenderingEngine re = new RenderingEngine();
+				re.setObject(ro);
+				re.renderAll(video);
+			}
+        	
+        });
+        
         convertPanel.addActionListener(new ActionListener() {
 
 			@Override
@@ -130,15 +146,6 @@ public class RenderList {
         	
         });
         
-        renderPanel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				RenderingEngine re = new RenderingEngine();
-				re.setObject(ro);
-				re.renderProject(video);
-			}
-        	
-        });
-		
 	}
 	// this may cause issues with the re.removePartObject. Probably will
 	private class Remove implements ActionListener {

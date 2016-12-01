@@ -31,6 +31,8 @@ import streamupdater.util.ScanForFFMpeg;
  */
 public class VideoHandler {
 
+	private Process p;
+	
 	private String inputFile = null;
 	private String alteredFile = null;
 	private String outputFile = null;
@@ -80,7 +82,19 @@ public class VideoHandler {
 	}
 	
 	public void setImageFileLocation(String n) {
-		outputImageFile = n;
+		String location = "";
+		if(FilesTab.getMediaFolder().equals("")) {
+			String user = System.getProperty("user.name");
+			location = "C:\\Users\\" + user  + "\\Desktop\\";
+		} else
+			location = FilesTab.getMediaFolder().replaceAll("/", "\\\\") + "\\";
+		outputImageFile = location + n;
+	}
+	
+	public void renderAllVideos() {
+		
+		
+		
 	}
 	
 	public void forceRender() {
@@ -180,7 +194,7 @@ public class VideoHandler {
 							 "cmd", "/c", arg);
 
 			builder.redirectErrorStream(true);
-			Process p = builder.start();
+			p = builder.start();
 			inheritIO(p.getInputStream(), System.out, false);
 			
 			try {
@@ -402,6 +416,10 @@ public class VideoHandler {
 		} else
 			return -1;
 		
+	}
+	
+	public Process getProcess() {
+		return p;
 	}
 	
 }
