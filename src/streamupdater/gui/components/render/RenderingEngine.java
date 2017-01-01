@@ -9,10 +9,10 @@ public class RenderingEngine {
 	
 	private static RenderObject ro = null;
 	
-	public static int renderProject(VideoHandler video, int pos) {
+	public static int renderProject(VideoHandler video, int pos, int moreDur) {
 		if(ro != null) {
 			if(ro.getDurations().size() == ro.getFileNames().size() && ro.getStartingPositions().size() == ro.getFileNames().size() ) {
-				handleRender(video, ro.getStreamURL(), pos);
+				handleRender(video, ro.getStreamURL(), pos, moreDur);
 			} else
 				return -3;
 		} else
@@ -21,11 +21,11 @@ public class RenderingEngine {
 	}
 	
 	@Deprecated
-	public static int renderProject(VideoHandler video) {
+	public static int renderProject(VideoHandler video, int moreDur) {
 		if(ro != null) {
 			if(ro.getDurations().size() == ro.getFileNames().size() && ro.getStartingPositions().size() == ro.getFileNames().size() ) {
 				for(int i = 0; i < ro.getDurations().size(); i++) {
-					handleRender(video, ro.getStreamURL(), i);
+					handleRender(video, ro.getStreamURL(), i, moreDur);
 				}
 			} else
 				return -3;
@@ -34,14 +34,14 @@ public class RenderingEngine {
 		return -1;
 	}
 	
-	public void renderAll(VideoHandler video) {
+	public void renderAll(VideoHandler video, int moreDur) {
 		
 		if(ro != null) {
 			if(ro.getDurations().size() == ro.getFileNames().size() && ro.getStartingPositions().size() == ro.getFileNames().size() ) {
 		
 				for(int i = 0; i < ro.getDurations().size(); i++) {
 				
-					video.setDuration(ro.getDurations().get(i));
+					video.setDuration(ro.getDurations().get(i) + moreDur);
 					video.setOffset(ro.getStartingPositions().get(i));
 					video.setVideoInput(ro.getStreamURL());
 					video.setVideoOutput(ro.getFileNames().get(i));
@@ -105,8 +105,8 @@ public class RenderingEngine {
 		video.forceRender();
 	}
 	
-	private static void handleRender(VideoHandler video, String s, int pos) {
-		video.setDuration(ro.getDurations().get(pos));
+	private static void handleRender(VideoHandler video, String s, int pos, int moreDur) {
+		video.setDuration(ro.getDurations().get(pos) + moreDur);
 		video.setOffset(ro.getStartingPositions().get(pos));
 		video.setVideoInput(s);
 		video.setVideoOutput(ro.getFileNames().get(pos));

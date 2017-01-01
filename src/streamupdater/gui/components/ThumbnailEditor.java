@@ -629,7 +629,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 						
 					}
 				} catch (Exception e) {
-					// image is loading, be patient
+					e.printStackTrace();
 				}
 			}
 		}
@@ -660,7 +660,7 @@ public class ThumbnailEditor extends JPanel implements Runnable, KeyListener, Mo
 							
 						}
 					} catch (Exception e) {
-						// image is loading, be patient
+						e.printStackTrace();
 					}
 				}
 			}

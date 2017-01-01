@@ -91,12 +91,6 @@ public class VideoHandler {
 		outputImageFile = location + n;
 	}
 	
-	public void renderAllVideos() {
-		
-		
-		
-	}
-	
 	public void forceRender() {
 		try {
 			alteredFile = inputFile.replace(".flv", ".mp4");
@@ -150,6 +144,8 @@ public class VideoHandler {
 				
 		        arg = " -y -i " + "\"" + inputFile + "\" -codec copy " + "\"" + alteredFile + "\"";
 		        arg = exe + arg;
+		        
+		        System.out.println("\n\n---------\n"+exe+"\n\n------------");
 	        
 	        } else
 	        	arg = "ffmpeg -y -i " + "\"" + inputFile + "\" -codec copy " + "\"" + alteredFile + "\"";

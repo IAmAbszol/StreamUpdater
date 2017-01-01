@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 
 import streamupdater.util.CheckStreaming;
 
@@ -31,6 +32,7 @@ public class RenderList {
 	private JLabel[] description;
 	private JButton[] remove;
 	private JButton[] render;
+	private JSpinner js;
 	
 	private int gap = 5;
 	
@@ -61,9 +63,15 @@ public class RenderList {
         scroll.setViewportView(borderlayoutpanel);
         borderlayoutpanel.setLayout(new BorderLayout(0, 0));
 
+        js = new JSpinner();
+        js.setToolTipText("Increase/Decrease End Duration");
+        js.setValue(0);
+        js.setBounds(414, 400, 200, 30);
+        frame.add(js);
+        
         JButton renderPanel = new JButton("Render All");
         renderPanel.setToolTipText("<html>Rendering during your stream may kill cpu usage, I advise not to do so.<br>Also this is very time consuming, save the object and come back later after the stream is done.</html>");
-       	renderPanel.setBounds(10, 400, 604, 30);
+       	renderPanel.setBounds(10, 400, 404, 30);
        	renderPanel.setEnabled(true);
        	frame.add(renderPanel);
        	
@@ -138,7 +146,7 @@ public class RenderList {
 				}
 				RenderingEngine re = new RenderingEngine();
 				re.setObject(ro);
-				re.renderAll(video);
+				re.renderAll(video, (int) js.getValue());
 			}
         	
         });
@@ -206,7 +214,7 @@ public class RenderList {
 			}
 			RenderingEngine re = new RenderingEngine();
 			re.setObject(ro);
-			re.renderProject(video, pos);
+			re.renderProject(video, pos, (int) js.getValue());
 			re.removePartObject(pos);
 			frame.setVisible(false);
 			RenderList rl = new RenderList(video, ro);
